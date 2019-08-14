@@ -1,0 +1,19 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compileOnly deps.support.app_compat
+}
+
