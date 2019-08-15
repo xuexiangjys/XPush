@@ -1,1 +1,1 @@
-include ':app', ':keeplive'
+include ':app', ':keeplive', ':push-core'

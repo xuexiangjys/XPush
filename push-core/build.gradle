@@ -17,4 +17,3 @@ android {
 dependencies {
     compileOnly deps.support.app_compat
 }
-
