@@ -20,7 +20,7 @@ package com.xuexiang.xpush.core;
 import android.content.Context;
 
 /**
- * 推送客户端
+ * 推送客户端【一定要有无参构造方法】
  *
  * @author xuexiang
  * @since 2019-08-15 11:42
@@ -73,5 +73,15 @@ public interface IPushClient {
      * @param tag 标签
      */
     void deleteTag(String tag);
+
+    /**
+     * @return 获取平台码
+     */
+    int getPlatformCode();
+
+    /**
+     * @return 获取平台名
+     */
+    String getPlatformName();
 
 }

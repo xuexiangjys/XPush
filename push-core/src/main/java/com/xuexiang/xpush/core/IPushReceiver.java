@@ -18,6 +18,8 @@
 package com.xuexiang.xpush.core;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
@@ -34,7 +36,7 @@ public interface IPushReceiver {
      * 收到通知
      *
      * @param context
-     * @param msg
+     * @param msg     消息
      */
     void onNotification(Context context, XPushMsg msg);
 
@@ -42,7 +44,7 @@ public interface IPushReceiver {
      * 收到通知点击事件
      *
      * @param context
-     * @param msg
+     * @param msg     消息
      */
     void onNotificationClick(Context context, XPushMsg msg);
 
@@ -50,7 +52,7 @@ public interface IPushReceiver {
      * 收到自定义消息
      *
      * @param context
-     * @param msg
+     * @param msg     消息
      */
     void onMessageReceived(Context context, XPushMsg msg);
 
@@ -58,7 +60,7 @@ public interface IPushReceiver {
      * IPushClient执行命令的结果返回
      *
      * @param context
-     * @param command
+     * @param command 命令实体
      * @see IPushClient#register()
      * @see IPushClient#unRegister()
      * @see IPushClient#addTag(String)
@@ -68,4 +70,12 @@ public interface IPushReceiver {
      */
     void onCommandResult(Context context, XPushCommand command);
 
+    /**
+     * 收到广播后解析消息数据
+     *
+     * @param intent
+     * @param <T>
+     * @return
+     */
+    <T extends Parcelable> T parsePushData(Intent intent);
 }

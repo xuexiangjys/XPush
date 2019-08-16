@@ -25,6 +25,7 @@ import com.xuexiang.xpush.core.IPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
+import com.xuexiang.xpush.util.TransmitDataUtils;
 
 import static com.xuexiang.xpush.core.XPushAction.RECEIVE_COMMAND_RESULT;
 import static com.xuexiang.xpush.core.XPushAction.RECEIVE_MESSAGE;
@@ -42,8 +43,9 @@ public abstract class XPushReceiver extends BroadcastReceiver implements IPushRe
 
     @Override
     public final void onReceive(Context context, Intent intent) {
+        if (intent == null) return;
         String action = intent.getAction();
-        Parcelable parcelable = TransmitDataManager.parsePushData(intent);
+        Parcelable parcelable = parsePushData(intent);
         if (RECEIVE_COMMAND_RESULT.equals(action)) {
             onCommandResult(context, (XPushCommand) parcelable);
         } else if (RECEIVE_NOTIFICATION.equals(action)) {
@@ -57,7 +59,13 @@ public abstract class XPushReceiver extends BroadcastReceiver implements IPushRe
     }
 
     @Override
+    public <T extends Parcelable> T parsePushData(Intent intent) {
+        return TransmitDataUtils.parsePushData(intent);
+    }
+
+    @Override
     public void onNotification(Context context, XPushMsg msg) {
         
     }
+
 }
