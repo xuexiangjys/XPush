@@ -41,7 +41,7 @@ public class XPushCommand implements Parcelable, XPushCode {
      */
     private String mError;
     /**
-     * 令牌
+     * 命令内容
      */
     private String mToken;
     /**
@@ -191,6 +191,7 @@ public class XPushCommand implements Parcelable, XPushCode {
     public String toString() {
         return "XPushCommand{" +
                 "mType=" + mType +
+                ", mTypeName=" + getTypeName(mType) +
                 ", mResultCode=" + mResultCode +
                 ", mError='" + mError + '\'' +
                 ", mToken='" + mToken + '\'' +

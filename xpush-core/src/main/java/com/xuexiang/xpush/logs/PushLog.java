@@ -40,7 +40,7 @@ public final class PushLog {
     /**
      * 默认tag
      */
-    public final static String DEFAULT_LOG_TAG = "[PushLog]";
+    public final static String DEFAULT_LOG_TAG = "PushLog";
     /**
      * 最大日志优先级【日志优先级为最大等级，所有日志都不打印】
      */
@@ -93,6 +93,10 @@ public final class PushLog {
      */
     public static void setDebug(boolean isDebug) {
         sIsDebug = isDebug;
+    }
+
+    public static boolean isDebug() {
+        return sIsDebug;
     }
 
     /**

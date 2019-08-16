@@ -1,1 +1,1 @@
-include ':app', ':keeplive', ':push-core'
+include ':app', ':keeplive', ':xpush-core', ':xpush-jpush'

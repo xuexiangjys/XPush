@@ -15,31 +15,16 @@
  *
  */
 
-package com.xuexiang.xpush.core;
+package com.xuexiang.xpush.jpush;
+
+import cn.jpush.android.service.JCommonService;
 
 /**
- * 推送广播动作
+ * 可以在更多手机平台上使得推送通道保持的更稳定
  *
  * @author xuexiang
- * @since 2019-08-15 18:08
+ * @since 2019-08-16 16:22
  */
-public interface XPushAction {
-
-    /**
-     *
-     */
-    String RECEIVE_NOTIFICATION = "com.xuexiang.xpush.core.ACTION_RECEIVE_NOTIFICATION";
-    /**
-     *
-     */
-    String RECEIVE_NOTIFICATION_CLICK = "com.xuexiang.xpush.core.ACTION_RECEIVE_NOTIFICATION_CLICK";
-    /**
-     *
-     */
-    String RECEIVE_MESSAGE = "com.xuexiang.xpush.core.ACTION_RECEIVE_MESSAGE";
-    /**
-     *
-     */
-    String RECEIVE_COMMAND_RESULT = "com.xuexiang.xpush.core.ACTION_RECEIVE_COMMAND_RESULT";
+public class PushService extends JCommonService {
 
 }

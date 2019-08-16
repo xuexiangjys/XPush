@@ -22,6 +22,36 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".push.CustomPushReceiver">
+            <intent-filter>
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <!--********************************XPush各家推送的AppId注册地方************************************-->
+        <!--极光推送静态注册-->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="default_developer" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="a32109db64ebe04e2430bb01" />
+
+
+        <!--********************************XPush各家推送的SDK注册地方**************************************-->
+        <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
+        <!--value格式：对应客户端实体类的类名-->
+
+        <!--如果引入了xpush-jpush库-->
+        <meta-data
+            android:name="XPush_JPush_1000"
+            android:value="com.xuexiang.xpush.jpush.JPushClient" />
+
     </application>
 
 </manifest>

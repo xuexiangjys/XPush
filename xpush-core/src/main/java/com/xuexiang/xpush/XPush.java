@@ -81,7 +81,7 @@ public final class XPush {
     /**
      * 注销
      */
-    public void unRegister() {
+    public static void unRegister() {
         _XPush.get().unRegister();
     }
 
@@ -90,7 +90,7 @@ public final class XPush {
      *
      * @param alias 别名
      */
-    public void bindAlias(String alias) {
+    public static void bindAlias(String alias) {
         _XPush.get().bindAlias(alias);
     }
 
@@ -99,7 +99,7 @@ public final class XPush {
      *
      * @param alias 别名
      */
-    public void unBindAlias(String alias) {
+    public static void unBindAlias(String alias) {
         _XPush.get().unBindAlias(alias);
     }
 
@@ -108,7 +108,7 @@ public final class XPush {
      *
      * @param tag 标签
      */
-    public void addTag(String tag) {
+    public static void addTag(String tag) {
         _XPush.get().addTag(tag);
     }
 
@@ -117,21 +117,21 @@ public final class XPush {
      *
      * @param tag 标签
      */
-    public void deleteTag(String tag) {
+    public static void deleteTag(String tag) {
         _XPush.get().deleteTag(tag);
     }
 
     /**
      * @return 推送平台码
      */
-    public int getPlatformCode() {
+    public static int getPlatformCode() {
         return _XPush.get().getPlatformCode();
     }
 
     /**
      * @return 推送平台的名称
      */
-    public String getPlatformName() {
+    public static String getPlatformName() {
         return _XPush.get().getPlatformName();
     }
 
@@ -154,7 +154,7 @@ public final class XPush {
      * @param type       命令类型
      * @param resultCode 结果码
      * @param error      错误信息
-     * @param token      令牌
+     * @param token      内容
      * @param extraMsg   额外信息
      * @see XPushCode#TYPE_ADD_TAG
      * @see XPushCode#TYPE_DEL_TAG
@@ -166,7 +166,7 @@ public final class XPush {
      * @see XPushCode#RESULT_ERROR
      * @see XPushCode#RESULT_OK
      */
-    public void transmitCommandResult(Context context, int type, int resultCode, String error, String token, String extraMsg) {
+    public static void transmitCommandResult(Context context, int type, int resultCode, String error, String token, String extraMsg) {
         _XPush.get().transmitCommandResult(context, type, resultCode, error, token, extraMsg);
     }
 
@@ -179,7 +179,7 @@ public final class XPush {
      * @param content  通知内容
      * @param extraMsg 额外消息
      */
-    public void transmitNotification(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
+    public static void transmitNotification(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
         _XPush.get().transmitNotification(context, notifyId, title, content, extraMsg, keyValue);
     }
 
@@ -192,7 +192,7 @@ public final class XPush {
      * @param content  通知内容
      * @param extraMsg 额外消息
      */
-    public void transmitNotificationClick(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
+    public static void transmitNotificationClick(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
         _XPush.get().transmitNotificationClick(context, notifyId, title, content, extraMsg, keyValue);
     }
 
@@ -203,7 +203,7 @@ public final class XPush {
      * @param msg      自定义消息内容
      * @param extraMsg 拓展消息
      */
-    public void transmitMessage(Context context, String msg, String extraMsg, Map<String, String> keyValue) {
+    public static void transmitMessage(Context context, String msg, String extraMsg, Map<String, String> keyValue) {
         _XPush.get().transmitMessage(context, msg, extraMsg, keyValue);
     }
 
@@ -213,7 +213,7 @@ public final class XPush {
      * @param context
      * @param pushMsg 推送消息
      */
-    public void transmitMessage(Context context, XPushMsg pushMsg) {
+    public static void transmitMessage(Context context, XPushMsg pushMsg) {
         _XPush.get().transmitMessage(context, pushMsg);
     }
 

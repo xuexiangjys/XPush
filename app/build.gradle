@@ -74,4 +74,7 @@ dependencies {
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
     implementation project(path: ':keeplive')
+    implementation project(path: ':xpush-core')
+    implementation project(path: ':xpush-jpush')
+
 }

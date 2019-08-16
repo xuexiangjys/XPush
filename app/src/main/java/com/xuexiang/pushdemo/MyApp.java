@@ -32,6 +32,9 @@ import com.xuexiang.xpage.AppPageConfig;
 import com.xuexiang.xpage.PageConfig;
 import com.xuexiang.xpage.PageConfiguration;
 import com.xuexiang.xpage.model.PageInfo;
+import com.xuexiang.xpush.XPush;
+import com.xuexiang.xpush.core.IPushInitCallback;
+import com.xuexiang.xpush.jpush.JPushClient;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
@@ -51,8 +54,9 @@ public class MyApp extends Application {
         initLibs();
 
         initKeepLive();
-    }
 
+        initPush();
+    }
 
     /**
      * 初始化基础库
@@ -81,11 +85,11 @@ public class MyApp extends Application {
     }
 
     /**
-     *
+     * 初始化保活
      */
     private void initKeepLive() {
         //定义前台服务的默认样式。即标题、描述和图标
-        ForegroundNotification foregroundNotification = new ForegroundNotification("测试","描述", R.mipmap.ic_launcher,
+        ForegroundNotification foregroundNotification = new ForegroundNotification("测试", "描述", R.mipmap.ic_launcher,
                 //定义前台服务的通知点击事件
                 new ForegroundNotificationClickListener() {
                     @Override
@@ -105,6 +109,7 @@ public class MyApp extends Application {
                     public void onWorking() {
                         Log.e("xuexiang", "onWorking");
                     }
+
                     /**
                      * 服务终止
                      * 由于服务可能会被多次终止，该方法可能重复调用，需同onWorking配套使用，如注册和注销broadcast
@@ -115,7 +120,23 @@ public class MyApp extends Application {
                     }
                 }
         );
+    }
 
+    /**
+     * 初始化推送
+     */
+    private void initPush() {
+        XPush.debug(BuildConfig.DEBUG);
+        //手动注册
+//        XPush.init(this, new JPushClient());
+        //自动注册
+        XPush.init(this, new IPushInitCallback() {
+            @Override
+            public boolean onInitPush(int platformCode, String platformName) {
+                return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
+            }
+        });
+        XPush.register();
     }
 
 

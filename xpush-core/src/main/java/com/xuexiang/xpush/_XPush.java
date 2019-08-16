@@ -56,7 +56,7 @@ public final class _XPush {
     /**
      * the meta_data split symbol
      */
-    public static final String METE_DATA_SPLIT_SYMBOL = "_";
+    private static final String METE_DATA_SPLIT_SYMBOL = "_";
 
     private Application mApplication;
 
@@ -106,7 +106,7 @@ public final class _XPush {
      * @param type       命令类型
      * @param resultCode 结果码
      * @param error      错误信息
-     * @param token      令牌
+     * @param token      内容
      * @param extraMsg   额外信息
      * @see XPushCode#TYPE_ADD_TAG
      * @see XPushCode#TYPE_DEL_TAG
