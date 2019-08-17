@@ -15,16 +15,25 @@
  *
  */
 
-package com.xuexiang.xpush.entity;
+package com.xuexiang.xpush.core.annotation;
+
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_ERROR;
+import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
- * 推送码
+ * 结果码
  *
  * @author xuexiang
- * @since 2019-08-15 14:07
+ * @since 2019-08-17 11:34
  */
-public interface XPushCode {
-
+@IntDef({RESULT_OK, RESULT_ERROR})
+@Retention(RetentionPolicy.SOURCE)
+public @interface ResultCode {
     /**
      * 成功
      */
@@ -33,42 +42,5 @@ public interface XPushCode {
      * 失败
      */
     int RESULT_ERROR = 1;
-
-
-
-    /**
-     * 注册推送
-     */
-    int TYPE_REGISTER = 2000;
-
-    /**
-     * 取消注册推送
-     */
-    int TYPE_UNREGISTER = 2001;
-
-    /**
-     * 添加标签
-     */
-    int TYPE_ADD_TAG = 2002;
-
-    /**
-     * 删除标签
-     */
-    int TYPE_DEL_TAG = 2003;
-
-    /**
-     * 绑定别名
-     */
-    int TYPE_BIND_ALIAS = 2004;
-
-    /**
-     * 解绑别名
-     */
-    int TYPE_UNBIND_ALIAS = 2005;
-
-    /**
-     * 添加或删除标签
-     */
-    int TYPE_AND_OR_DEL_TAG = 2006;
 
 }

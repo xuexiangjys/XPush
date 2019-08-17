@@ -24,6 +24,7 @@
 
         <receiver android:name=".push.CustomPushReceiver">
             <intent-filter>
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
                 <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
                 <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
                 <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />

@@ -32,7 +32,7 @@ import java.util.Map;
 public class XPushMsg implements Parcelable {
 
     /**
-     * 消息ID
+     * 消息ID / 状态
      */
     private int mId;
     /**
@@ -55,6 +55,14 @@ public class XPushMsg implements Parcelable {
      * 消息键值对(初始化值，防止序列化出错)
      */
     private Map<String, String> mKeyValue;
+
+    public XPushMsg() {
+
+    }
+
+    public XPushMsg(int id) {
+        mId = id;
+    }
 
     public XPushMsg(int id, String title, String content, String msg) {
         mId = id;

@@ -15,7 +15,18 @@
  *
  */
 
-package com.xuexiang.xpush.core;
+package com.xuexiang.xpush.core.annotation;
+
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_COMMAND_RESULT;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_CONNECT_STATUS_CHANGED;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_MESSAGE;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION_CLICK;
 
 /**
  * 推送广播动作
@@ -23,8 +34,19 @@ package com.xuexiang.xpush.core;
  * @author xuexiang
  * @since 2019-08-15 18:08
  */
-public interface XPushAction {
+@StringDef({RECEIVE_CONNECT_STATUS_CHANGED,
+        RECEIVE_NOTIFICATION,
+        RECEIVE_NOTIFICATION_CLICK,
+        RECEIVE_MESSAGE,
+        RECEIVE_COMMAND_RESULT
+})
+@Retention(RetentionPolicy.SOURCE)
+public @interface PushAction {
 
+    /**
+     * 推送的连接状态发生改变
+     */
+    String RECEIVE_CONNECT_STATUS_CHANGED = "com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED";
     /**
      * 接收到通知
      */

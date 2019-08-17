@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.xuexiang.xpush.core.annotation.PushAction;
+
 /**
  * 数据传输工具
  *
@@ -42,7 +44,7 @@ public final class TransmitDataUtils {
      * @param action  动作
      * @param data    数据
      */
-    public static void sendPushData(Context context, String action, Parcelable data) {
+    public static void sendPushData(Context context, @PushAction String action, Parcelable data) {
         Intent intent = new Intent(action);
         intent.putExtra(INTENT_DATA_PUSH, data);
         intent.addCategory(context.getPackageName());

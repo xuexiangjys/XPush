@@ -38,7 +38,6 @@ public interface IPushClient {
      * 注册推送
      */
     void register();
-
     /**
      * 注销推送
      */
@@ -50,8 +49,6 @@ public interface IPushClient {
      * @param alias 别名
      */
     void bindAlias(String alias);
-
-
     /**
      * 解绑别名
      *
@@ -66,7 +63,6 @@ public interface IPushClient {
      * @param tag 标签
      */
     void addTag(String tag);
-
     /**
      * 删除标签
      *
@@ -78,7 +74,6 @@ public interface IPushClient {
      * @return 获取平台码
      */
     int getPlatformCode();
-
     /**
      * @return 获取平台名
      */

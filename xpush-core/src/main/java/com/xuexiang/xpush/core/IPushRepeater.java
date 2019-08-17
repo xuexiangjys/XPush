@@ -20,6 +20,8 @@ package com.xuexiang.xpush.core;
 import android.content.Context;
 import android.os.Parcelable;
 
+import com.xuexiang.xpush.core.annotation.PushAction;
+
 /**
  * 消息推送中间件
  *
@@ -35,6 +37,6 @@ public interface IPushRepeater {
      * @param action  动作
      * @param data    数据
      */
-    void transmit(Context context, String action, Parcelable data);
+    void transmit(Context context, @PushAction String action, Parcelable data);
 
 }

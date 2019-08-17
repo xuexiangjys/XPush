@@ -27,9 +27,11 @@ import android.support.annotation.NonNull;
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.core.IPushRepeater;
-import com.xuexiang.xpush.core.XPushAction;
+import com.xuexiang.xpush.core.annotation.CommandType;
+import com.xuexiang.xpush.core.annotation.ConnectStatus;
+import com.xuexiang.xpush.core.annotation.ResultCode;
+import com.xuexiang.xpush.core.annotation.PushAction;
 import com.xuexiang.xpush.core.impl.DefaultPushRepeaterImpl;
-import com.xuexiang.xpush.entity.XPushCode;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
@@ -103,23 +105,33 @@ public final class _XPush {
      * 转发命令执行结果
      *
      * @param context
-     * @param type       命令类型
-     * @param resultCode 结果码
-     * @param error      错误信息
-     * @param token      内容
-     * @param extraMsg   额外信息
-     * @see XPushCode#TYPE_ADD_TAG
-     * @see XPushCode#TYPE_DEL_TAG
-     * @see XPushCode#TYPE_AND_OR_DEL_TAG
-     * @see XPushCode#TYPE_REGISTER
-     * @see XPushCode#TYPE_UNREGISTER
-     * @see XPushCode#TYPE_BIND_ALIAS
-     * @see XPushCode#TYPE_UNBIND_ALIAS
-     * @see XPushCode#RESULT_ERROR
-     * @see XPushCode#RESULT_OK
+     * @param commandType 命令类型
+     * @param resultCode  结果码
+     * @param error       错误信息
+     * @param token       内容
+     * @param extraMsg    额外信息
+     * @see CommandType#TYPE_ADD_TAG
+     * @see CommandType#TYPE_DEL_TAG
+     * @see CommandType#TYPE_AND_OR_DEL_TAG
+     * @see CommandType#TYPE_REGISTER
+     * @see CommandType#TYPE_UNREGISTER
+     * @see CommandType#TYPE_BIND_ALIAS
+     * @see CommandType#TYPE_UNBIND_ALIAS
+     * @see ResultCode#RESULT_ERROR
+     * @see ResultCode#RESULT_OK
      */
-    public void transmitCommandResult(Context context, int type, int resultCode, String error, String token, String extraMsg) {
-        transmit(context, XPushAction.RECEIVE_COMMAND_RESULT, new XPushCommand(type, resultCode, token, extraMsg, error));
+    public void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String error, String token, String extraMsg) {
+        transmit(context, PushAction.RECEIVE_COMMAND_RESULT, new XPushCommand(commandType, resultCode, token, extraMsg, error));
+    }
+
+    /**
+     * 转发连接状态发生改变
+     *
+     * @param context
+     * @param connectStatus 推送连接状态
+     */
+    public void transmitConnectStatusChanged(Context context, @ConnectStatus int connectStatus) {
+        transmit(context, PushAction.RECEIVE_CONNECT_STATUS_CHANGED, new XPushMsg(connectStatus));
     }
 
     /**
@@ -132,7 +144,7 @@ public final class _XPush {
      * @param extraMsg 额外消息
      */
     public void transmitNotification(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
-        transmit(context, XPushAction.RECEIVE_NOTIFICATION, new XPushMsg(notifyId, title, content, null, extraMsg, keyValue));
+        transmit(context, PushAction.RECEIVE_NOTIFICATION, new XPushMsg(notifyId, title, content, null, extraMsg, keyValue));
     }
 
     /**
@@ -145,7 +157,7 @@ public final class _XPush {
      * @param extraMsg 额外消息
      */
     public void transmitNotificationClick(Context context, int notifyId, String title, String content, String extraMsg, Map<String, String> keyValue) {
-        transmit(context, XPushAction.RECEIVE_NOTIFICATION_CLICK, new XPushMsg(notifyId, title, content, null, extraMsg, keyValue));
+        transmit(context, PushAction.RECEIVE_NOTIFICATION_CLICK, new XPushMsg(notifyId, title, content, null, extraMsg, keyValue));
     }
 
     /**
@@ -156,7 +168,7 @@ public final class _XPush {
      * @param extraMsg 拓展消息
      */
     public void transmitMessage(Context context, String msg, String extraMsg, Map<String, String> keyValue) {
-        transmit(context, XPushAction.RECEIVE_MESSAGE, new XPushMsg(0, null, null, msg, extraMsg, keyValue));
+        transmit(context, PushAction.RECEIVE_MESSAGE, new XPushMsg(0, null, null, msg, extraMsg, keyValue));
     }
 
     /**
@@ -166,7 +178,7 @@ public final class _XPush {
      * @param pushMsg 推送消息
      */
     public void transmitMessage(Context context, XPushMsg pushMsg) {
-        transmit(context, XPushAction.RECEIVE_MESSAGE, pushMsg);
+        transmit(context, PushAction.RECEIVE_MESSAGE, pushMsg);
     }
 
     /**
@@ -176,7 +188,7 @@ public final class _XPush {
      * @param action  广播动作
      * @param data    消息数据
      */
-    private void transmit(Context context, String action, @NonNull Parcelable data) {
+    private void transmit(Context context, @PushAction String action, @NonNull Parcelable data) {
         if (mIPushRepeater != null) {
             mIPushRepeater.transmit(context, action, data);
         }

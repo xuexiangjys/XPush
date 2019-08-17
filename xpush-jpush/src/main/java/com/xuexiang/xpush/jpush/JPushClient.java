@@ -31,12 +31,12 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 
-import static com.xuexiang.xpush.entity.XPushCode.RESULT_OK;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_ADD_TAG;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_BIND_ALIAS;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_DEL_TAG;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_REGISTER;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_UNBIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
  * 极光推送客户端

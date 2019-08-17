@@ -20,7 +20,6 @@ package com.xuexiang.xpush.jpush;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.logs.PushLog;
@@ -39,9 +38,11 @@ import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.api.NotificationMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
 
-import static com.xuexiang.xpush.entity.XPushCode.RESULT_ERROR;
-import static com.xuexiang.xpush.entity.XPushCode.RESULT_OK;
-import static com.xuexiang.xpush.entity.XPushCode.TYPE_REGISTER;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTED;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.DISCONNECT;
+import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_ERROR;
+import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
  * 消息推送接收器
@@ -102,6 +103,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     @Override
     public void onConnected(Context context, boolean isConnected) {
         PushLog.d("[onConnected] " + isConnected);
+        XPush.transmitConnectStatusChanged(context, isConnected ? CONNECTED : DISCONNECT);
     }
 
     @Override

@@ -21,16 +21,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+
 import com.xuexiang.xpush.core.IPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
 import com.xuexiang.xpush.util.TransmitDataUtils;
 
-import static com.xuexiang.xpush.core.XPushAction.RECEIVE_COMMAND_RESULT;
-import static com.xuexiang.xpush.core.XPushAction.RECEIVE_MESSAGE;
-import static com.xuexiang.xpush.core.XPushAction.RECEIVE_NOTIFICATION;
-import static com.xuexiang.xpush.core.XPushAction.RECEIVE_NOTIFICATION_CLICK;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_COMMAND_RESULT;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_CONNECT_STATUS_CHANGED;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_MESSAGE;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION;
+import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION_CLICK;
 
 
 /**
@@ -44,17 +46,22 @@ public abstract class XPushReceiver extends BroadcastReceiver implements IPushRe
     @Override
     public final void onReceive(Context context, Intent intent) {
         if (intent == null) return;
+
         String action = intent.getAction();
         Parcelable parcelable = parsePushData(intent);
+
         if (RECEIVE_COMMAND_RESULT.equals(action)) {
             onCommandResult(context, (XPushCommand) parcelable);
         } else if (RECEIVE_NOTIFICATION.equals(action)) {
             onNotification(context, (XPushMsg) parcelable);
         } else if (RECEIVE_NOTIFICATION_CLICK.equals(action)) {
-            onNotificationClick(context,  (XPushMsg) parcelable);
+            onNotificationClick(context, (XPushMsg) parcelable);
         } else if (RECEIVE_MESSAGE.equals(action)) {
             onMessageReceived(context, (XPushMsg) parcelable);
+        } else if (RECEIVE_CONNECT_STATUS_CHANGED.equals(action)) {
+            onConnectStatusChanged(context, ((XPushMsg) parcelable).getId());
         }
+
         PushLog.i(String.format("%s--%s", action, String.valueOf(parcelable)));
     }
 
@@ -65,7 +72,12 @@ public abstract class XPushReceiver extends BroadcastReceiver implements IPushRe
 
     @Override
     public void onNotification(Context context, XPushMsg msg) {
-        
+
+    }
+
+    @Override
+    public void onConnectStatusChanged(Context context, int connectStatus) {
+
     }
 
 }

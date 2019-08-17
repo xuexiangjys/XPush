@@ -33,6 +33,14 @@ import com.xuexiang.xpush.entity.XPushMsg;
 public interface IPushReceiver {
 
     /**
+     * 消息推送连接状态发生变化
+     *
+     * @param context
+     * @param connectStatus 连接状态
+     */
+    void onConnectStatusChanged(Context context, int connectStatus);
+
+    /**
      * 收到通知
      *
      * @param context

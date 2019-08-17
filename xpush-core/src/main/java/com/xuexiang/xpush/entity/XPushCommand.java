@@ -20,13 +20,21 @@ package com.xuexiang.xpush.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_AND_OR_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
+
 /**
  * IPushClient推送执行命令结果
  *
  * @author xuexiang
  * @since 2019-08-15 15:09
  */
-public class XPushCommand implements Parcelable, XPushCode {
+public class XPushCommand implements Parcelable {
 
     /**
      * 命令类型

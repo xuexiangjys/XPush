@@ -24,7 +24,9 @@ import android.support.annotation.NonNull;
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.core.IPushRepeater;
-import com.xuexiang.xpush.entity.XPushCode;
+import com.xuexiang.xpush.core.annotation.CommandType;
+import com.xuexiang.xpush.core.annotation.ConnectStatus;
+import com.xuexiang.xpush.core.annotation.ResultCode;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.ILogger;
 import com.xuexiang.xpush.logs.PushLog;
@@ -151,23 +153,33 @@ public final class XPush {
      * 转发命令执行结果
      *
      * @param context
-     * @param type       命令类型
-     * @param resultCode 结果码
-     * @param error      错误信息
-     * @param token      内容
-     * @param extraMsg   额外信息
-     * @see XPushCode#TYPE_ADD_TAG
-     * @see XPushCode#TYPE_DEL_TAG
-     * @see XPushCode#TYPE_AND_OR_DEL_TAG
-     * @see XPushCode#TYPE_REGISTER
-     * @see XPushCode#TYPE_UNREGISTER
-     * @see XPushCode#TYPE_BIND_ALIAS
-     * @see XPushCode#TYPE_UNBIND_ALIAS
-     * @see XPushCode#RESULT_ERROR
-     * @see XPushCode#RESULT_OK
+     * @param commandType 命令类型
+     * @param resultCode  结果码
+     * @param error       错误信息
+     * @param token       内容
+     * @param extraMsg    额外信息
+     * @see CommandType#TYPE_ADD_TAG
+     * @see CommandType#TYPE_DEL_TAG
+     * @see CommandType#TYPE_AND_OR_DEL_TAG
+     * @see CommandType#TYPE_REGISTER
+     * @see CommandType#TYPE_UNREGISTER
+     * @see CommandType#TYPE_BIND_ALIAS
+     * @see CommandType#TYPE_UNBIND_ALIAS
+     * @see ResultCode#RESULT_ERROR
+     * @see ResultCode#RESULT_OK
      */
-    public static void transmitCommandResult(Context context, int type, int resultCode, String error, String token, String extraMsg) {
-        _XPush.get().transmitCommandResult(context, type, resultCode, error, token, extraMsg);
+    public static void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String error, String token, String extraMsg) {
+        _XPush.get().transmitCommandResult(context, commandType, resultCode, error, token, extraMsg);
+    }
+
+    /**
+     * 转发连接状态发生改变
+     *
+     * @param context
+     * @param connectStatus 推送连接状态
+     */
+    public static void transmitConnectStatusChanged(Context context, @ConnectStatus int connectStatus) {
+        _XPush.get().transmitConnectStatusChanged(context, connectStatus);
     }
 
     /**

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.Parcelable;
 
 import com.xuexiang.xpush.core.IPushRepeater;
+import com.xuexiang.xpush.core.annotation.PushAction;
 import com.xuexiang.xpush.util.TransmitDataUtils;
 
 /**
@@ -32,7 +33,7 @@ import com.xuexiang.xpush.util.TransmitDataUtils;
 public class DefaultPushRepeaterImpl implements IPushRepeater {
 
     @Override
-    public void transmit(Context context, String action, Parcelable data) {
+    public void transmit(Context context, @PushAction String action, Parcelable data) {
         TransmitDataUtils.sendPushData(context, action, data);
     }
 }
