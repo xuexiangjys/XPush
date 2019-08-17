@@ -15,7 +15,7 @@
  *
  */
 
-package com.xuexiang.xpush.core;
+package com.xuexiang.xpush.core.repeater;
 
 import android.content.Context;
 import android.os.Parcelable;
@@ -23,12 +23,12 @@ import android.os.Parcelable;
 import com.xuexiang.xpush.core.annotation.PushAction;
 
 /**
- * 消息推送中间件
+ * 消息推送事件转发器
  *
  * @author xuexiang
  * @since 2019-08-16 9:07
  */
-public interface IPushRepeater {
+public interface IPushDispatcher {
 
     /**
      * 转译消息

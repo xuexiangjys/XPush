@@ -15,14 +15,14 @@
  *
  */
 
-package com.xuexiang.xpush.core.impl;
+package com.xuexiang.xpush.core.receiver.impl;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
-import com.xuexiang.xpush.core.IPushReceiver;
+import com.xuexiang.xpush.core.receiver.IPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
@@ -41,7 +41,7 @@ import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION
  * @author xuexiang
  * @since 2019-08-15 18:04
  */
-public abstract class XPushReceiver extends BroadcastReceiver implements IPushReceiver {
+public abstract class AbstractPushReceiver extends BroadcastReceiver implements IPushReceiver {
 
     @Override
     public final void onReceive(Context context, Intent intent) {

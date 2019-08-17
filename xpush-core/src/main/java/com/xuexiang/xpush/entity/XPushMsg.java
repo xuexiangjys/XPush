@@ -134,6 +134,20 @@ public class XPushMsg implements Parcelable {
         return this;
     }
 
+    /**
+     * @return 转化为通知
+     */
+    public Notification toNotification() {
+        return new Notification(mId, mTitle, mContent, mExtraMsg, mKeyValue);
+    }
+
+    /**
+     * @return 转化为自定义消息
+     */
+    public CustomMessage toCustomMessage() {
+        return new CustomMessage(mMsg, mExtraMsg, mKeyValue);
+    }
+
     @Override
     public int describeContents() {
         return 0;

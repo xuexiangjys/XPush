@@ -21,8 +21,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.TestActivity" />
 
+        <receiver android:name=".receiver.NotifyBroadCastReceiver">
+            <intent-filter>
+                <action android:name="com.xuexiang.pushdemo.receiver.action_submit" />
+                <action android:name="com.xuexiang.pushdemo.receiver.action_cancel" />
+                <action android:name="com.xuexiang.pushdemo.receiver.action_reply" />
+            </intent-filter>
+        </receiver>
+
+        <!--********************************XPush消息推送接收器************************************-->
+        <!--自定义消息推送接收器-->
         <receiver android:name=".push.CustomPushReceiver">
+            <intent-filter>
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <!--默认的消息推送接收器-->
+        <receiver android:name="com.xuexiang.xpush.core.receiver.impl.XPushReceiver">
             <intent-filter>
                 <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
                 <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />

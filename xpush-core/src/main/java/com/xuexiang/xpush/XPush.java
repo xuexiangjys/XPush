@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
-import com.xuexiang.xpush.core.IPushRepeater;
+import com.xuexiang.xpush.core.repeater.IPushDispatcher;
 import com.xuexiang.xpush.core.annotation.CommandType;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.annotation.ResultCode;
@@ -69,6 +69,26 @@ public final class XPush {
 
     public static Context getContext() {
         return _XPush.get().getContext();
+    }
+
+    //===============================日志========================================//
+
+    /**
+     * 设置是否打开调试
+     *
+     * @param isDebug
+     */
+    public static void debug(boolean isDebug) {
+        PushLog.debug(isDebug);
+    }
+
+    /**
+     * 设置是否打开调试
+     *
+     * @param logger
+     */
+    public static void setLogger(@NonNull ILogger logger) {
+        PushLog.setLogger(logger);
     }
 
     //===============================操作========================================//
@@ -137,16 +157,16 @@ public final class XPush {
         return _XPush.get().getPlatformName();
     }
 
-    //===============================IPushRepeater========================================//
+    //===============================IPushDispatcher========================================//
 
     /**
-     * 设置消息推送的中继器
+     * 设置消息推送的事件转发器
      *
-     * @param iPushRepeater 消息推送的中继器
+     * @param iPushDispatcher 消息推送的事件转发器
      * @return
      */
-    public static void setIPushRepeater(@NonNull IPushRepeater iPushRepeater) {
-        _XPush.get().setIPushRepeater(iPushRepeater);
+    public static void setIPushDispatcher(@NonNull IPushDispatcher iPushDispatcher) {
+        _XPush.get().setIPushDispatcher(iPushDispatcher);
     }
 
     /**
@@ -227,26 +247,6 @@ public final class XPush {
      */
     public static void transmitMessage(Context context, XPushMsg pushMsg) {
         _XPush.get().transmitMessage(context, pushMsg);
-    }
-
-    //===============================日志========================================//
-
-    /**
-     * 设置是否打开调试
-     *
-     * @param isDebug
-     */
-    public static void debug(boolean isDebug) {
-        PushLog.debug(isDebug);
-    }
-
-    /**
-     * 设置是否打开调试
-     *
-     * @param logger
-     */
-    public static void setLogger(@NonNull ILogger logger) {
-        PushLog.setLogger(logger);
     }
 
 

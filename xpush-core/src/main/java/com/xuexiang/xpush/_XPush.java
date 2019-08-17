@@ -26,12 +26,12 @@ import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
-import com.xuexiang.xpush.core.IPushRepeater;
 import com.xuexiang.xpush.core.annotation.CommandType;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
-import com.xuexiang.xpush.core.annotation.ResultCode;
 import com.xuexiang.xpush.core.annotation.PushAction;
-import com.xuexiang.xpush.core.impl.DefaultPushRepeaterImpl;
+import com.xuexiang.xpush.core.annotation.ResultCode;
+import com.xuexiang.xpush.core.repeater.IPushDispatcher;
+import com.xuexiang.xpush.core.repeater.impl.DefaultPushDispatcherImpl;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
@@ -66,10 +66,13 @@ public final class _XPush {
      * 推送客户端
      */
     private IPushClient mIPushClient;
-    private IPushRepeater mIPushRepeater;
+    /**
+     * 消息推送事件转发器
+     */
+    private IPushDispatcher mIPushDispatcher;
 
     private _XPush() {
-        mIPushRepeater = new DefaultPushRepeaterImpl();
+        mIPushDispatcher = new DefaultPushDispatcherImpl();
     }
 
     /**
@@ -91,13 +94,13 @@ public final class _XPush {
     //=====================================================================//
 
     /**
-     * 设置消息推送的中继器
+     * 设置消息推送的事件转发器
      *
-     * @param iPushRepeater 消息推送的中继器
+     * @param iPushDispatcher 消息推送的事件转发器
      * @return
      */
-    public _XPush setIPushRepeater(@NonNull IPushRepeater iPushRepeater) {
-        mIPushRepeater = iPushRepeater;
+    public _XPush setIPushDispatcher(@NonNull IPushDispatcher iPushDispatcher) {
+        mIPushDispatcher = iPushDispatcher;
         return this;
     }
 
@@ -189,12 +192,20 @@ public final class _XPush {
      * @param data    消息数据
      */
     private void transmit(Context context, @PushAction String action, @NonNull Parcelable data) {
-        if (mIPushRepeater != null) {
-            mIPushRepeater.transmit(context, action, data);
+        if (mIPushDispatcher != null) {
+            mIPushDispatcher.transmit(context, action, data);
         }
     }
 
     //===================初始化======================//
+    /**
+     * 初始化[不注册推送客户端]
+     *
+     * @param application
+     */
+    public void init(@NonNull Application application) {
+        mApplication = application;
+    }
 
     /**
      * 初始化[自动注册]

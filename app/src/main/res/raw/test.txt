@@ -1,0 +1,5 @@
+Android一词的本义指“机器人”，同时也是Google于2007年11月5日
+ 宣布的基于Linux平台的开源手机操作系统的名称，该平台由操作系统、中间件、用户界面和应用软件组成。
+Android一词最早出现于法国作家利尔亚当（Auguste Villiers de l'Isle-Adam）在1886年发表的科幻小说《未来夏娃》（L'ève future）中。他将外表像人的机器起名为Android。
+Android的Logo是由Ascender公司设计的，诞生于2010年，其设计灵感源于男女厕所门上的图形符号，[1]  于是布洛克绘制了一个简单的机器人，它的躯干就像锡罐的形状，头上还有两根天线，Android小机器人便诞生了。其中的文字使用了Ascender公司专门制作的称之为“Droid ” 的字体。Android是一个全身绿色的机器人，绿色也是Android的标志。颜色采用了PMS 376C和RGB中十六进制的#A4C639来绘制，这是Android操作系统的品牌象徵。有时候，它们还会使用纯文字的Logo。[1]
+2012年7月美国科技博客网站BusinessInsider评选出二十一世纪十款最重要电子产品，Android操作系统和iPhone等榜上有名。

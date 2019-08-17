@@ -15,12 +15,13 @@
  *
  */
 
-package com.xuexiang.xpush.core;
+package com.xuexiang.xpush.core.receiver;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 

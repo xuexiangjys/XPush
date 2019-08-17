@@ -15,12 +15,12 @@
  *
  */
 
-package com.xuexiang.xpush.core.impl;
+package com.xuexiang.xpush.core.repeater.impl;
 
 import android.content.Context;
 import android.os.Parcelable;
 
-import com.xuexiang.xpush.core.IPushRepeater;
+import com.xuexiang.xpush.core.repeater.IPushDispatcher;
 import com.xuexiang.xpush.core.annotation.PushAction;
 import com.xuexiang.xpush.util.TransmitDataUtils;
 
@@ -30,7 +30,7 @@ import com.xuexiang.xpush.util.TransmitDataUtils;
  * @author xuexiang
  * @since 2019-08-16 9:21
  */
-public class DefaultPushRepeaterImpl implements IPushRepeater {
+public class DefaultPushDispatcherImpl implements IPushDispatcher {
 
     @Override
     public void transmit(Context context, @PushAction String action, Parcelable data) {

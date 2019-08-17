@@ -19,7 +19,7 @@ package com.xuexiang.pushdemo.push;
 
 import android.content.Context;
 
-import com.xuexiang.xpush.core.impl.XPushReceiver;
+import com.xuexiang.xpush.core.receiver.impl.AbstractPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 
@@ -27,7 +27,7 @@ import com.xuexiang.xpush.entity.XPushMsg;
  * @author xuexiang
  * @since 2019-08-16 17:50
  */
-public class CustomPushReceiver extends XPushReceiver {
+public class CustomPushReceiver extends AbstractPushReceiver {
 
     @Override
     public void onNotificationClick(Context context, XPushMsg msg) {
