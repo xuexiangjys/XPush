@@ -15,25 +15,28 @@
  *
  */
 
-package com.xuexiang.xpush.core.repeater.impl;
+package com.xuexiang.xpush.core.dispatcher;
 
 import android.content.Context;
 import android.os.Parcelable;
 
-import com.xuexiang.xpush.core.repeater.IPushDispatcher;
 import com.xuexiang.xpush.core.annotation.PushAction;
-import com.xuexiang.xpush.util.TransmitDataUtils;
 
 /**
- * 默认的消息推送中间件
+ * 消息推送事件转发器
  *
  * @author xuexiang
- * @since 2019-08-16 9:21
+ * @since 2019-08-16 9:07
  */
-public class DefaultPushDispatcherImpl implements IPushDispatcher {
+public interface IPushDispatcher {
 
-    @Override
-    public void transmit(Context context, @PushAction String action, Parcelable data) {
-        TransmitDataUtils.sendPushData(context, action, data);
-    }
+    /**
+     * 转译消息
+     *
+     * @param context
+     * @param action  动作
+     * @param data    数据
+     */
+    void transmit(Context context, @PushAction String action, Parcelable data);
+
 }

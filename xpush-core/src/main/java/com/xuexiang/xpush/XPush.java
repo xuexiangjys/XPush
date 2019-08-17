@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
-import com.xuexiang.xpush.core.repeater.IPushDispatcher;
+import com.xuexiang.xpush.core.dispatcher.IPushDispatcher;
 import com.xuexiang.xpush.core.annotation.CommandType;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.annotation.ResultCode;

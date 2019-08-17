@@ -20,8 +20,8 @@ package com.xuexiang.xpush.core;
 import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.queue.IMessageObservable;
+import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
-import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 
@@ -122,7 +122,7 @@ public class XPushManager implements IMessageObservable {
      * @param subscriber 消息订阅者
      */
     @Override
-    public boolean register(MessageSubscriber subscriber) {
+    public boolean register(IMessageObserver subscriber) {
         if (mMessageObservable != null) {
             return mMessageObservable.register(subscriber);
         }
@@ -132,12 +132,12 @@ public class XPushManager implements IMessageObservable {
     /**
      * 注销推送消息的订阅者
      *
-     * @param subscriber 消息订阅者
+     * @param observer 消息订阅者
      */
     @Override
-    public boolean unregister(MessageSubscriber subscriber) {
+    public boolean unregister(IMessageObserver observer) {
         if (mMessageObservable != null) {
-            return mMessageObservable.unregister(subscriber);
+            return mMessageObservable.unregister(observer);
         }
         return false;
     }

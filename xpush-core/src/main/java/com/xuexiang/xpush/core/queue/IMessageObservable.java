@@ -63,16 +63,16 @@ public interface IMessageObservable {
     /**
      * 注册推送消息的订阅者
      *
-     * @param subscriber 消息订阅者
+     * @param observer 消息订阅者
      */
-    boolean register(MessageSubscriber subscriber);
+    boolean register(IMessageObserver observer);
 
     /**
      * 注销推送消息的订阅者
      *
-     * @param subscriber 消息订阅者
+     * @param observer 消息订阅者
      */
-    boolean unregister(MessageSubscriber subscriber);
+    boolean unregister(IMessageObserver observer);
 
     /**
      * 注销所有的推送消息的订阅者

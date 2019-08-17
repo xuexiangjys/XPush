@@ -18,6 +18,7 @@
 package com.xuexiang.xpush.core.queue.impl;
 
 import com.xuexiang.xpush.core.queue.IMessageObservable;
+import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 
@@ -40,7 +41,7 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
     /**
      * 存放推送消息的订阅者
      */
-    private List<WeakReference<MessageSubscriber>> mSubscribers = new ArrayList<>();
+    private List<WeakReference<IMessageObserver>> mObservers = new ArrayList<>();
 
     /**
      * 消息推送连接状态发生变化
@@ -49,12 +50,12 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public void notifyConnectStatusChanged(int connectStatus) {
-        Iterator<WeakReference<MessageSubscriber>> it = mSubscribers.iterator();
+        Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
         synchronized (mLock) {
             while (it.hasNext()) {
-                MessageSubscriber subscriber = it.next().get();
-                if (subscriber != null) {
-                    subscriber.onConnectStatusChanged(connectStatus);
+                IMessageObserver observer = it.next().get();
+                if (observer != null) {
+                    observer.onConnectStatusChanged(connectStatus);
                 } else {
                     it.remove();
                 }
@@ -70,12 +71,12 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public void notifyNotification(Notification notification) {
-        Iterator<WeakReference<MessageSubscriber>> it = mSubscribers.iterator();
+        Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
         synchronized (mLock) {
             while (it.hasNext()) {
-                MessageSubscriber subscriber = it.next().get();
-                if (subscriber != null) {
-                    subscriber.onNotification(notification);
+                IMessageObserver observer = it.next().get();
+                if (observer != null) {
+                    observer.onNotification(notification);
                 } else {
                     it.remove();
                 }
@@ -91,12 +92,12 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public void notifyNotificationClick(Notification notification) {
-        Iterator<WeakReference<MessageSubscriber>> it = mSubscribers.iterator();
+        Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
         synchronized (mLock) {
             while (it.hasNext()) {
-                MessageSubscriber subscriber = it.next().get();
-                if (subscriber != null) {
-                    subscriber.onNotificationClick(notification);
+                IMessageObserver observer = it.next().get();
+                if (observer != null) {
+                    observer.onNotificationClick(notification);
                 } else {
                     it.remove();
                 }
@@ -112,12 +113,12 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public void notifyMessageReceived(CustomMessage message) {
-        Iterator<WeakReference<MessageSubscriber>> it = mSubscribers.iterator();
+        Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
         synchronized (mLock) {
             while (it.hasNext()) {
-                MessageSubscriber subscriber = it.next().get();
-                if (subscriber != null) {
-                    subscriber.onMessageReceived(message);
+                IMessageObserver observer = it.next().get();
+                if (observer != null) {
+                    observer.onMessageReceived(message);
                 } else {
                     it.remove();
                 }
@@ -128,13 +129,13 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
     /**
      * 注册推送消息的订阅者
      *
-     * @param subscriber 消息订阅者
+     * @param observer 消息订阅者
      */
     @Override
-    public boolean register(MessageSubscriber subscriber) {
-        if (subscriber != null) {
-            WeakReference<MessageSubscriber> obs = new WeakReference<>(subscriber);
-            return mSubscribers.add(obs);
+    public boolean register(IMessageObserver observer) {
+        if (observer != null) {
+            WeakReference<IMessageObserver> obs = new WeakReference<>(observer);
+            return mObservers.add(obs);
         } else {
             return false;
         }
@@ -143,17 +144,17 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
     /**
      * 注销推送消息的订阅者
      *
-     * @param subscriber 消息订阅者
+     * @param observer 消息订阅者
      */
     @Override
-    public boolean unregister(MessageSubscriber subscriber) {
+    public boolean unregister(IMessageObserver observer) {
         boolean result = false;
-        if (subscriber != null) {
-            Iterator<WeakReference<MessageSubscriber>> it = mSubscribers.iterator();
+        if (observer != null) {
+            Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
             synchronized (mLock) {
                 while (it.hasNext()) {
-                    MessageSubscriber sb = it.next().get();
-                    if (sb == subscriber) {
+                    IMessageObserver sb = it.next().get();
+                    if (sb == observer) {
                         it.remove();
                         result = true;
                         break;
@@ -169,8 +170,8 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public void unregisterAll() {
-        if (mSubscribers != null) {
-            mSubscribers.clear();
+        if (mObservers != null) {
+            mObservers.clear();
         }
     }
 }
