@@ -33,13 +33,10 @@ import com.xuexiang.xpush.entity.XPushMsg;
 public class XPushReceiver extends AbstractPushReceiver {
 
     @Override
-    public void onConnectStatusChanged(Context context, int connectStatus) {
-        XPushManager.get().notifyConnectStatusChanged(connectStatus);
-    }
-
-    @Override
     public void onNotification(Context context, XPushMsg msg) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
 
         XPushManager.get().notifyNotification(msg.toNotification());
     }
@@ -52,7 +49,9 @@ public class XPushReceiver extends AbstractPushReceiver {
      */
     @Override
     public void onNotificationClick(Context context, XPushMsg msg) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
 
         XPushManager.get().notifyNotificationClick(msg.toNotification());
     }
@@ -65,7 +64,9 @@ public class XPushReceiver extends AbstractPushReceiver {
      */
     @Override
     public void onMessageReceived(Context context, XPushMsg msg) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
 
         XPushManager.get().notifyMessageReceived(msg.toCustomMessage());
     }

@@ -22,6 +22,7 @@ import android.content.Context;
 import com.xuexiang.xpush.core.receiver.impl.AbstractPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
+import com.xuexiang.xutil.tip.ToastUtils;
 
 /**
  * @author xuexiang
@@ -41,6 +42,7 @@ public class CustomPushReceiver extends AbstractPushReceiver {
 
     @Override
     public void onCommandResult(Context context, XPushCommand command) {
-
+        ToastUtils.toast(command.getDescription());
     }
+
 }

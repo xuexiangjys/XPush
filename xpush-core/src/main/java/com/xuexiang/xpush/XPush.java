@@ -23,10 +23,11 @@ import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
-import com.xuexiang.xpush.core.dispatcher.IPushDispatcher;
+import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.annotation.CommandType;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.annotation.ResultCode;
+import com.xuexiang.xpush.core.dispatcher.IPushDispatcher;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.ILogger;
 import com.xuexiang.xpush.logs.PushLog;
@@ -46,6 +47,25 @@ public final class XPush {
     }
 
     //===============================初始化========================================//
+
+    /**
+     * 初始化[不注册推送客户端]
+     *
+     * @param application
+     */
+    public static void init(@NonNull Application application) {
+        _XPush.get().init(application);
+    }
+
+    /**
+     * 设置推送客户端
+     *
+     * @param pushClient
+     */
+    public static void setIPushClient(@NonNull IPushClient pushClient) {
+        _XPush.get().setIPushClient(pushClient);
+
+    }
 
     /**
      * 初始化[自动注册]
@@ -157,6 +177,13 @@ public final class XPush {
         return _XPush.get().getPlatformName();
     }
 
+    /**
+     * @return 推送连接状态
+     */
+    public static int getConnectStatus() {
+        return XPushManager.get().getConnectStatus();
+    }
+
     //===============================IPushDispatcher========================================//
 
     /**
@@ -175,9 +202,9 @@ public final class XPush {
      * @param context
      * @param commandType 命令类型
      * @param resultCode  结果码
-     * @param error       错误信息
      * @param token       内容
      * @param extraMsg    额外信息
+     * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
      * @see CommandType#TYPE_DEL_TAG
      * @see CommandType#TYPE_AND_OR_DEL_TAG
@@ -188,8 +215,8 @@ public final class XPush {
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */
-    public static void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String error, String token, String extraMsg) {
-        _XPush.get().transmitCommandResult(context, commandType, resultCode, error, token, extraMsg);
+    public static void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String token, String extraMsg, String error) {
+        _XPush.get().transmitCommandResult(context, commandType, resultCode, token, extraMsg, error);
     }
 
     /**

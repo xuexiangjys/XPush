@@ -20,6 +20,8 @@ package com.xuexiang.xpush.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.xuexiang.xpush.core.annotation.ResultCode;
+
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_AND_OR_DEL_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
@@ -45,10 +47,6 @@ public class XPushCommand implements Parcelable {
      */
     private int mResultCode;
     /**
-     * 错误信息
-     */
-    private String mError;
-    /**
      * 命令内容
      */
     private String mToken;
@@ -56,16 +54,30 @@ public class XPushCommand implements Parcelable {
      * 拓展字段
      */
     private String mExtraMsg;
+    /**
+     * 错误信息
+     */
+    private String mError;
 
     public XPushCommand() {
     }
 
-    public XPushCommand(int type, int resultCode, String error, String token, String extraMsg) {
+
+    /**
+     * 构造方法
+     *
+     * @param type       命令类型
+     * @param resultCode 结果码
+     * @param token      内容
+     * @param extraMsg   额外信息
+     * @param error      错误信息
+     */
+    public XPushCommand(int type, int resultCode, String token, String extraMsg, String error) {
         mType = type;
         mResultCode = resultCode;
-        mError = error;
         mToken = token;
         mExtraMsg = extraMsg;
+        mError = error;
     }
 
     public int getType() {
@@ -113,7 +125,11 @@ public class XPushCommand implements Parcelable {
         return this;
     }
 
-    private String getTypeText(int type) {
+    public boolean isSuccess() {
+        return mResultCode == ResultCode.RESULT_OK;
+    }
+
+    public String getTypeText(int type) {
         switch (type) {
             case TYPE_REGISTER:
                 return "TYPE_REGISTER";
@@ -140,7 +156,7 @@ public class XPushCommand implements Parcelable {
      * @param type
      * @return
      */
-    private String getTypeName(int type) {
+    public String getTypeName(int type) {
         switch (type) {
             case TYPE_REGISTER:
                 return "注册推送";
@@ -157,8 +173,15 @@ public class XPushCommand implements Parcelable {
             case TYPE_AND_OR_DEL_TAG:
                 return "添加或删除标签";
             default:
-                return "";
+                return "未知操作";
         }
+    }
+
+    /**
+     * @return 获取命令的描述信息
+     */
+    public String getDescription() {
+        return getTypeName(mType) + (isSuccess() ? "成功" : "失败");
     }
 
     protected XPushCommand(Parcel in) {
@@ -199,11 +222,10 @@ public class XPushCommand implements Parcelable {
     public String toString() {
         return "XPushCommand{" +
                 "mType=" + mType +
-                ", mTypeName=" + getTypeName(mType) +
                 ", mResultCode=" + mResultCode +
-                ", mError='" + mError + '\'' +
                 ", mToken='" + mToken + '\'' +
                 ", mExtraMsg='" + mExtraMsg + '\'' +
+                ", mError='" + mError + '\'' +
                 '}';
     }
 }

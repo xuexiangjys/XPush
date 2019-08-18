@@ -19,6 +19,7 @@ package com.xuexiang.xpush.core;
 
 import android.support.annotation.NonNull;
 
+import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.queue.IMessageObservable;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
@@ -35,10 +36,19 @@ public class XPushManager implements IMessageObservable {
 
     private static volatile XPushManager sInstance = null;
 
-    private IMessageObservable mMessageObservable;
+    /**
+     * 消息被观察者
+     */
+    private IMessageObservable mObservable;
+
+    /**
+     * 推送连接状态
+     */
+    private int mConnectStatus = ConnectStatus.DISCONNECT;
+
 
     private XPushManager() {
-        mMessageObservable = new DefaultMessageObservableImpl();
+        mObservable = new DefaultMessageObservableImpl();
     }
 
     /**
@@ -64,8 +74,15 @@ public class XPushManager implements IMessageObservable {
      * @return
      */
     public XPushManager setIMessageObservable(@NonNull IMessageObservable observable) {
-        mMessageObservable = observable;
+        mObservable = observable;
         return this;
+    }
+
+    /**
+     * @return 推送连接状态
+     */
+    public int getConnectStatus() {
+        return mConnectStatus;
     }
 
     /**
@@ -75,8 +92,9 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyConnectStatusChanged(int connectStatus) {
-        if (mMessageObservable != null) {
-            mMessageObservable.notifyConnectStatusChanged(connectStatus);
+        mConnectStatus = connectStatus;
+        if (mObservable != null) {
+            mObservable.notifyConnectStatusChanged(connectStatus);
         }
     }
 
@@ -87,8 +105,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyNotification(Notification notification) {
-        if (mMessageObservable != null) {
-            mMessageObservable.notifyNotification(notification);
+        if (mObservable != null) {
+            mObservable.notifyNotification(notification);
         }
     }
 
@@ -99,8 +117,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyNotificationClick(Notification notification) {
-        if (mMessageObservable != null) {
-            mMessageObservable.notifyNotificationClick(notification);
+        if (mObservable != null) {
+            mObservable.notifyNotificationClick(notification);
         }
     }
 
@@ -111,8 +129,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyMessageReceived(CustomMessage message) {
-        if (mMessageObservable != null) {
-            mMessageObservable.notifyMessageReceived(message);
+        if (mObservable != null) {
+            mObservable.notifyMessageReceived(message);
         }
     }
 
@@ -123,8 +141,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public boolean register(IMessageObserver subscriber) {
-        if (mMessageObservable != null) {
-            return mMessageObservable.register(subscriber);
+        if (mObservable != null) {
+            return mObservable.register(subscriber);
         }
         return false;
     }
@@ -136,8 +154,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public boolean unregister(IMessageObserver observer) {
-        if (mMessageObservable != null) {
-            return mMessageObservable.unregister(observer);
+        if (mObservable != null) {
+            return mObservable.unregister(observer);
         }
         return false;
     }
@@ -147,8 +165,8 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void unregisterAll() {
-        if (mMessageObservable != null) {
-            mMessageObservable.unregisterAll();
+        if (mObservable != null) {
+            mObservable.unregisterAll();
         }
     }
 

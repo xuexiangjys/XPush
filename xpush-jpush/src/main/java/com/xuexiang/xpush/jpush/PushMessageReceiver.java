@@ -23,7 +23,7 @@ import android.text.TextUtils;
 
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.logs.PushLog;
-import com.xuexiang.xpush.util.JsonUtils;
+import com.xuexiang.xpush.util.PushUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +63,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         PushLog.d("[onNotifyMessageOpened]:" + message);
         try {
             XPush.transmitNotificationClick(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
-                    JsonUtils.toMap(new JSONObject(message.notificationExtras)));
+                    PushUtils.toMap(new JSONObject(message.notificationExtras)));
         } catch (JSONException localJSONException1) {
             localJSONException1.printStackTrace();
             XPush.transmitNotificationClick(context, message.notificationId, message.notificationTitle, message.notificationContent, message.notificationExtras, null);
@@ -72,6 +72,10 @@ public class PushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onMultiActionClicked(Context context, Intent intent) {
+        if (intent.getExtras() == null) {
+            return;
+        }
+
         PushLog.d("[onMultiActionClicked] 用户点击了通知栏按钮:" + intent.getExtras().getString(JPushInterface.EXTRA_NOTIFICATION_ACTION_EXTRA));
     }
 
@@ -80,7 +84,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         PushLog.d("[onNotifyMessageArrived]:" + message);
         try {
             XPush.transmitNotification(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
-                    JsonUtils.toMap(new JSONObject(message.notificationExtras)));
+                    PushUtils.toMap(new JSONObject(message.notificationExtras)));
         } catch (JSONException localJSONException1) {
             localJSONException1.printStackTrace();
             XPush.transmitNotification(context, message.notificationId, message.notificationTitle, message.notificationContent, message.notificationExtras, null);
@@ -115,7 +119,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         XPush.transmitCommandResult(context, jPushMessage.getSequence(),
                 jPushMessage.getErrorCode() == 0 ? RESULT_OK : jPushMessage.getErrorCode(),
-                null, set2String(jPushMessage.getTags()), null);
+                set2String(jPushMessage.getTags()), null, null);
         super.onTagOperatorResult(context, jPushMessage);
     }
 
@@ -141,7 +145,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         XPush.transmitCommandResult(context, jPushMessage.getSequence(),
                 jPushMessage.getErrorCode() == 0 ? RESULT_OK : jPushMessage.getErrorCode(),
-                null, jPushMessage.getAlias(), null);
+                jPushMessage.getAlias(), null, null);
         super.onAliasOperatorResult(context, jPushMessage);
     }
 

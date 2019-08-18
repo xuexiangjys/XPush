@@ -110,9 +110,9 @@ public final class _XPush {
      * @param context
      * @param commandType 命令类型
      * @param resultCode  结果码
-     * @param error       错误信息
      * @param token       内容
      * @param extraMsg    额外信息
+     * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
      * @see CommandType#TYPE_DEL_TAG
      * @see CommandType#TYPE_AND_OR_DEL_TAG
@@ -123,7 +123,7 @@ public final class _XPush {
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */
-    public void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String error, String token, String extraMsg) {
+    public void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String token, String extraMsg, String error) {
         transmit(context, PushAction.RECEIVE_COMMAND_RESULT, new XPushCommand(commandType, resultCode, token, extraMsg, error));
     }
 
@@ -198,6 +198,7 @@ public final class _XPush {
     }
 
     //===================初始化======================//
+
     /**
      * 初始化[不注册推送客户端]
      *
@@ -205,6 +206,16 @@ public final class _XPush {
      */
     public void init(@NonNull Application application) {
         mApplication = application;
+    }
+
+    /**
+     * 设置推送客户端
+     *
+     * @param pushClient
+     */
+    public void setIPushClient(@NonNull IPushClient pushClient) {
+        mIPushClient = pushClient;
+        mIPushClient.init(getContext());
     }
 
     /**
@@ -235,6 +246,7 @@ public final class _XPush {
         mIPushClient = pushClient;
         mIPushClient.init(application);
     }
+
 
     /**
      * 在AndroidManifest.xml中查找所有支持的平台

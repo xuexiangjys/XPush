@@ -17,21 +17,27 @@
 
 package com.xuexiang.xpush.util;
 
+import com.xuexiang.xpush.core.annotation.ConnectStatus;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTED;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTING;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.DISCONNECT;
+
 /**
- * Json 工具类
+ * 推送工具类
  *
  * @author xuexiang
- * @since 2019-08-16 8:59
+ * @since 2019-08-18 23:03
  */
-public final class JsonUtils {
+public final class PushUtils {
 
-    private JsonUtils() {
+    private PushUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
@@ -58,5 +64,22 @@ public final class JsonUtils {
         }
         return map;
     }
-
+    
+    /**
+     * 格式化推送连接状态
+     *
+     * @return 推送连接状态
+     */
+    public static String formatConnectStatus(@ConnectStatus int connectStatus) {
+        switch (connectStatus) {
+            case DISCONNECT:
+                return "已断开";
+            case CONNECTING:
+                return "连接中";
+            case CONNECTED:
+                return "已连接";
+            default:
+                return "未知状态";
+        }
+    }
 }

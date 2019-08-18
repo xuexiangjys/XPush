@@ -17,6 +17,7 @@
 
 package com.xuexiang.xpush.core.queue.impl;
 
+import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.entity.Notification;
 
@@ -34,7 +35,7 @@ public abstract class MessageSubscriber implements IMessageObserver {
      * @param connectStatus 连接状态
      */
     @Override
-    public void onConnectStatusChanged(int connectStatus) {
+    public void onConnectStatusChanged(@ConnectStatus int connectStatus) {
 
     }
 

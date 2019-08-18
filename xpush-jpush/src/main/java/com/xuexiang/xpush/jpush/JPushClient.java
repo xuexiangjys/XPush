@@ -36,6 +36,7 @@ import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
 import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
@@ -82,6 +83,14 @@ public class JPushClient implements IPushClient {
     @Override
     public void unRegister() {
         JPushInterface.stopPush(mContext);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (JPushInterface.isPushStopped(mContext)) {
+                    XPush.transmitCommandResult(mContext, TYPE_UNREGISTER, RESULT_OK, null, null, null);
+                }
+            }
+        }, 200);
     }
 
     @Override

@@ -17,7 +17,6 @@
 
 package com.xuexiang.xpush.core.queue;
 
-import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.receiver.IPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
@@ -36,7 +37,7 @@ import static com.xuexiang.xpush.core.annotation.PushAction.RECEIVE_NOTIFICATION
 
 
 /**
- * 消息推送接收器
+ * 抽象的消息推送接收器
  *
  * @author xuexiang
  * @since 2019-08-15 18:04
@@ -77,7 +78,7 @@ public abstract class AbstractPushReceiver extends BroadcastReceiver implements 
 
     @Override
     public void onConnectStatusChanged(Context context, int connectStatus) {
-
+        XPushManager.get().notifyConnectStatusChanged(connectStatus);
     }
 
 }
