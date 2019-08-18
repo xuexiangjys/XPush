@@ -35,7 +35,7 @@ public class ForegroundNotification implements Serializable {
      * 初始化
      * @return ForegroundNotification
      */
-    public static ForegroundNotification ini(){
+    public static ForegroundNotification init(){
         return new ForegroundNotification();
     }
     /**

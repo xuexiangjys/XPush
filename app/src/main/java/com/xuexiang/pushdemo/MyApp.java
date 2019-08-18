@@ -56,6 +56,7 @@ public class MyApp extends Application {
         initKeepLive();
 
         initPush();
+
     }
 
     /**
@@ -89,7 +90,7 @@ public class MyApp extends Application {
      */
     private void initKeepLive() {
         //定义前台服务的默认样式。即标题、描述和图标
-        ForegroundNotification foregroundNotification = new ForegroundNotification("测试", "描述", R.mipmap.ic_launcher,
+        ForegroundNotification foregroundNotification = new ForegroundNotification("推送服务", "推送服务正在运行中...", R.mipmap.ic_launcher,
                 //定义前台服务的通知点击事件
                 new ForegroundNotificationClickListener() {
                     @Override

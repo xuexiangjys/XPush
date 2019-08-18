@@ -11,16 +11,16 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
-import com.xuexiang.keeplive.config.NotificationUtils;
+import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.config.NotificationUtils.KEY_NOTIFICATION_ID;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OFF;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
 
 /**
- * 守护进程
+ * 守护进程服务
  *
  * @author xuexiang
  * @since 2019-08-14 16:09

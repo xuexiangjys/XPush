@@ -17,21 +17,30 @@ import android.os.RemoteException;
 
 import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.keeplive.R;
-import com.xuexiang.keeplive.config.NotificationUtils;
+import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import com.xuexiang.keeplive.receiver.OnePxReceiver;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.config.NotificationUtils.KEY_NOTIFICATION_ID;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OFF;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
 
+/**
+ * 本地服务
+ *
+ * @author xuexiang
+ * @since 2019-08-18 23:23
+ */
 public final class LocalService extends Service {
     public static final String KEY_LOCAL_SERVICE_NAME = "com.xuexiang.keeplive.service.LocalService";
 
     private OnePxReceiver mOnePxReceiver;
     private ScreenStateReceiver mScreenStateReceiver;
-    private boolean mIsPause = true;//控制暂停
+    /**
+     * 控制暂停
+     */
+    private boolean mIsPause = true;
     private MediaPlayer mMediaPlayer;
     private GuardBinder mBinder;
     private Handler mHandler;

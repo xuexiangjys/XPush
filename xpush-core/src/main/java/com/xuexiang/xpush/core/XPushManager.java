@@ -26,6 +26,10 @@ import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 推送核心管理类
  *
@@ -40,6 +44,10 @@ public class XPushManager implements IMessageObservable {
      * 消息被观察者
      */
     private IMessageObservable mObservable;
+    /**
+     * 消息过滤器
+     */
+    private List<IMessageFilter> mFilters;
 
     /**
      * 推送连接状态
@@ -49,6 +57,7 @@ public class XPushManager implements IMessageObservable {
 
     private XPushManager() {
         mObservable = new DefaultMessageObservableImpl();
+        mFilters = new ArrayList<>();
     }
 
     /**
@@ -67,6 +76,15 @@ public class XPushManager implements IMessageObservable {
         return sInstance;
     }
 
+    //=======================消息被观察者==============================//
+
+    /**
+     * @return 推送连接状态
+     */
+    public int getConnectStatus() {
+        return mConnectStatus;
+    }
+
     /**
      * 设置推送消息的被观察者
      *
@@ -76,13 +94,6 @@ public class XPushManager implements IMessageObservable {
     public XPushManager setIMessageObservable(@NonNull IMessageObservable observable) {
         mObservable = observable;
         return this;
-    }
-
-    /**
-     * @return 推送连接状态
-     */
-    public int getConnectStatus() {
-        return mConnectStatus;
     }
 
     /**
@@ -105,8 +116,11 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyNotification(Notification notification) {
-        if (mObservable != null) {
-            mObservable.notifyNotification(notification);
+        boolean isFiltered = filterNotification(notification);
+        if (!isFiltered) {
+            if (mObservable != null) {
+                mObservable.notifyNotification(notification);
+            }
         }
     }
 
@@ -117,10 +131,14 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyNotificationClick(Notification notification) {
-        if (mObservable != null) {
-            mObservable.notifyNotificationClick(notification);
+        boolean isFiltered = filterNotification(notification);
+        if (!isFiltered) {
+            if (mObservable != null) {
+                mObservable.notifyNotificationClick(notification);
+            }
         }
     }
+
 
     /**
      * 收到自定义消息
@@ -129,9 +147,13 @@ public class XPushManager implements IMessageObservable {
      */
     @Override
     public void notifyMessageReceived(CustomMessage message) {
-        if (mObservable != null) {
-            mObservable.notifyMessageReceived(message);
+        boolean isFiltered = filterCustomMessage(message);
+        if (!isFiltered) {
+            if (mObservable != null) {
+                mObservable.notifyMessageReceived(message);
+            }
         }
+
     }
 
     /**
@@ -170,5 +192,90 @@ public class XPushManager implements IMessageObservable {
         }
     }
 
+    //=======================消息过滤器==============================//
+
+    /**
+     * 增加消息过滤器
+     *
+     * @param filter 消息过滤器
+     * @return
+     */
+    public XPushManager addFilter(@NonNull IMessageFilter filter) {
+        mFilters.add(filter);
+        return this;
+    }
+
+    /**
+     * 增加消息过滤器
+     *
+     * @param index  索引
+     * @param filter 消息过滤器
+     * @return
+     */
+    public XPushManager addFilter(int index, @NonNull IMessageFilter filter) {
+        mFilters.add(index, filter);
+        return this;
+    }
+
+    /**
+     * 增加消息过滤器
+     *
+     * @param filters 消息过滤器
+     * @return
+     */
+    public XPushManager addFilters(@NonNull IMessageFilter... filters) {
+        mFilters.addAll(Arrays.asList(filters));
+        return this;
+    }
+
+    /**
+     * 设置消息过滤器
+     *
+     * @param filters 消息过滤器
+     * @return
+     */
+    public XPushManager setFilters(@NonNull IMessageFilter... filters) {
+        mFilters.clear();
+        mFilters.addAll(Arrays.asList(filters));
+        return this;
+    }
+
+    /**
+     * 过滤通知
+     *
+     * @param notification 通知
+     * @return {@code true}：过滤通知 <br> {@code false}：不过滤通知
+     */
+    private boolean filterNotification(Notification notification) {
+        if (mFilters.size() == 0) {
+            return false;
+        }
+
+        for (int i = 0; i < mFilters.size(); i++) {
+            if (mFilters.get(i).filter(notification)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 过滤自定义消息
+     *
+     * @param message 自定义消息
+     * @return {@code true}：过滤自定义消息 <br> {@code false}：不过滤自定义消息
+     */
+    private boolean filterCustomMessage(CustomMessage message) {
+        if (mFilters.size() == 0) {
+            return false;
+        }
+
+        for (int i = 0; i < mFilters.size(); i++) {
+            if (mFilters.get(i).filter(message)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

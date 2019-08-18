@@ -8,5 +8,11 @@ import android.content.Intent;
  */
 public interface ForegroundNotificationClickListener {
 
+    /**
+     * 前台服务被点击
+     *
+     * @param context
+     * @param intent
+     */
     void foregroundNotificationClick(Context context, Intent intent);
 }

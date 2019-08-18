@@ -63,6 +63,7 @@ public interface IMessageObservable {
      * 注册推送消息的订阅者
      *
      * @param observer 消息订阅者
+     * @return 是否注册成功
      */
     boolean register(IMessageObserver observer);
 
@@ -70,6 +71,7 @@ public interface IMessageObservable {
      * 注销推送消息的订阅者
      *
      * @param observer 消息订阅者
+     * @return 是否注销成功
      */
     boolean unregister(IMessageObserver observer);
 

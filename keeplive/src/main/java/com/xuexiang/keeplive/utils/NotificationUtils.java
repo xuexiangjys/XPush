@@ -1,4 +1,21 @@
-package com.xuexiang.keeplive.config;
+/*
+ * Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.xuexiang.keeplive.utils;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,6 +31,12 @@ import android.support.v4.app.NotificationCompat;
 
 import java.util.Random;
 
+/**
+ * 通知工具类
+ *
+ * @author xuexiang
+ * @since 2019-08-18 23:25
+ */
 public class NotificationUtils extends ContextWrapper {
     public static final int KEY_NOTIFICATION_ID = 13691;
 
@@ -77,7 +100,7 @@ public class NotificationUtils extends ContextWrapper {
     public static void sendNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent) {
         NotificationUtils notificationUtils = new NotificationUtils(context);
         Notification notification;
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationUtils.createNotificationChannel();
             notification = notificationUtils.getChannelNotification(title, content, icon, intent).build();
         } else {
@@ -89,7 +112,7 @@ public class NotificationUtils extends ContextWrapper {
     public static Notification createNotification(@NonNull Context context, @NonNull String title, @NonNull String content, @NonNull int icon, @NonNull Intent intent) {
         NotificationUtils notificationUtils = new NotificationUtils(context);
         Notification notification;
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationUtils.createNotificationChannel();
             notification = notificationUtils.getChannelNotification(title, content, icon, intent).build();
         } else {

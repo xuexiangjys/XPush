@@ -13,10 +13,10 @@ import android.support.annotation.RequiresApi;
 
 import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.keeplive.utils.ServiceUtils;
-import com.xuexiang.keeplive.config.NotificationUtils;
+import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 
-import static com.xuexiang.keeplive.config.NotificationUtils.KEY_NOTIFICATION_ID;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.service.LocalService.KEY_LOCAL_SERVICE_NAME;
 
 /**

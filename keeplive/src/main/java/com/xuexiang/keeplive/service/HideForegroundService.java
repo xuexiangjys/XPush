@@ -7,10 +7,10 @@ import android.os.Handler;
 import android.os.IBinder;
 
 import com.xuexiang.keeplive.KeepLive;
-import com.xuexiang.keeplive.config.NotificationUtils;
+import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 
-import static com.xuexiang.keeplive.config.NotificationUtils.KEY_NOTIFICATION_ID;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
  * 隐藏前台服务通知
