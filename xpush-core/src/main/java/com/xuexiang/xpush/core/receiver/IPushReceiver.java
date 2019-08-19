@@ -74,8 +74,10 @@ public interface IPushReceiver {
      * @see IPushClient#unRegister()
      * @see IPushClient#addTag(String)
      * @see IPushClient#deleteTag(String)
+     * @see IPushClient#getTags()
      * @see IPushClient#bindAlias(String)
      * @see IPushClient#unBindAlias(String)
+     * @see IPushClient#getAlias()
      */
     void onCommandResult(Context context, XPushCommand command);
 

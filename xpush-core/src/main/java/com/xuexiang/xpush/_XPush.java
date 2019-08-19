@@ -115,11 +115,13 @@ public final class _XPush {
      * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
      * @see CommandType#TYPE_DEL_TAG
+     * @see CommandType#TYPE_GET_TAG
      * @see CommandType#TYPE_AND_OR_DEL_TAG
      * @see CommandType#TYPE_REGISTER
      * @see CommandType#TYPE_UNREGISTER
      * @see CommandType#TYPE_BIND_ALIAS
      * @see CommandType#TYPE_UNBIND_ALIAS
+     * @see CommandType#TYPE_GET_ALIAS
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */
@@ -365,6 +367,15 @@ public final class _XPush {
     }
 
     /**
+     * 获取别名
+     */
+    public void getAlias() {
+        testInitialize();
+        PushLog.i(String.format("%s--%s", getPlatformName(), "getAlias()"));
+        mIPushClient.getAlias();
+    }
+
+    /**
      * 添加标签
      *
      * @param tag 标签
@@ -384,6 +395,15 @@ public final class _XPush {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "deleteTag(" + tag + ")"));
         mIPushClient.deleteTag(tag);
+    }
+
+    /**
+     * 获取标签
+     */
+    public void getTags() {
+        testInitialize();
+        PushLog.i(String.format("%s--%s", getPlatformName(), "getTags()"));
+        mIPushClient.getTags();
     }
 
     /**

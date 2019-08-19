@@ -34,6 +34,8 @@ import cn.jpush.android.api.JPushInterface;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
@@ -103,6 +105,14 @@ public class JPushClient implements IPushClient {
         JPushInterface.deleteAlias(mContext, TYPE_UNBIND_ALIAS);
     }
 
+    /**
+     * 获取别名
+     */
+    @Override
+    public void getAlias() {
+        JPushInterface.getAlias(mContext, TYPE_GET_ALIAS);
+    }
+
     @Override
     public void addTag(String tag) {
         mHandler.removeCallbacks(mSetTagRunnable);
@@ -113,6 +123,14 @@ public class JPushClient implements IPushClient {
     @Override
     public void deleteTag(String tag) {
         JPushInterface.deleteTags(mContext, TYPE_DEL_TAG, Collections.singleton(tag));
+    }
+
+    /**
+     * 获取标签
+     */
+    @Override
+    public void getTags() {
+        JPushInterface.getAllTags(mContext, TYPE_GET_TAG);
     }
 
     @Override

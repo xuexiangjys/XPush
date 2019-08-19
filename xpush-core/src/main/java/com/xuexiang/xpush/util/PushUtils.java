@@ -17,6 +17,10 @@
 
 package com.xuexiang.xpush.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
 
 import org.json.JSONException;
@@ -41,6 +45,10 @@ public final class PushUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+    private static final String PREF_NAME = "XPush";
+    private static final String KEY_CONNECT_STATUS = "key_connect_status";
+
+
     /**
      * 转换成Map
      *
@@ -64,7 +72,7 @@ public final class PushUtils {
         }
         return map;
     }
-    
+
     /**
      * 格式化推送连接状态
      *
@@ -82,4 +90,23 @@ public final class PushUtils {
                 return "未知状态";
         }
     }
+
+    /**
+     * 保存连接状态
+     *
+     * @param connectStatus 连接状态
+     */
+    public static void saveConnectStatus(@ConnectStatus int connectStatus) {
+        SharedPreferences sp = XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sp.edit().putInt(KEY_CONNECT_STATUS, connectStatus).apply();
+    }
+
+    /**
+     * 获取连接状态
+     */
+    public static int getConnectStatus() {
+        SharedPreferences sp = XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sp.getInt(KEY_CONNECT_STATUS, DISCONNECT);
+    }
+
 }

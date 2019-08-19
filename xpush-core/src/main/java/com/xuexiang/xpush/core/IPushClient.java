@@ -55,7 +55,10 @@ public interface IPushClient {
      * @param alias 别名
      */
     void unBindAlias(String alias);
-
+    /**
+     * 获取别名
+     */
+    void getAlias();
 
     /**
      * 增加标签
@@ -69,6 +72,10 @@ public interface IPushClient {
      * @param tag 标签
      */
     void deleteTag(String tag);
+    /**
+     * 获取标签
+     */
+    void getTags();
 
     /**
      * @return 获取平台码

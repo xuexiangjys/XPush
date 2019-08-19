@@ -73,7 +73,12 @@ public abstract class AbstractPushReceiver extends BroadcastReceiver implements 
 
     @Override
     public void onNotification(Context context, XPushMsg msg) {
+        //处理收到通知的事件
+    }
 
+    @Override
+    public void onCommandResult(Context context, XPushCommand command) {
+        //处理命令执行的结果
     }
 
     @Override

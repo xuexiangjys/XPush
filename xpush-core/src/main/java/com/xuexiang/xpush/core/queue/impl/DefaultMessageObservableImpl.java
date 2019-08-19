@@ -21,6 +21,7 @@ import com.xuexiang.xpush.core.queue.IMessageObservable;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -119,6 +120,26 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
                 IMessageObserver observer = it.next().get();
                 if (observer != null) {
                     observer.onMessageReceived(message);
+                } else {
+                    it.remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * 收到命令执行的结果
+     *
+     * @param command 命令
+     */
+    @Override
+    public void notifyCommandResult(XPushCommand command) {
+        Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
+        synchronized (mLock) {
+            while (it.hasNext()) {
+                IMessageObserver observer = it.next().get();
+                if (observer != null) {
+                    observer.onCommandResult(command);
                 } else {
                     it.remove();
                 }

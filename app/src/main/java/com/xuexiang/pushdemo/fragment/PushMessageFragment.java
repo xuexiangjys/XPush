@@ -27,6 +27,7 @@ import com.xuexiang.pushdemo.R;
 import com.xuexiang.xaop.annotation.MainThread;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageFragment;
+import com.xuexiang.xpush.core.IMessageFilter;
 import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
@@ -68,22 +69,46 @@ public class PushMessageFragment extends XPageFragment {
      */
     @Override
     protected void initListeners() {
-        XPushManager.get().register(mMessageSubscriber);
+        XPushManager.get()
+                .addFilter(new IMessageFilter() {
+                    @Override
+                    public boolean filter(Notification notification) {
+                        if (notification.getContent().contains("XPush")) {
+                            showMessage("通知被拦截");
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean filter(CustomMessage message) {
+                        if (message.getMsg().contains("XPush")) {
+                            showMessage("自定义消息被拦截");
+                            return true;
+                        }
+                        return false;
+                    }
+                })
+                .register(mMessageSubscriber);
+
     }
 
     private MessageSubscriber mMessageSubscriber = new MessageSubscriber() {
-        @MainThread
         @Override
         public void onMessageReceived(CustomMessage message) {
-            tvContent.setText(String.format("收到自定义消息:%s", message));
+            showMessage(String.format("收到自定义消息:%s", message));
         }
 
-        @MainThread
         @Override
         public void onNotification(Notification notification) {
-            tvContent.setText(String.format("收到通知:%s", notification));
+            showMessage(String.format("收到通知:%s", notification));
         }
     };
+
+    @MainThread
+    private void showMessage(String msg) {
+        tvContent.setText(msg);
+    }
 
 
     @Override

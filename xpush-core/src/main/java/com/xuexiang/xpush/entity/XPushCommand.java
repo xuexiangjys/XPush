@@ -26,6 +26,8 @@ import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_AND_OR_DEL_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
@@ -166,10 +168,14 @@ public class XPushCommand implements Parcelable {
                 return "添加标签";
             case TYPE_DEL_TAG:
                 return "删除标签";
+            case TYPE_GET_TAG:
+                return "获取标签";
             case TYPE_BIND_ALIAS:
                 return "绑定别名";
             case TYPE_UNBIND_ALIAS:
                 return "解绑别名";
+            case TYPE_GET_ALIAS:
+                return "获取别名";
             case TYPE_AND_OR_DEL_TAG:
                 return "添加或删除标签";
             default:
@@ -181,7 +187,7 @@ public class XPushCommand implements Parcelable {
      * @return 获取命令的描述信息
      */
     public String getDescription() {
-        return getTypeName(mType) + (isSuccess() ? "成功" : "失败");
+        return getTypeName(mType) + (isSuccess() ? "成功：" + mToken  : "失败");
     }
 
     protected XPushCommand(Parcel in) {

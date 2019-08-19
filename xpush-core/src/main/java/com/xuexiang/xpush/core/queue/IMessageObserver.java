@@ -19,6 +19,7 @@ package com.xuexiang.xpush.core.queue;
 
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
 
 /**
  * 推送消息观察者
@@ -55,5 +56,13 @@ public interface IMessageObserver {
      * @param message 自定义消息
      */
     void onMessageReceived(CustomMessage message);
+
+    /**
+     * 收到命令执行的结果
+     *
+     * @param command 命令
+     */
+    void onCommandResult(XPushCommand command);
+
 
 }

@@ -80,12 +80,17 @@ public class XPushReceiver extends AbstractPushReceiver {
      * @see IPushClient#unRegister()
      * @see IPushClient#addTag(String)
      * @see IPushClient#deleteTag(String)
+     * @see IPushClient#getTags()
      * @see IPushClient#bindAlias(String)
      * @see IPushClient#unBindAlias(String)
+     * @see IPushClient#getAlias()
      */
     @Override
     public void onCommandResult(Context context, XPushCommand command) {
+        if (command == null) {
+            return;
+        }
 
+        XPushManager.get().notifyCommandResult(command);
     }
-
 }

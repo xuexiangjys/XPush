@@ -20,6 +20,7 @@ package com.xuexiang.xpush.core.queue.impl;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
 
 /**
  * 推送消息的订阅者
@@ -59,4 +60,13 @@ public abstract class MessageSubscriber implements IMessageObserver {
 
     }
 
+    /**
+     * 收到命令执行的结果
+     *
+     * @param command 命令
+     */
+    @Override
+    public void onCommandResult(XPushCommand command) {
+
+    }
 }

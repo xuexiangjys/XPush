@@ -18,6 +18,7 @@
 package com.xuexiang.pushdemo.fragment;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.xuexiang.pushdemo.R;
@@ -30,10 +31,16 @@ import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.util.PushUtils;
+import com.xuexiang.xutil.common.StringUtils;
+import com.xuexiang.xutil.tip.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_TAG;
 
 /**
  * @author xuexiang
@@ -46,6 +53,10 @@ public class OperationFragment extends XPageFragment {
     TextView tvPushPlatform;
     @BindView(R.id.tv_status)
     TextView tvStatus;
+    @BindView(R.id.et_tag)
+    EditText etTag;
+    @BindView(R.id.et_alias)
+    EditText etAlias;
 
     @Override
     protected int getLayoutId() {
@@ -79,10 +90,25 @@ public class OperationFragment extends XPageFragment {
         public void onConnectStatusChanged(int connectStatus) {
             tvStatus.setText(PushUtils.formatConnectStatus(connectStatus));
         }
+
+        @MainThread
+        @Override
+        public void onCommandResult(XPushCommand command) {
+            switch(command.getType()) {
+                case TYPE_GET_TAG:
+                    etTag.setText(command.getToken());
+                    break;
+                case TYPE_GET_ALIAS:
+                    etAlias.setText(command.getToken());
+                    break;
+                default:
+                    break;
+            }
+        }
     };
 
     @SingleClick
-    @OnClick({R.id.btn_start, R.id.btn_stop})
+    @OnClick({R.id.btn_start, R.id.btn_stop, R.id.btn_add_tag, R.id.btn_delete_tag, R.id.btn_get_tag, R.id.btn_bind_alias, R.id.btn_unbind_alias, R.id.btn_get_alias})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_start:
@@ -91,9 +117,67 @@ public class OperationFragment extends XPageFragment {
             case R.id.btn_stop:
                 XPush.unRegister();
                 break;
+            case R.id.btn_add_tag:
+                addTag();
+                break;
+            case R.id.btn_delete_tag:
+                deleteTag();
+                break;
+            case R.id.btn_get_tag:
+                XPush.getTags();
+                break;
+            case R.id.btn_bind_alias:
+                bindAlias();
+                break;
+            case R.id.btn_unbind_alias:
+                unBindAlias();
+                break;
+            case R.id.btn_get_alias:
+                XPush.getAlias();
+                break;
             default:
                 break;
         }
+    }
+
+    private void addTag() {
+        String tag = etTag.getText().toString();
+        if (StringUtils.isEmpty(tag)) {
+            ToastUtils.toast("标签不能为空");
+            return;
+        }
+
+        XPush.addTag(tag);
+    }
+
+    private void deleteTag() {
+        String tag = etTag.getText().toString();
+        if (StringUtils.isEmpty(tag)) {
+            ToastUtils.toast("标签不能为空");
+            return;
+        }
+
+        XPush.deleteTag(tag);
+    }
+
+    private void bindAlias() {
+        String alias = etAlias.getText().toString();
+        if (StringUtils.isEmpty(alias)) {
+            ToastUtils.toast("别名不能为空");
+            return;
+        }
+
+        XPush.bindAlias(alias);
+    }
+
+    private void unBindAlias() {
+        String alias = etAlias.getText().toString();
+        if (StringUtils.isEmpty(alias)) {
+            ToastUtils.toast("别名不能为空");
+            return;
+        }
+
+        XPush.unBindAlias(alias);
     }
 
     @Override

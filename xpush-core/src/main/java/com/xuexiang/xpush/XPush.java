@@ -146,6 +146,13 @@ public final class XPush {
     }
 
     /**
+     * 获取别名
+     */
+    public static void getAlias() {
+        _XPush.get().getAlias();
+    }
+
+    /**
      * 添加标签
      *
      * @param tag 标签
@@ -161,6 +168,13 @@ public final class XPush {
      */
     public static void deleteTag(String tag) {
         _XPush.get().deleteTag(tag);
+    }
+
+    /**
+     * 获取标签
+     */
+    public static void getTags() {
+        _XPush.get().getTags();
     }
 
     /**
@@ -207,11 +221,13 @@ public final class XPush {
      * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
      * @see CommandType#TYPE_DEL_TAG
+     * @see CommandType#TYPE_GET_TAG
      * @see CommandType#TYPE_AND_OR_DEL_TAG
      * @see CommandType#TYPE_REGISTER
      * @see CommandType#TYPE_UNREGISTER
      * @see CommandType#TYPE_BIND_ALIAS
      * @see CommandType#TYPE_UNBIND_ALIAS
+     * @see CommandType#TYPE_GET_ALIAS
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */

@@ -25,6 +25,8 @@ import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
+import com.xuexiang.xpush.util.PushUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,12 +54,13 @@ public class XPushManager implements IMessageObservable {
     /**
      * 推送连接状态
      */
-    private int mConnectStatus = ConnectStatus.DISCONNECT;
+    private int mConnectStatus;
 
 
     private XPushManager() {
         mObservable = new DefaultMessageObservableImpl();
         mFilters = new ArrayList<>();
+        mConnectStatus = PushUtils.getConnectStatus();
     }
 
     /**
@@ -104,6 +107,7 @@ public class XPushManager implements IMessageObservable {
     @Override
     public void notifyConnectStatusChanged(int connectStatus) {
         mConnectStatus = connectStatus;
+        PushUtils.saveConnectStatus(mConnectStatus);
         if (mObservable != null) {
             mObservable.notifyConnectStatusChanged(connectStatus);
         }
@@ -139,7 +143,6 @@ public class XPushManager implements IMessageObservable {
         }
     }
 
-
     /**
      * 收到自定义消息
      *
@@ -154,6 +157,18 @@ public class XPushManager implements IMessageObservable {
             }
         }
 
+    }
+
+    /**
+     * 收到命令执行的结果
+     *
+     * @param command 命令
+     */
+    @Override
+    public void notifyCommandResult(XPushCommand command) {
+        if (mObservable != null) {
+            mObservable.notifyCommandResult(command);
+        }
     }
 
     /**

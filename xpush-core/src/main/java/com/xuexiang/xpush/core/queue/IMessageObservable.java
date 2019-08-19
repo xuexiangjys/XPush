@@ -19,6 +19,7 @@ package com.xuexiang.xpush.core.queue;
 
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xpush.entity.XPushCommand;
 
 /**
  * 推送消息的被观察者实现接口
@@ -58,6 +59,13 @@ public interface IMessageObservable {
      * @param message 自定义消息
      */
     void notifyMessageReceived(CustomMessage message);
+
+    /**
+     * 收到命令执行的结果
+     *
+     * @param command 命令
+     */
+    void notifyCommandResult(XPushCommand command);
 
     /**
      * 注册推送消息的订阅者
