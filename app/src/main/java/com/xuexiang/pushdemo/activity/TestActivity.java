@@ -39,6 +39,9 @@ import butterknife.OnClick;
  */
 public class TestActivity extends AppCompatActivity {
 
+    public static final String KEY_PARAM_STRING = "key_param_string";
+    public static final String KEY_PARAM_INT = "key_param_int";
+
     @BindView(R.id.tv_content)
     TextView mTvContent;
 
@@ -48,7 +51,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
 
-        showContent("参数1：" + IntentUtils.getStringExtra(getIntent(), "param1") + "， 参数2：" + IntentUtils.getIntExtra(getIntent(), "param2", 0));
+        showContent("参数1：" + IntentUtils.getStringExtra(getIntent(), KEY_PARAM_STRING) + "， 参数2：" + IntentUtils.getIntExtra(getIntent(), KEY_PARAM_INT, 0));
     }
 
 

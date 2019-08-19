@@ -18,11 +18,18 @@
 package com.xuexiang.pushdemo.push;
 
 import android.content.Context;
+import android.content.Intent;
 
+import com.xuexiang.pushdemo.activity.TestActivity;
 import com.xuexiang.xpush.core.receiver.impl.AbstractPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
+import com.xuexiang.xutil.app.ActivityUtils;
+import com.xuexiang.xutil.app.IntentUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
+
+import static com.xuexiang.pushdemo.activity.TestActivity.KEY_PARAM_INT;
+import static com.xuexiang.pushdemo.activity.TestActivity.KEY_PARAM_STRING;
 
 /**
  * @author xuexiang
@@ -32,7 +39,12 @@ public class CustomPushReceiver extends AbstractPushReceiver {
 
     @Override
     public void onNotificationClick(Context context, XPushMsg msg) {
-
+        //打开自定义的Activity
+        Intent intent = IntentUtils.getIntent(context, TestActivity.class, null, true);
+        intent.putExtra(KEY_PARAM_STRING, msg.getContent());
+        intent.putExtra(KEY_PARAM_INT, msg.getId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ActivityUtils.startActivity(intent);
     }
 
     @Override

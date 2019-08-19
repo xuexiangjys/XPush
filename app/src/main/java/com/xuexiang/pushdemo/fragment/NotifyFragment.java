@@ -33,6 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.xuexiang.pushdemo.activity.TestActivity.KEY_PARAM_INT;
+import static com.xuexiang.pushdemo.activity.TestActivity.KEY_PARAM_STRING;
+
 /**
  * @author xuexiang
  * @date 2018/4/14 上午1:49
@@ -81,8 +84,8 @@ public class NotifyFragment extends XPageSimpleListFragment {
                 break;
             case 1:
                 Map<String, Object> params = new HashMap<>();
-                params.put("param1", "我是参数1");
-                params.put("param2", 123);
+                params.put(KEY_PARAM_STRING, "我是参数1");
+                params.put(KEY_PARAM_INT, 123);
                 NotificationUtils.buildBigPic(1001, R.mipmap.ic_launcher, "我是通知的标题", "我是图片的概要信息")
                         .setPicRes(R.mipmap.timg2)
                         .setContentIntent(PendingIntentUtils.buildActivityIntent(TestActivity.class, params))
