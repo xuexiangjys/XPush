@@ -35,27 +35,159 @@
 1.先在项目根目录的 build.gradle 的 repositories 添加:
 ```
 allprojects {
-     repositories {
+    repositories {
         ...
         maven { url "https://jitpack.io" }
     }
 }
 ```
 
-2.然后在dependencies添加:
+2.添加XPush主要依赖:
 
 ```
 dependencies {
   ...
   //推送核心库
   implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'
-   //推送保活库
+  //推送保活库
   implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.0'
 }
 ```
 
-### 初始化XPush设置
+3.添加第三方推送依赖（根据自己的需求进行添加，当然也可以全部添加）
 
+```
+dependencies {
+  ...
+  //选择你想要集成的推送库
+  implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
+}
+```
 
+### 初始化XPush配置
 
+1.注册消息推送接收器。方法有两种，选其中一种就行了。
+
+* 继承`AbstractPushReceiver`类，重写里面的方法，并在AndroidManifest.xml中注册。
+
+* 直接在AndroidManifest.xml中注册框架默认提供的`XPushReceiver`。
+
+```
+    <!--自定义消息推送接收器-->
+    <receiver android:name=".push.CustomPushReceiver">
+        <intent-filter>
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+
+            <category android:name="${applicationId}" />
+        </intent-filter>
+    </receiver>
+
+    <!--默认的消息推送接收器-->
+    <receiver android:name="com.xuexiang.xpush.core.receiver.impl.XPushReceiver">
+        <intent-filter>
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
+            <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+
+            <category android:name="${applicationId}" />
+        </intent-filter>
+    </receiver>
+
+```
+
+2.在AndroidManifest.xml的application标签下，添加第三方推送客户端实现类.
+
+需要注意的是，这里注册的`PlatformName`和`PlatformCode`必须要和推送客户端实现类中的一一对应才行。
+
+```
+<!--name格式：XPush_[PlatformName]_[PlatformCode]-->
+<!--value格式：对应客户端实体类的全类名路径-->
+
+<!--如果引入了xpush-jpush库-->
+<meta-data
+    android:name="XPush_JPush_1000"
+    android:value="com.xuexiang.xpush.jpush.JPushClient" />
+
+<!--如果引入了xpush-umeng库-->
+<meta-data
+    android:name="XPush_UMengPush_1001"
+    android:value="com.xuexiang.xpush.umeng.UMengPushClient" />
+
+```
+
+3.添加第三方AppKey和AppSecret.
+
+这里的AppKey和AppSecret需要我们到各自的推送平台上注册应用后获得。
+
+```
+<!--极光推送静态注册-->
+<meta-data
+    android:name="JPUSH_CHANNEL"
+    android:value="default_developer" />
+<meta-data
+    android:name="JPUSH_APPKEY"
+    android:value="a32109db64ebe04e2430bb01" />
+
+<!--友盟推送静态注册-->
+<meta-data
+    android:name="UMENG_APPKEY"
+    android:value="5d5a42ce570df37e850002e9" />
+<meta-data
+    android:name="UMENG_MESSAGE_SECRET"
+    android:value="4783a04255ed93ff675aca69312546f4" />
+```
+
+4.在Application中初始化XPush
+
+初始化XPush的方式有两种：
+
+* 静态注册
+
+```
+/**
+ * 静态注册初始化推送
+ */
+private void initPush() {
+    XPush.debug(BuildConfig.DEBUG);
+    //静态注册，指定使用极光推送客户端
+    XPush.init(this, new JPushClient());
+    XPush.register();
+}
+```
+
+* 动态注册
+
+```
+/**
+ * 动态注册初始化推送
+ */
+private void initPush() {
+    XPush.debug(BuildConfig.DEBUG);
+    //动态注册，根据平台名或者平台码动态注册推送客户端
+    XPush.init(this, new IPushInitCallback() {
+        @Override
+        public boolean onInitPush(int platformCode, String platformName) {
+            if (RomUtils.isMiuiRom()) {
+                return platformCode == MIUIPushClient.MIUI_PUSH_PLATFORM_CODE;
+            } else if (RomUtils.isHuaweiRom()) {
+                return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE;
+            } else if (RomUtils.isFlymeRom()) {
+                return platformCode == FlymePushClient.FLYME_PUSH_PLATFORM_CODE;
+            } else {
+                return platformCode == JPushClient.JPUSH_PLATFORM_CODE;
+            }
+        }
+    });
+    XPush.register();
+}
+```
+
+## 如何拓展第三方推送
 
