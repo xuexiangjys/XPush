@@ -24,10 +24,7 @@ import android.text.TextUtils;
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.logs.PushLog;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import com.xuexiang.xpush.util.PushUtils;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -54,15 +51,7 @@ public class JPushClient implements IPushClient {
 
     private Context mContext;
 
-    private HashSet<String> mTagSet = new HashSet<String>();
     private Handler mHandler = new Handler();
-    private Runnable mSetTagRunnable = new Runnable() {
-        @Override
-        public void run() {
-            JPushInterface.addTags(mContext, TYPE_ADD_TAG, (Set<String>) mTagSet.clone());
-            mTagSet.clear();
-        }
-    };
 
     @Override
     public void init(Context context) {
@@ -114,15 +103,13 @@ public class JPushClient implements IPushClient {
     }
 
     @Override
-    public void addTag(String tag) {
-        mHandler.removeCallbacks(mSetTagRunnable);
-        mTagSet.add(tag);
-        mHandler.postDelayed(mSetTagRunnable, 200);
+    public void addTags(String... tag) {
+        JPushInterface.addTags(mContext, TYPE_ADD_TAG, PushUtils.array2Set(tag));
     }
 
     @Override
-    public void deleteTag(String tag) {
-        JPushInterface.deleteTags(mContext, TYPE_DEL_TAG, Collections.singleton(tag));
+    public void deleteTags(String... tag) {
+        JPushInterface.deleteTags(mContext, TYPE_DEL_TAG, PushUtils.array2Set(tag));
     }
 
     /**
@@ -131,6 +118,14 @@ public class JPushClient implements IPushClient {
     @Override
     public void getTags() {
         JPushInterface.getAllTags(mContext, TYPE_GET_TAG);
+    }
+
+    /**
+     * @return 获取推送令牌
+     */
+    @Override
+    public String getPushToken() {
+        return JPushInterface.getRegistrationID(mContext);
     }
 
     @Override

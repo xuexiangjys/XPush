@@ -124,14 +124,6 @@
 #SignalR推送
 -keep class microsoft.aspnet.signalr.** { *; }
 
-# 极光推送混淆
--dontoptimize
--dontpreverify
--dontwarn cn.jpush.**
--keep class cn.jpush.** { *; }
--dontwarn cn.jiguang.**
--keep class cn.jiguang.** { *; }
-
 # 数据库框架OrmLite
 -keepattributes *DatabaseField*
 -keepattributes *DatabaseTable*
@@ -230,3 +222,37 @@
 -keepclassmembers class * {
     @com.xuexiang.xipc.annotation.* <methods>;
 }
+
+#===================================推送混淆=============================#######
+
+ # XPush的混淆
+-keep class * extends com.xuexiang.xpush.core.IPushClient{*;}
+
+# 极光推送混淆
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+-keep class * extends cn.jpush.android.service.JPushMessageReceiver{*;}
+
+# umeng推送
+-dontwarn com.umeng.**
+-dontwarn com.taobao.**
+-dontwarn anet.channel.**
+-dontwarn anetwork.channel.**
+-dontwarn org.android.**
+-dontwarn org.apache.thrift.**
+-dontwarn com.xiaomi.**
+-dontwarn com.huawei.**
+-dontwarn com.meizu.**
+-keep class com.taobao.** {*;}
+-keep class org.android.** {*;}
+-keep class anet.channel.** {*;}
+-keep class com.xiaomi.** {*;}
+-keep class com.huawei.** {*;}
+-keep class com.meizu.** {*;}
+-keep class org.apache.thrift.** {*;}
+-keep class com.alibaba.sdk.android.**{*;}
+-keep class com.ut.**{*;}
+-keep class com.ta.**{*;}
+

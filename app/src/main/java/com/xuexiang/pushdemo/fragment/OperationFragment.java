@@ -41,6 +41,8 @@ import butterknife.OnClick;
 
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
 
 /**
  * @author xuexiang
@@ -51,6 +53,8 @@ public class OperationFragment extends XPageFragment {
 
     @BindView(R.id.tv_push_platform)
     TextView tvPushPlatform;
+    @BindView(R.id.tv_token)
+    TextView tvToken;
     @BindView(R.id.tv_status)
     TextView tvStatus;
     @BindView(R.id.et_tag)
@@ -66,6 +70,7 @@ public class OperationFragment extends XPageFragment {
     @Override
     protected void initViews() {
         tvPushPlatform.setText(String.format("%s(%d)", XPush.getPlatformName(), XPush.getPlatformCode()));
+        tvToken.setText(XPush.getPushToken());
         tvStatus.setText(PushUtils.formatConnectStatus(XPush.getConnectStatus()));
     }
 
@@ -94,12 +99,21 @@ public class OperationFragment extends XPageFragment {
         @MainThread
         @Override
         public void onCommandResult(XPushCommand command) {
-            switch(command.getType()) {
+            if (!command.isSuccess()) {
+                return;
+            }
+            switch (command.getType()) {
+                case TYPE_REGISTER:
+                    tvToken.setText(command.getContent());
+                    break;
+                case TYPE_UNREGISTER:
+                    tvToken.setText("");
+                    break;
                 case TYPE_GET_TAG:
-                    etTag.setText(command.getToken());
+                    etTag.setText(command.getContent());
                     break;
                 case TYPE_GET_ALIAS:
-                    etAlias.setText(command.getToken());
+                    etAlias.setText(command.getContent());
                     break;
                 default:
                     break;
@@ -118,10 +132,10 @@ public class OperationFragment extends XPageFragment {
                 XPush.unRegister();
                 break;
             case R.id.btn_add_tag:
-                addTag();
+                addTags();
                 break;
             case R.id.btn_delete_tag:
-                deleteTag();
+                deleteTags();
                 break;
             case R.id.btn_get_tag:
                 XPush.getTags();
@@ -140,24 +154,24 @@ public class OperationFragment extends XPageFragment {
         }
     }
 
-    private void addTag() {
+    private void addTags() {
         String tag = etTag.getText().toString();
         if (StringUtils.isEmpty(tag)) {
             ToastUtils.toast("标签不能为空");
             return;
         }
 
-        XPush.addTag(tag);
+        XPush.addTags(PushUtils.string2Array(tag));
     }
 
-    private void deleteTag() {
+    private void deleteTags() {
         String tag = etTag.getText().toString();
         if (StringUtils.isEmpty(tag)) {
             ToastUtils.toast("标签不能为空");
             return;
         }
 
-        XPush.deleteTag(tag);
+        XPush.deleteTags(PushUtils.string2Array(tag));
     }
 
     private void bindAlias() {

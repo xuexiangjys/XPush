@@ -78,8 +78,8 @@ public class XPushReceiver extends AbstractPushReceiver {
      * @param command 命令实体
      * @see IPushClient#register()
      * @see IPushClient#unRegister()
-     * @see IPushClient#addTag(String)
-     * @see IPushClient#deleteTag(String)
+     * @see IPushClient#addTags(String...)
+     * @see IPushClient#deleteTags(String...)
      * @see IPushClient#getTags()
      * @see IPushClient#bindAlias(String)
      * @see IPushClient#unBindAlias(String)

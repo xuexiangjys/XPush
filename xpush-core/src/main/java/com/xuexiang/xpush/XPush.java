@@ -157,8 +157,8 @@ public final class XPush {
      *
      * @param tag 标签
      */
-    public static void addTag(String tag) {
-        _XPush.get().addTag(tag);
+    public static void addTags(String... tag) {
+        _XPush.get().addTags(tag);
     }
 
     /**
@@ -166,8 +166,8 @@ public final class XPush {
      *
      * @param tag 标签
      */
-    public static void deleteTag(String tag) {
-        _XPush.get().deleteTag(tag);
+    public static void deleteTags(String... tag) {
+        _XPush.get().deleteTags(tag);
     }
 
     /**
@@ -175,6 +175,13 @@ public final class XPush {
      */
     public static void getTags() {
         _XPush.get().getTags();
+    }
+
+    /**
+     * 获取推送令牌
+     */
+    public static String getPushToken() {
+        return _XPush.get().getPushToken();
     }
 
     /**
@@ -216,7 +223,7 @@ public final class XPush {
      * @param context
      * @param commandType 命令类型
      * @param resultCode  结果码
-     * @param token       内容
+     * @param content     内容
      * @param extraMsg    额外信息
      * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
@@ -231,8 +238,8 @@ public final class XPush {
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */
-    public static void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String token, String extraMsg, String error) {
-        _XPush.get().transmitCommandResult(context, commandType, resultCode, token, extraMsg, error);
+    public static void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String content, String extraMsg, String error) {
+        _XPush.get().transmitCommandResult(context, commandType, resultCode, content, extraMsg, error);
     }
 
     /**

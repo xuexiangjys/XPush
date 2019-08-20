@@ -76,5 +76,5 @@ dependencies {
     implementation project(path: ':keeplive')
     implementation project(path: ':xpush-core')
     implementation project(path: ':xpush-jpush')
-
+    implementation project(path: ':xpush-umeng')
 }

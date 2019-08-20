@@ -67,6 +67,13 @@
             android:name="JPUSH_APPKEY"
             android:value="a32109db64ebe04e2430bb01" />
 
+        <!--友盟推送静态注册-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5d5a42ce570df37e850002e9" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="4783a04255ed93ff675aca69312546f4" />
 
         <!--********************************XPush各家推送的SDK注册地方**************************************-->
         <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
@@ -76,6 +83,11 @@
         <meta-data
             android:name="XPush_JPush_1000"
             android:value="com.xuexiang.xpush.jpush.JPushClient" />
+
+        <!--如果引入了xpush-umeng库-->
+        <meta-data
+            android:name="XPush_UMengPush_1001"
+            android:value="com.xuexiang.xpush.umeng.UMengPushClient" />
 
     </application>
 

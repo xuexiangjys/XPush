@@ -19,6 +19,7 @@ package com.xuexiang.xpush.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
@@ -26,8 +27,11 @@ import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTED;
 import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTING;
@@ -109,4 +113,61 @@ public final class PushUtils {
         return sp.getInt(KEY_CONNECT_STATUS, DISCONNECT);
     }
 
+    /**
+     * Set集合转String，以“,”隔开
+     *
+     * @param set
+     * @return
+     */
+    public static String set2String(Set<String> set) {
+        Iterator<String> iterator = set.iterator();
+        StringBuilder sb = new StringBuilder();
+        while (iterator.hasNext()) {
+            sb.append(iterator.next()).append(",");
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 数组集合转String，以“,”隔开
+     *
+     * @param values
+     * @return
+     */
+    public static String array2String(String... values) {
+        StringBuilder sb = new StringBuilder();
+        for (String value : values) {
+            sb.append(value).append(",");
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 以“,”隔开的字符串转数组
+     *
+     * @param values
+     * @return
+     */
+    public static String[] string2Array(String values) {
+        if (!TextUtils.isEmpty(values)) {
+            return values.split(",");
+        }
+        return new String[0];
+    }
+
+    /**
+     * String数组转Set
+     *
+     * @param values
+     * @return
+     */
+    public static Set<String> array2Set(String... values) {
+        return new HashSet<>(Arrays.asList(values));
+    }
 }

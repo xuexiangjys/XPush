@@ -20,9 +20,23 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# 极光推送混淆
--dontwarn cn.jpush.**
--keep class cn.jpush.** { *; }
--dontwarn cn.jiguang.**
--keep class cn.jiguang.** { *; }
--keep class * extends cn.jpush.android.service.JPushMessageReceiver{*;}
+# umeng推送
+-dontwarn com.umeng.**
+-dontwarn com.taobao.**
+-dontwarn anet.channel.**
+-dontwarn anetwork.channel.**
+-dontwarn org.android.**
+-dontwarn org.apache.thrift.**
+-dontwarn com.xiaomi.**
+-dontwarn com.huawei.**
+-dontwarn com.meizu.**
+-keep class com.taobao.** {*;}
+-keep class org.android.** {*;}
+-keep class anet.channel.** {*;}
+-keep class com.xiaomi.** {*;}
+-keep class com.huawei.** {*;}
+-keep class com.meizu.** {*;}
+-keep class org.apache.thrift.** {*;}
+-keep class com.alibaba.sdk.android.**{*;}
+-keep class com.ut.**{*;}
+-keep class com.ta.**{*;}

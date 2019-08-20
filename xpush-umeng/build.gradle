@@ -1,0 +1,45 @@
+/*
+ * Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
+ *   
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion build_versions.target_sdk
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly deps.support.app_compat
+    compileOnly project(path: ':xpush-core')
+
+    //PushSDK必须依赖基础组件库，所以需要加入对应依赖
+    implementation 'com.umeng.umsdk:common:2.0.2'
+    //PushSDK必须依赖utdid库，所以需要加入对应依赖
+    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
+    //PushSDK
+    implementation 'com.umeng.umsdk:push:6.0.1'
+}

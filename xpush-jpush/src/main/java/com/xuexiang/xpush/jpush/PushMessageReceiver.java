@@ -119,27 +119,10 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         XPush.transmitCommandResult(context, jPushMessage.getSequence(),
                 jPushMessage.getErrorCode() == 0 ? RESULT_OK : jPushMessage.getErrorCode(),
-                set2String(jPushMessage.getTags()), null, null);
+                PushUtils.set2String(jPushMessage.getTags()), null, null);
         super.onTagOperatorResult(context, jPushMessage);
     }
 
-    /**
-     * 集合转String，以“，”隔开
-     *
-     * @param set
-     * @return
-     */
-    private String set2String(Set<String> set) {
-        Iterator<String> iterator = set.iterator();
-        StringBuilder sb = new StringBuilder();
-        while (iterator.hasNext()) {
-            sb.append(iterator.next()).append(",");
-        }
-        if (sb.length() > 0) {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        return sb.toString();
-    }
 
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {

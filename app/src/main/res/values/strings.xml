@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">XPushDemo</string>
+    <string name="hint_tag">请输入标签(Tag),以英文\",\"隔开</string>
 </resources>

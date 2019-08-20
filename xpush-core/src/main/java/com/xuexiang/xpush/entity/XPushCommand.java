@@ -51,7 +51,7 @@ public class XPushCommand implements Parcelable {
     /**
      * 命令内容
      */
-    private String mToken;
+    private String mContent;
     /**
      * 拓展字段
      */
@@ -70,14 +70,14 @@ public class XPushCommand implements Parcelable {
      *
      * @param type       命令类型
      * @param resultCode 结果码
-     * @param token      内容
+     * @param content    内容
      * @param extraMsg   额外信息
      * @param error      错误信息
      */
-    public XPushCommand(int type, int resultCode, String token, String extraMsg, String error) {
+    public XPushCommand(int type, int resultCode, String content, String extraMsg, String error) {
         mType = type;
         mResultCode = resultCode;
-        mToken = token;
+        mContent = content;
         mExtraMsg = extraMsg;
         mError = error;
     }
@@ -100,12 +100,12 @@ public class XPushCommand implements Parcelable {
         return this;
     }
 
-    public String getToken() {
-        return mToken;
+    public String getContent() {
+        return mContent;
     }
 
-    public XPushCommand setToken(String token) {
-        mToken = token;
+    public XPushCommand setContent(String content) {
+        mContent = content;
         return this;
     }
 
@@ -187,13 +187,13 @@ public class XPushCommand implements Parcelable {
      * @return 获取命令的描述信息
      */
     public String getDescription() {
-        return getTypeName(mType) + (isSuccess() ? "成功：" + mToken  : "失败");
+        return getTypeName(mType) + (isSuccess() ? "成功：" + mContent : "失败");
     }
 
     protected XPushCommand(Parcel in) {
         mType = in.readInt();
         mResultCode = in.readInt();
-        mToken = in.readString();
+        mContent = in.readString();
         mExtraMsg = in.readString();
         mError = in.readString();
     }
@@ -219,7 +219,7 @@ public class XPushCommand implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mType);
         dest.writeInt(mResultCode);
-        dest.writeString(mToken);
+        dest.writeString(mContent);
         dest.writeString(mExtraMsg);
         dest.writeString(mError);
     }
@@ -229,7 +229,7 @@ public class XPushCommand implements Parcelable {
         return "XPushCommand{" +
                 "mType=" + mType +
                 ", mResultCode=" + mResultCode +
-                ", mToken='" + mToken + '\'' +
+                ", mContent='" + mContent + '\'' +
                 ", mExtraMsg='" + mExtraMsg + '\'' +
                 ", mError='" + mError + '\'' +
                 '}';

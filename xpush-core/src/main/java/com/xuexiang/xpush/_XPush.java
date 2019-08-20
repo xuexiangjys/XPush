@@ -35,6 +35,7 @@ import com.xuexiang.xpush.core.dispatcher.impl.DefaultPushDispatcherImpl;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.PushLog;
+import com.xuexiang.xpush.util.PushUtils;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -48,7 +49,7 @@ import java.util.Set;
  * @author xuexiang
  * @since 2019-08-16 9:44
  */
-public final class _XPush {
+public final class _XPush implements IPushClient{
 
     private static volatile _XPush sInstance = null;
     /**
@@ -110,7 +111,7 @@ public final class _XPush {
      * @param context
      * @param commandType 命令类型
      * @param resultCode  结果码
-     * @param token       内容
+     * @param content     内容
      * @param extraMsg    额外信息
      * @param error       错误信息
      * @see CommandType#TYPE_ADD_TAG
@@ -125,8 +126,8 @@ public final class _XPush {
      * @see ResultCode#RESULT_ERROR
      * @see ResultCode#RESULT_OK
      */
-    public void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String token, String extraMsg, String error) {
-        transmit(context, PushAction.RECEIVE_COMMAND_RESULT, new XPushCommand(commandType, resultCode, token, extraMsg, error));
+    public void transmitCommandResult(Context context, @CommandType int commandType, @ResultCode int resultCode, String content, String extraMsg, String error) {
+        transmit(context, PushAction.RECEIVE_COMMAND_RESULT, new XPushCommand(commandType, resultCode, content, extraMsg, error));
     }
 
     /**
@@ -327,8 +328,21 @@ public final class _XPush {
     }
 
     /**
+     * 初始化
+     *
+     * @param context
+     */
+    @Override
+    public void init(Context context) {
+        testInitialize();
+        PushLog.i(String.format("%s--%s", getPlatformName(), "init()"));
+        mIPushClient.init(context);
+    }
+
+    /**
      * 注册
      */
+    @Override
     public void register() {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "register()"));
@@ -338,6 +352,7 @@ public final class _XPush {
     /**
      * 注销
      */
+    @Override
     public void unRegister() {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "unRegister()"));
@@ -349,6 +364,7 @@ public final class _XPush {
      *
      * @param alias 别名
      */
+    @Override
     public void bindAlias(String alias) {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "bindAlias(" + alias + ")"));
@@ -360,6 +376,7 @@ public final class _XPush {
      *
      * @param alias 别名
      */
+    @Override
     public void unBindAlias(String alias) {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "unBindAlias(" + alias + ")"));
@@ -369,6 +386,7 @@ public final class _XPush {
     /**
      * 获取别名
      */
+    @Override
     public void getAlias() {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "getAlias()"));
@@ -380,10 +398,11 @@ public final class _XPush {
      *
      * @param tag 标签
      */
-    public void addTag(String tag) {
+    @Override
+    public void addTags(String... tag) {
         testInitialize();
-        PushLog.i(String.format("%s--%s", getPlatformName(), "addTag(" + tag + ")"));
-        mIPushClient.addTag(tag);
+        PushLog.i(String.format("%s--%s", getPlatformName(), "addTags(" + PushUtils.array2String(tag) + ")"));
+        mIPushClient.addTags(tag);
     }
 
     /**
@@ -391,15 +410,17 @@ public final class _XPush {
      *
      * @param tag 标签
      */
-    public void deleteTag(String tag) {
+    @Override
+    public void deleteTags(String... tag) {
         testInitialize();
-        PushLog.i(String.format("%s--%s", getPlatformName(), "deleteTag(" + tag + ")"));
-        mIPushClient.deleteTag(tag);
+        PushLog.i(String.format("%s--%s", getPlatformName(), "deleteTags(" + PushUtils.array2String(tag) + ")"));
+        mIPushClient.deleteTags(tag);
     }
 
     /**
      * 获取标签
      */
+    @Override
     public void getTags() {
         testInitialize();
         PushLog.i(String.format("%s--%s", getPlatformName(), "getTags()"));
@@ -407,8 +428,19 @@ public final class _XPush {
     }
 
     /**
+     * 获取标签
+     */
+    @Override
+    public String getPushToken() {
+        testInitialize();
+        PushLog.i(String.format("%s--%s", getPlatformName(), "getPushToken()"));
+        return mIPushClient.getPushToken();
+    }
+
+    /**
      * @return 推送平台码
      */
+    @Override
     public int getPlatformCode() {
         testInitialize();
         return mIPushClient.getPlatformCode();
@@ -417,6 +449,7 @@ public final class _XPush {
     /**
      * @return 推送平台的名称
      */
+    @Override
     public String getPlatformName() {
         testInitialize();
         return mIPushClient.getPlatformName();
