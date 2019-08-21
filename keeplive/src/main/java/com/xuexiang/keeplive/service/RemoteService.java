@@ -90,7 +90,7 @@ public final class RemoteService extends Service {
                         LocalService.class), mConnection, Context.BIND_ABOVE_CLIENT);
             }
             PowerManager pm = (PowerManager) RemoteService.this.getSystemService(Context.POWER_SERVICE);
-            boolean isScreenOn = pm.isScreenOn();
+            boolean isScreenOn = pm != null && pm.isScreenOn();
             if (isScreenOn) {
                 sendBroadcast(new Intent(KEEP_ACTION_SCREEN_ON));
             } else {

@@ -16,14 +16,14 @@ import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
  * 隐藏前台服务通知
  */
 public class HideForegroundService extends Service {
-    private android.os.Handler handler;
+    private Handler mHandler;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground();
-        if (handler == null){
-            handler = new Handler();
+        if (mHandler == null){
+            mHandler = new Handler();
         }
-        handler.postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 stopForeground(true);

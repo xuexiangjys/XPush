@@ -52,8 +52,8 @@ public final class LocalService extends Service {
         if (mBinder == null) {
             mBinder = new GuardBinder();
         }
-        PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        mIsPause = pm.isScreenOn();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mIsPause = pm != null && pm.isScreenOn();
         if (mHandler == null) {
             mHandler = new Handler();
         }
@@ -126,8 +126,10 @@ public final class LocalService extends Service {
         }
         //隐藏服务通知
         try {
-            if (Build.VERSION.SDK_INT < 25) {
-                startService(new Intent(this, HideForegroundService.class));
+            if (KeepLive.foregroundNotification == null || !KeepLive.foregroundNotification.isShow()) {
+                if (Build.VERSION.SDK_INT < 25) {
+                    startService(new Intent(this, HideForegroundService.class));
+                }
             }
         } catch (Exception e) {
         }
@@ -187,8 +189,8 @@ public final class LocalService extends Service {
                 mIsBoundRemoteService = LocalService.this.bindService(intent, mConnection,
                         Context.BIND_ABOVE_CLIENT);
             }
-            PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
-            boolean isScreenOn = pm.isScreenOn();
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            boolean isScreenOn = pm != null && pm.isScreenOn();
             if (isScreenOn) {
                 sendBroadcast(new Intent(KEEP_ACTION_SCREEN_ON));
             } else {

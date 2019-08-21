@@ -33,9 +33,8 @@ public final class JobHandlerService extends JobService {
         startService(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            JobInfo.Builder builder = new JobInfo.Builder(startId++,
-                    new ComponentName(getPackageName(), JobHandlerService.class.getName()));
-            if (Build.VERSION.SDK_INT >= 24) {
+            JobInfo.Builder builder = new JobInfo.Builder(startId++, new ComponentName(getPackageName(), JobHandlerService.class.getName()));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS); //执行的最小延迟时间
                 builder.setOverrideDeadline(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);  //执行的最长延时时间
                 builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);

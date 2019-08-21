@@ -14,5 +14,5 @@ public interface ForegroundNotificationClickListener {
      * @param context
      * @param intent
      */
-    void foregroundNotificationClick(Context context, Intent intent);
+    void onNotificationClick(Context context, Intent intent);
 }

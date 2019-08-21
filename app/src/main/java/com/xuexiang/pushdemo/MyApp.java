@@ -37,6 +37,7 @@ import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.jpush.JPushClient;
 import com.xuexiang.xpush.umeng.UMengPushClient;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.AppUtils;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 
@@ -91,16 +92,19 @@ public class MyApp extends Application {
      */
     private void initKeepLive() {
         //定义前台服务的默认样式。即标题、描述和图标
-        ForegroundNotification foregroundNotification = new ForegroundNotification("推送服务", "推送服务正在运行中...", R.mipmap.ic_launcher,
+        ForegroundNotification notification = new ForegroundNotification("推送服务", "推送服务正在运行中...", R.mipmap.ic_launcher,
                 //定义前台服务的通知点击事件
                 new ForegroundNotificationClickListener() {
                     @Override
-                    public void foregroundNotificationClick(Context context, Intent intent) {
+                    public void onNotificationClick(Context context, Intent intent) {
                         ToastUtils.toast("点击了通知");
+                        AppUtils.launchApp(getPackageName());
                     }
-                });
+                })
+                //要想不显示通知，可以设置为false，默认是false
+                .setIsShow(true);
         //启动保活服务
-        KeepLive.startWork(this, KeepLive.RunMode.ENERGY, foregroundNotification,
+        KeepLive.startWork(this, KeepLive.RunMode.ENERGY, notification,
                 //你需要保活的服务，如socket连接、定时任务等，建议不用匿名内部类的方式在这里写
                 new KeepLiveService() {
                     /**
@@ -111,7 +115,6 @@ public class MyApp extends Application {
                     public void onWorking() {
                         Log.e("xuexiang", "onWorking");
                     }
-
                     /**
                      * 服务终止
                      * 由于服务可能会被多次终止，该方法可能重复调用，需同onWorking配套使用，如注册和注销broadcast

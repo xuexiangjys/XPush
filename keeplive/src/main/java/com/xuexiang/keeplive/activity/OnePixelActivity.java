@@ -31,8 +31,8 @@ public final class OnePixelActivity extends Activity {
     }
 
     private void checkScreenOn() {
-        PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        boolean isScreenOn = pm.isScreenOn();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm != null && pm.isScreenOn();
         if (isScreenOn) {
             finish();
         }

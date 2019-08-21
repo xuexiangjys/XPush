@@ -12,9 +12,9 @@ public final class ServiceUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
-    public static boolean isServiceRunning(Context ctx, String className) {
+    public static boolean isServiceRunning(Context context, String className) {
         boolean isRunning = false;
-        ActivityManager activityManager = (ActivityManager) ctx
+        ActivityManager activityManager = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> servicesList = activityManager
                 .getRunningServices(Integer.MAX_VALUE);
@@ -27,10 +27,11 @@ public final class ServiceUtils {
         }
         return isRunning;
     }
+
     public static boolean isRunningTaskExist(Context context, String processName) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processList = am.getRunningAppProcesses();
-        if (processList != null){
+        if (processList != null) {
             for (ActivityManager.RunningAppProcessInfo info : processList) {
                 if (info.processName.equals(processName)) {
                     return true;

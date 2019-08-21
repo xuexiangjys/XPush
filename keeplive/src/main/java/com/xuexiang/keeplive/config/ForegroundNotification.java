@@ -5,89 +5,122 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 
 /**
- * 默认前台服务样式
+ * 默认前台服务通知样式
  *
  * @author xuexiang
  * @since 2019-08-14 15:41
  */
 public class ForegroundNotification implements Serializable {
-    private String title;
-    private String description;
-    private int iconRes;
-    private ForegroundNotificationClickListener foregroundNotificationClickListener;
-    private ForegroundNotification(){
+    /**
+     * 标题
+     */
+    private String mTitle;
+    /**
+     * 描述
+     */
+    private String mDescription;
+    /**
+     * 图标资源
+     */
+    private int mIconRes;
+    /**
+     * 是否显示
+     */
+    private boolean mIsShow;
+    private ForegroundNotificationClickListener mNotificationClickListener;
+
+    private ForegroundNotification() {
 
     }
+
     public ForegroundNotification(String title, String description, int iconRes, ForegroundNotificationClickListener foregroundNotificationClickListener) {
-        this.title = title;
-        this.description = description;
-        this.iconRes = iconRes;
-        this.foregroundNotificationClickListener = foregroundNotificationClickListener;
+        mTitle = title;
+        mDescription = description;
+        mIconRes = iconRes;
+        mNotificationClickListener = foregroundNotificationClickListener;
     }
 
     public ForegroundNotification(String title, String description, int iconRes) {
-        this.title = title;
-        this.description = description;
-        this.iconRes = iconRes;
+        mTitle = title;
+        mDescription = description;
+        mIconRes = iconRes;
     }
 
     /**
      * 初始化
+     *
      * @return ForegroundNotification
      */
-    public static ForegroundNotification init(){
+    public static ForegroundNotification init() {
         return new ForegroundNotification();
     }
+
     /**
      * 设置标题
+     *
      * @param title 标题
      * @return ForegroundNotification
      */
-    public ForegroundNotification title(@NonNull String title){
-        this.title = title;
+    public ForegroundNotification title(@NonNull String title) {
+        mTitle = title;
         return this;
     }
+
     /**
      * 设置副标题
+     *
      * @param description 副标题
      * @return ForegroundNotification
      */
-    public ForegroundNotification description(@NonNull String description){
-        this.description = description;
+    public ForegroundNotification description(@NonNull String description) {
+        mDescription = description;
         return this;
     }
+
     /**
      * 设置图标
+     *
      * @param iconRes 图标
      * @return ForegroundNotification
      */
-    public ForegroundNotification icon(@NonNull int iconRes){
-        this.iconRes = iconRes;
+    public ForegroundNotification icon(@NonNull int iconRes) {
+        mIconRes = iconRes;
         return this;
     }
+
     /**
      * 设置前台通知点击事件
-     * @param foregroundNotificationClickListener 前台通知点击回调
+     *
+     * @param notificationClickListener 前台通知点击回调
      * @return ForegroundNotification
      */
-    public ForegroundNotification foregroundNotificationClickListener(@NonNull ForegroundNotificationClickListener foregroundNotificationClickListener){
-        this.foregroundNotificationClickListener = foregroundNotificationClickListener;
+    public ForegroundNotification setNotificationClickListener(@NonNull ForegroundNotificationClickListener notificationClickListener) {
+        mNotificationClickListener = notificationClickListener;
         return this;
     }
 
     public String getTitle() {
-        return title==null?"":title;
+        return mTitle == null ? "" : mTitle;
     }
 
     public String getDescription() {
-        return description==null?"":description;
+        return mDescription == null ? "" : mDescription;
     }
 
     public int getIconRes() {
-        return iconRes;
+        return mIconRes;
     }
 
-    public ForegroundNotificationClickListener getForegroundNotificationClickListener() {
-        return foregroundNotificationClickListener;
+    public boolean isShow() {
+        return mIsShow;
+    }
+
+    public ForegroundNotification setIsShow(boolean show) {
+        mIsShow = show;
+        return this;
+    }
+
+    public ForegroundNotificationClickListener getNotificationClickListener() {
+        return mNotificationClickListener;
     }
 }
