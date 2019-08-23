@@ -256,3 +256,6 @@
 -keep class com.ut.**{*;}
 -keep class com.ta.**{*;}
 
+# 华为推送
+-keep class com.huawei.hms.**{*;}
+-keep class com.huawei.android.hms.agent.**{*;}

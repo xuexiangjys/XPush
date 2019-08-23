@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTED;
@@ -51,7 +52,32 @@ public final class PushUtils {
 
     private static final String PREF_NAME = "XPush";
     private static final String KEY_CONNECT_STATUS = "key_connect_status";
+    private static final String KEY_PUSH_TOKEN = "key_push_token_";
 
+
+    /**
+     * json转换map
+     *
+     * @param json
+     * @return
+     */
+    private Map<String, String> json2Map(String json) {
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            Map<String, String> map = new HashMap<>();
+            Iterator<String> iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                String value = jsonObject.getString(key);
+                map.put(key, value);
+            }
+            return map;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     /**
      * 转换成Map
@@ -101,16 +127,32 @@ public final class PushUtils {
      * @param connectStatus 连接状态
      */
     public static void saveConnectStatus(@ConnectStatus int connectStatus) {
-        SharedPreferences sp = XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        sp.edit().putInt(KEY_CONNECT_STATUS, connectStatus).apply();
+        getPushSP().edit().putInt(KEY_CONNECT_STATUS, connectStatus).apply();
     }
 
     /**
      * 获取连接状态
      */
     public static int getConnectStatus() {
-        SharedPreferences sp = XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return sp.getInt(KEY_CONNECT_STATUS, DISCONNECT);
+        return getPushSP().getInt(KEY_CONNECT_STATUS, DISCONNECT);
+    }
+
+    public static SharedPreferences getPushSP() {
+        return XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * 保存推送token
+     */
+    public static void savePushToken(String platform, String token) {
+        getPushSP().edit().putString(KEY_PUSH_TOKEN + platform, token).apply();
+    }
+
+    /**
+     * 获取推送token
+     */
+    public static String getPushToken(String platform) {
+        return getPushSP().getString(KEY_PUSH_TOKEN + platform, "");
     }
 
     /**

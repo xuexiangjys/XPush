@@ -75,6 +75,11 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="4783a04255ed93ff675aca69312546f4" />
 
+        <!--华为HMS推送静态注册-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="101049475"/>
+
         <!--********************************XPush各家推送的SDK注册地方**************************************-->
         <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
         <!--value格式：对应客户端实体类的全类名路径-->

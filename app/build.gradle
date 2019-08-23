@@ -13,22 +13,26 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-
         ndk {
             // 设置支持的SO库
             abiFilters 'armeabi'//,'armeabi-v7a', 'x86', 'x86_64', 'arm64-v8a','mips','mips64'
         }
-
     }
 
-    if (isNeedPackage.toBoolean()) {
-        signingConfigs {
+    signingConfigs {
+        if (isNeedPackage.toBoolean()) {
             release {
                 storeFile file(app_release.storeFile)
                 storePassword app_release.storePassword
                 keyAlias app_release.keyAlias
                 keyPassword app_release.keyPassword
             }
+        }
+        debug {
+            storeFile file("./debug.jks")
+            storePassword "123456"
+            keyAlias "debug"
+            keyPassword "123456"
         }
     }
 
@@ -40,13 +44,19 @@ android {
                 signingConfig signingConfigs.release
             }
         }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
     }
 
     if (isNeedPackage.toBoolean()) {
         applicationVariants.all { variant ->
             variant.outputs.all {
                 if (variant.buildType.name.equals('release')) {
-                    outputFileName = "template_${defaultConfig.versionName}.apk"
+                    outputFileName = "xpushdemo_${defaultConfig.versionName}.apk"
                 }
             }
         }
@@ -84,4 +94,5 @@ dependencies {
     implementation project(path: ':xpush-core')
     implementation project(path: ':xpush-jpush')
     implementation project(path: ':xpush-umeng')
+//    implementation project(path: ':xpush-huawei')
 }
