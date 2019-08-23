@@ -34,14 +34,18 @@ import com.xuexiang.xpage.PageConfiguration;
 import com.xuexiang.xpage.model.PageInfo;
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.IPushInitCallback;
+import com.xuexiang.xpush.huawei.HuaweiPushClient;
 import com.xuexiang.xpush.jpush.JPushClient;
 import com.xuexiang.xpush.umeng.UMengPushClient;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.AppUtils;
 import com.xuexiang.xutil.common.StringUtils;
+import com.xuexiang.xutil.system.RomUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 
 import java.util.List;
+
+import static com.xuexiang.xutil.system.RomUtils.SYS_EMUI;
 
 /**
  * @author xuexiang
@@ -138,8 +142,11 @@ public class MyApp extends Application {
         XPush.init(this, new IPushInitCallback() {
             @Override
             public boolean onInitPush(int platformCode, String platformName) {
-//                return platformCode == UMengPushClient.UMENG_PUSH_PLATFORM_CODE && platformName.equals(UMengPushClient.UMENG_PUSH_PLATFORM_NAME);
-                return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
+                if (RomUtils.getRom().getRomName().equals(SYS_EMUI)) {
+                    return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE && platformName.equals(HuaweiPushClient.HUAWEI_PUSH_PLATFORM_NAME);
+                } else {
+                    return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
+                }
             }
         });
         XPush.register();

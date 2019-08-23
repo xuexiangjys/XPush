@@ -9,7 +9,7 @@ public class EmptyConnectCallback implements IClientConnectCallback {
 
     private String msgPre;
 
-    public EmptyConnectCallback(String msgPre){
+    public EmptyConnectCallback(String msgPre) {
         this.msgPre = msgPre;
     }
 

@@ -26,7 +26,8 @@ public class CheckUpdateApi extends BaseApiAgent implements CheckUpdatelistener 
 
     /**
      * Huawei Api Client 连接回调
-     * @param rst 结果码
+     *
+     * @param rst    结果码
      * @param client HuaweiApiClient 实例
      */
     @Override
@@ -38,7 +39,7 @@ public class CheckUpdateApi extends BaseApiAgent implements CheckUpdatelistener 
 
         if (activityCur != null && client != null) {
             client.checkUpdate(activityCur, this);
-        } else if (activity != null && client != null){
+        } else if (activity != null && client != null) {
             client.checkUpdate(activity, this);
         } else {
             // 跟SE确认：activity 为 null ， 不处理 | Activity is null and does not need to be processed
@@ -53,8 +54,8 @@ public class CheckUpdateApi extends BaseApiAgent implements CheckUpdatelistener 
         onCheckUpdateResult(resultCode);
     }
 
-    private void onCheckUpdateResult(int retCode){
-        HMSAgentLog.i("checkUpdate:callback=" + StrUtils.objDesc(handler) +" retCode=" + retCode);
+    private void onCheckUpdateResult(int retCode) {
+        HMSAgentLog.i("checkUpdate:callback=" + StrUtils.objDesc(handler) + " retCode=" + retCode);
         if (handler != null) {
             new Handler(Looper.getMainLooper()).post(new CallbackCodeRunnable(handler, retCode));
             handler = null;
@@ -65,6 +66,7 @@ public class CheckUpdateApi extends BaseApiAgent implements CheckUpdatelistener 
 
     /**
      * 应用自升级接口
+     *
      * @param handler 应用自升级结果回调
      */
     public void checkUpdate(Activity activity, CheckUpdateHandler handler) {

@@ -9,6 +9,7 @@ public interface IActivityResumeCallback {
 
     /**
      * Activity onResume回调
+     *
      * @param activity 发生 onResume 事件的activity
      */
     void onActivityResume(Activity activity);

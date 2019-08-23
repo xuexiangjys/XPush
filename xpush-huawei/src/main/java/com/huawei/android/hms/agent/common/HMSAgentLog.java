@@ -12,9 +12,13 @@ public final class HMSAgentLog {
      */
     public interface IHMSAgentLogCallback {
         void logD(String tag, String log);
+
         void logV(String tag, String log);
+
         void logI(String tag, String log);
+
         void logW(String tag, String log);
+
         void logE(String tag, String log);
     }
 
@@ -23,7 +27,7 @@ public final class HMSAgentLog {
 
     private static IHMSAgentLogCallback logCallback = null;
 
-    public static void setHMSAgentLogCallback(IHMSAgentLogCallback callback){
+    public static void setHMSAgentLogCallback(IHMSAgentLogCallback callback) {
         logCallback = callback;
     }
 
@@ -87,8 +91,8 @@ public final class HMSAgentLog {
     private static void appendStack(StringBuilder sb) {
         StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
         if (stacks != null && stacks.length > START_STACK_INDEX) {
-            int lastIndex = Math.min(stacks.length-1,START_STACK_INDEX+PRINT_STACK_COUTN);
-            for (int i=lastIndex; i >= START_STACK_INDEX; i--) {
+            int lastIndex = Math.min(stacks.length - 1, START_STACK_INDEX + PRINT_STACK_COUTN);
+            for (int i = lastIndex; i >= START_STACK_INDEX; i--) {
                 if (stacks[i] == null) {
                     continue;
                 }

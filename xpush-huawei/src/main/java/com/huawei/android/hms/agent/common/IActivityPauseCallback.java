@@ -9,6 +9,7 @@ public interface IActivityPauseCallback {
 
     /**
      * Activity onPause回调
+     *
      * @param activity 发生 onPause 事件的activity
      */
     void onActivityPause(Activity activity);

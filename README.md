@@ -156,8 +156,8 @@ dependencies {
  */
 private void initPush() {
     XPush.debug(BuildConfig.DEBUG);
-    //静态注册，指定使用极光推送客户端
-    XPush.init(this, new JPushClient());
+    //静态注册，指定使用友盟推送客户端
+    XPush.init(this, new UMengPushClient());
     XPush.register();
 }
 ```
@@ -174,14 +174,12 @@ private void initPush() {
     XPush.init(this, new IPushInitCallback() {
         @Override
         public boolean onInitPush(int platformCode, String platformName) {
-            if (RomUtils.isMiuiRom()) {
-                return platformCode == MIUIPushClient.MIUI_PUSH_PLATFORM_CODE;
-            } else if (RomUtils.isHuaweiRom()) {
-                return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE;
-            } else if (RomUtils.isFlymeRom()) {
-                return platformCode == FlymePushClient.FLYME_PUSH_PLATFORM_CODE;
+            if (RomUtils.getRom().getRomName().equals(SYS_EMUI)) {
+                //华为手机使用华为推送
+                return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE && platformName.equals(HuaweiPushClient.HUAWEI_PUSH_PLATFORM_NAME);
             } else {
-                return platformCode == JPushClient.JPUSH_PLATFORM_CODE;
+                //未识别到特殊的rom，默认使用极光推送
+                return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
             }
         }
     });

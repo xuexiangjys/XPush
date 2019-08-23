@@ -94,6 +94,11 @@
             android:name="XPush_UMengPush_1001"
             android:value="com.xuexiang.xpush.umeng.UMengPushClient" />
 
+        <!--如果引入了xpush-huawei库-->
+        <meta-data
+            android:name="XPush_HuaweiPush_1002"
+            android:value="com.xuexiang.xpush.huawei.HuaweiPushClient" />
+
     </application>
 
 </manifest>

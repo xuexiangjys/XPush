@@ -18,7 +18,9 @@
 package com.xuexiang.pushdemo.fragment;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xuexiang.pushdemo.R;
@@ -32,6 +34,8 @@ import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 import com.xuexiang.xpush.entity.XPushCommand;
+import com.xuexiang.xpush.huawei.HuaweiPushClient;
+import com.xuexiang.xpush.umeng.UMengPushClient;
 import com.xuexiang.xpush.util.PushUtils;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
@@ -57,10 +61,29 @@ public class OperationFragment extends XPageFragment {
     TextView tvToken;
     @BindView(R.id.tv_status)
     TextView tvStatus;
+
+
+    @BindView(R.id.ll_tag)
+    LinearLayout llTag;
     @BindView(R.id.et_tag)
     EditText etTag;
+    @BindView(R.id.btn_add_tag)
+    Button btnAddTag;
+    @BindView(R.id.btn_delete_tag)
+    Button btnDeleteTag;
+    @BindView(R.id.btn_get_tag)
+    Button btnGetTag;
+
+    @BindView(R.id.ll_alias)
+    LinearLayout llAlias;
     @BindView(R.id.et_alias)
     EditText etAlias;
+    @BindView(R.id.btn_bind_alias)
+    Button btnBindAlias;
+    @BindView(R.id.btn_unbind_alias)
+    Button btnUnbindAlias;
+    @BindView(R.id.btn_get_alias)
+    Button btnGetAlias;
 
     @Override
     protected int getLayoutId() {
@@ -72,6 +95,17 @@ public class OperationFragment extends XPageFragment {
         tvPushPlatform.setText(String.format("%s(%d)", XPush.getPlatformName(), XPush.getPlatformCode()));
         tvToken.setText(XPush.getPushToken());
         tvStatus.setText(PushUtils.formatConnectStatus(XPush.getConnectStatus()));
+
+        //极光推送都支持
+        if (XPush.getPlatformCode() == UMengPushClient.UMENG_PUSH_PLATFORM_CODE) {
+            //友盟推送不支持获取tag和alias
+            btnGetTag.setVisibility(View.GONE);
+            btnGetAlias.setVisibility(View.GONE);
+        } else if (XPush.getPlatformCode() == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE) {
+            //华为推送不支持tag和alias操作
+            llTag.setVisibility(View.GONE);
+            llAlias.setVisibility(View.GONE);
+        }
     }
 
     @Override

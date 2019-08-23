@@ -14,11 +14,12 @@ public final class ThreadUtil {
 
     private ExecutorService executors;
 
-    private ThreadUtil(){
+    private ThreadUtil() {
     }
 
     /**
      * 在线程中执行
+     *
      * @param runnable 要执行的runnable
      */
     public void excute(Runnable runnable) {
@@ -34,17 +35,19 @@ public final class ThreadUtil {
 
     /**
      * 在主线程中执行
+     *
      * @param runnable 要执行的runnable
      */
-    public void excuteInMainThread(Runnable runnable){
+    public void excuteInMainThread(Runnable runnable) {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
 
     /**
      * 获取缓存线程池
+     *
      * @return 缓存线程池服务
      */
-    private ExecutorService getExecutorService(){
+    private ExecutorService getExecutorService() {
         if (executors == null) {
             try {
                 executors = Executors.newCachedThreadPool();

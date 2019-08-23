@@ -9,8 +9,9 @@ public interface IActivityDestroyedCallback {
 
     /**
      * Activity onPause回调
+     *
      * @param activityDestroyed 发生 onDestroyed 事件的activity
-     * @param activityNxt 下个要显示的activity
+     * @param activityNxt       下个要显示的activity
      */
     void onActivityDestroyed(Activity activityDestroyed, Activity activityNxt);
 }

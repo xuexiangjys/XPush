@@ -34,7 +34,7 @@ public class HMSAgentActivity extends BaseAgentActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            int rstCode =  intent.getIntExtra(CONN_ERR_CODE_TAG, 0);
+            int rstCode = intent.getIntExtra(CONN_ERR_CODE_TAG, 0);
             HMSAgentLog.d("dispose code:" + rstCode);
             HuaweiApiAvailability.getInstance().resolveError(this, rstCode, REQUEST_HMS_RESOLVE_ERROR);
         } else {
@@ -47,8 +47,8 @@ public class HMSAgentActivity extends BaseAgentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_HMS_RESOLVE_ERROR) {
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_HMS_RESOLVE_ERROR) {
+            if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(EXTRA_RESULT, -1);
                 HMSAgentLog.d("dispose result:" + result);
                 ApiClientMgr.INST.onResolveErrorRst(result);

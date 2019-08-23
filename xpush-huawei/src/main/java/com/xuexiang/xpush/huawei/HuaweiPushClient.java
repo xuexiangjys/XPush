@@ -42,7 +42,7 @@ import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
  * @since 2019-08-23 14:29
  */
 public class HuaweiPushClient implements IPushClient {
-    public static final String HUAWEI_PUSH_PLATFORM_NAME = " HuaweiPush";
+    public static final String HUAWEI_PUSH_PLATFORM_NAME = "HuaweiPush";
     public static final int HUAWEI_PUSH_PLATFORM_CODE = 1002;
 
     private Application mApplication;

@@ -12,12 +12,7 @@ import com.huawei.hms.activity.BridgeActivity;
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
 import com.huawei.hms.api.HuaweiApiClient;
-import com.huawei.hms.support.api.game.HuaweiGame;
-import com.huawei.hms.support.api.hwid.HuaweiId;
-import com.huawei.hms.support.api.hwid.HuaweiIdSignInOptions;
-import com.huawei.hms.support.api.pay.HuaweiPay;
 import com.huawei.hms.support.api.push.HuaweiPush;
-import com.huawei.hms.support.api.sns.HuaweiSns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -297,13 +292,7 @@ public final class ApiClientMgr implements HuaweiApiClient.ConnectionCallbacks, 
 
             // 这种重置client，极端情况可能会出现2个client都回调结果的情况。此时可能出现rstCode=0，但是client无效。
             // 因为业务调用封装中都进行了一次重试。所以不会有问题
-            HuaweiIdSignInOptions signInOptions = new
-                    HuaweiIdSignInOptions.Builder(HuaweiIdSignInOptions.DEFAULT_SIGN_IN).requestAccessToken().requestOpenId().requestUnionId().build();
             apiClient = new HuaweiApiClient.Builder(context)
-                    .addApi(HuaweiPay.PAY_API)
-                    .addApi(HuaweiGame.GAME_API)
-                    .addApi(HuaweiSns.API)
-                    .addApi(HuaweiId.SIGN_IN_API, signInOptions)
                     .addApi(HuaweiPush.PUSH_API)
                     .addConnectionCallbacks(INST)
                     .addOnConnectionFailedListener(INST)
