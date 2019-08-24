@@ -15,4 +15,26 @@
   ~
   -->
 
-<manifest package="com.xuexiang.xpush" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xuexiang.xpush">
+
+    <application
+        android:allowBackup="false"
+        android:supportsRtl="true">
+
+        <!--处理推送通知自定义动作通知的点击处理，使用的是deeplink技术-->
+        <activity
+            android:name=".core.XPushNotificationClickActivity"
+            android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="com.xuexiang.xpush"
+                    android:path="/notification"
+                    android:scheme="xpush" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

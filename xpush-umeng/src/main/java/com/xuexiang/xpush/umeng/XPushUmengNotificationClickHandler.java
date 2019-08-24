@@ -22,16 +22,21 @@ import android.content.Context;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.xuexiang.xpush.XPush;
+import com.xuexiang.xpush.logs.PushLog;
 
 /**
+ * 友盟推送通知点击处理
  *
  * @author xuexiang
  * @since 2019-08-20 9:09
  */
 public class XPushUmengNotificationClickHandler extends UmengNotificationClickHandler {
 
+    private static final String TAG = "UmengPush-";
+
     @Override
     public void dealWithCustomAction(Context context, UMessage uMessage) {
+        PushLog.d(TAG + "[dealWithCustomAction]:" + uMessage);
         XPush.transmitNotificationClick(context, 0, uMessage.title, uMessage.text, uMessage.custom, uMessage.extra);
     }
 

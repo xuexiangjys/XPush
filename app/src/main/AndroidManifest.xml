@@ -45,18 +45,18 @@
             </intent-filter>
         </receiver>
 
-        <!--默认的消息推送接收器-->
-        <receiver android:name="com.xuexiang.xpush.core.receiver.impl.XPushReceiver">
-            <intent-filter>
-                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
-                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
-                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
-                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
-                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+        <!--&lt;!&ndash;默认的消息推送接收器&ndash;&gt;-->
+        <!--<receiver android:name="com.xuexiang.xpush.core.receiver.impl.XPushReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />-->
+                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />-->
+                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />-->
+                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />-->
+                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />-->
 
-                <category android:name="${applicationId}" />
-            </intent-filter>
-        </receiver>
+                <!--<category android:name="${applicationId}" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <!--********************************XPush各家推送的AppId注册地方************************************-->
         <!--极光推送静态注册-->
@@ -80,6 +80,14 @@
             android:name="com.huawei.hms.client.appid"
             android:value="101049475"/>
 
+        <!--小米推送静态注册-->
+        <meta-data
+            android:name="MIPUSH_APPID"
+            android:value="\ 2882303761518134164"/>
+        <meta-data
+            android:name="MIPUSH_APPKEY"
+            android:value="\ 5371813415164"/>
+
         <!--********************************XPush各家推送的SDK注册地方**************************************-->
         <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
         <!--value格式：对应客户端实体类的全类名路径-->
@@ -98,6 +106,11 @@
         <meta-data
             android:name="XPush_HuaweiPush_1002"
             android:value="com.xuexiang.xpush.huawei.HuaweiPushClient" />
+
+        <!--如果引入了xpush-xiaomi库-->
+        <meta-data
+            android:name="XPush_MIPush_1003"
+            android:value="com.xuexiang.xpush.xiaomi.XiaoMiPushClient" />
 
     </application>
 

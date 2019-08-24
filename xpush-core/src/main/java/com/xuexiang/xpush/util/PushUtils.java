@@ -19,18 +19,24 @@ package com.xuexiang.xpush.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
+import com.xuexiang.xpush.logs.PushLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,54 +62,6 @@ public final class PushUtils {
 
 
     /**
-     * json转换map
-     *
-     * @param json
-     * @return
-     */
-    private Map<String, String> json2Map(String json) {
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            Map<String, String> map = new HashMap<>();
-            Iterator<String> iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                String key = iterator.next();
-                String value = jsonObject.getString(key);
-                map.put(key, value);
-            }
-            return map;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    /**
-     * 转换成Map
-     *
-     * @param jsonObject
-     * @return
-     */
-    public static HashMap<String, String> toMap(JSONObject jsonObject) {
-        if (jsonObject == null) {
-            return null;
-        }
-        Iterator<String> keys = jsonObject.keys();
-        HashMap<String, String> map = new HashMap<>();
-        while (keys.hasNext()) {
-            String next = keys.next();
-            try {
-                Object o = jsonObject.get(next);
-                map.put(next, String.valueOf(o));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return map;
-    }
-
-    /**
      * 格式化推送连接状态
      *
      * @return 推送连接状态
@@ -119,6 +77,12 @@ public final class PushUtils {
             default:
                 return "未知状态";
         }
+    }
+
+    //=================SharedPreferences==================//
+
+    public static SharedPreferences getPushSP() {
+        return XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     /**
@@ -137,10 +101,6 @@ public final class PushUtils {
         return getPushSP().getInt(KEY_CONNECT_STATUS, DISCONNECT);
     }
 
-    public static SharedPreferences getPushSP() {
-        return XPush.getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
     /**
      * 保存推送token
      */
@@ -156,12 +116,21 @@ public final class PushUtils {
     }
 
     /**
+     * 清除推送token
+     */
+    public static void deletePushToken(String platform) {
+        getPushSP().edit().remove(KEY_PUSH_TOKEN + platform).apply();
+    }
+
+    //=================数组、集合处理==================//
+
+    /**
      * Set集合转String，以“,”隔开
      *
      * @param set
      * @return
      */
-    public static String set2String(Set<String> set) {
+    public static String collection2String(Collection<String> set) {
         Iterator<String> iterator = set.iterator();
         StringBuilder sb = new StringBuilder();
         while (iterator.hasNext()) {
@@ -212,4 +181,86 @@ public final class PushUtils {
     public static Set<String> array2Set(String... values) {
         return new HashSet<>(Arrays.asList(values));
     }
+
+    /**
+     * json转换map
+     *
+     * @param json
+     * @return
+     */
+    public static Map<String, String> json2Map(String json) {
+        if (TextUtils.isEmpty(json)) {
+            return null;
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            Map<String, String> map = new HashMap<>();
+            Iterator<String> iterator = jsonObject.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                Object value = jsonObject.get(key);
+                map.put(key, String.valueOf(value));
+            }
+            return map;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 转换成Map
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static HashMap<String, String> toMap(JSONObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
+        Iterator<String> keys = jsonObject.keys();
+        HashMap<String, String> map = new HashMap<>();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            try {
+                Object o = jsonObject.get(key);
+                map.put(key, String.valueOf(o));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
+
+    //=================meta-data==================//
+
+    /**
+     * 获取manifest里注册的meta-data值集合
+     *
+     * @return meta-data值集合
+     */
+    @Nullable
+    public static Bundle getMetaDatas(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            return pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA).metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            PushLog.e(e);
+        }
+        return null;
+    }
+
+    /**
+     * 获取meta-data中的String类型的值
+     *
+     * @param key
+     * @return String类型的值
+     */
+    @Nullable
+    public static String getStringValueInMetaData(Context context, String key) {
+        Bundle metaData = getMetaDatas(context);
+        return metaData != null ? metaData.getString(key) : null;
+    }
+
 }

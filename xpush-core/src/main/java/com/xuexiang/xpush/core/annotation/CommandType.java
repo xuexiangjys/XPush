@@ -26,6 +26,8 @@ import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_AND_OR_DEL_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_DEL_TAG;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_ALIAS;
+import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_GET_TAG;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_REGISTER;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
@@ -37,7 +39,7 @@ import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNREGISTER;
  * @author xuexiang
  * @since 2019-08-17 11:27
  */
-@IntDef({TYPE_REGISTER, TYPE_UNREGISTER, TYPE_ADD_TAG, TYPE_DEL_TAG, TYPE_BIND_ALIAS, TYPE_UNBIND_ALIAS, TYPE_AND_OR_DEL_TAG})
+@IntDef({TYPE_REGISTER, TYPE_UNREGISTER, TYPE_ADD_TAG, TYPE_DEL_TAG, TYPE_GET_TAG, TYPE_BIND_ALIAS, TYPE_UNBIND_ALIAS, TYPE_GET_ALIAS, TYPE_AND_OR_DEL_TAG})
 @Retention(RetentionPolicy.SOURCE)
 public @interface CommandType {
 

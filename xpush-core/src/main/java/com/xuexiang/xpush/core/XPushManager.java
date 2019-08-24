@@ -19,7 +19,6 @@ package com.xuexiang.xpush.core;
 
 import android.support.annotation.NonNull;
 
-import com.xuexiang.xpush.core.annotation.ConnectStatus;
 import com.xuexiang.xpush.core.queue.IMessageObservable;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
 import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
@@ -28,8 +27,9 @@ import com.xuexiang.xpush.entity.Notification;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.util.PushUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class XPushManager implements IMessageObservable {
     /**
      * 消息过滤器
      */
-    private List<IMessageFilter> mFilters;
+    private List<WeakReference<IMessageFilter>> mFilters;
 
     /**
      * 推送连接状态
@@ -216,7 +216,8 @@ public class XPushManager implements IMessageObservable {
      * @return
      */
     public XPushManager addFilter(@NonNull IMessageFilter filter) {
-        mFilters.add(filter);
+        WeakReference<IMessageFilter> reference = new WeakReference<>(filter);
+        mFilters.add(reference);
         return this;
     }
 
@@ -228,7 +229,8 @@ public class XPushManager implements IMessageObservable {
      * @return
      */
     public XPushManager addFilter(int index, @NonNull IMessageFilter filter) {
-        mFilters.add(index, filter);
+        WeakReference<IMessageFilter> reference = new WeakReference<>(filter);
+        mFilters.add(index, reference);
         return this;
     }
 
@@ -239,7 +241,11 @@ public class XPushManager implements IMessageObservable {
      * @return
      */
     public XPushManager addFilters(@NonNull IMessageFilter... filters) {
-        mFilters.addAll(Arrays.asList(filters));
+        List<WeakReference<IMessageFilter>> list = new ArrayList<>();
+        for (IMessageFilter filter : filters) {
+            list.add(new WeakReference<>(filter));
+        }
+        mFilters.addAll(list);
         return this;
     }
 
@@ -251,7 +257,7 @@ public class XPushManager implements IMessageObservable {
      */
     public XPushManager setFilters(@NonNull IMessageFilter... filters) {
         mFilters.clear();
-        mFilters.addAll(Arrays.asList(filters));
+        addFilters(filters);
         return this;
     }
 
@@ -266,9 +272,15 @@ public class XPushManager implements IMessageObservable {
             return false;
         }
 
-        for (int i = 0; i < mFilters.size(); i++) {
-            if (mFilters.get(i).filter(notification)) {
-                return true;
+        Iterator<WeakReference<IMessageFilter>> it = mFilters.iterator();
+        while (it.hasNext()) {
+            IMessageFilter filter = it.next().get();
+            if (filter != null) {
+                if (filter.filter(notification)) {
+                    return true;
+                }
+            } else {
+                it.remove();
             }
         }
         return false;
@@ -285,9 +297,15 @@ public class XPushManager implements IMessageObservable {
             return false;
         }
 
-        for (int i = 0; i < mFilters.size(); i++) {
-            if (mFilters.get(i).filter(message)) {
-                return true;
+        Iterator<WeakReference<IMessageFilter>> it = mFilters.iterator();
+        while (it.hasNext()) {
+            IMessageFilter filter = it.next().get();
+            if (filter != null) {
+                if (filter.filter(message)) {
+                    return true;
+                }
+            } else {
+                it.remove();
             }
         }
         return false;

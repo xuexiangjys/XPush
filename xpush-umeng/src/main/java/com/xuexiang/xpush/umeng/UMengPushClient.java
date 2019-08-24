@@ -20,9 +20,7 @@ package com.xuexiang.xpush.umeng;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengCallback;
@@ -34,7 +32,6 @@ import com.umeng.message.tag.TagManager;
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.XPushManager;
-import com.xuexiang.xpush.logs.PushLog;
 import com.xuexiang.xpush.util.PushUtils;
 
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_ADD_TAG;
@@ -50,6 +47,8 @@ import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
  * 友盟推送客户端
+ * 1.获取tag和alias不支持
+ * 2.推送连接状态不支持
  *
  * @author xuexiang
  * @since 2019-08-19 15:11
@@ -59,8 +58,7 @@ public class UMengPushClient implements IPushClient {
     public static final String UMENG_PUSH_PLATFORM_NAME = "UMengPush";
     public static final int UMENG_PUSH_PLATFORM_CODE = 1001;
 
-    public static final String XPUSH_ALIAS = "XPUSH_ALIAS";
-
+    private static final String XPUSH_ALIAS = "XPUSH_ALIAS";
     private static final String KEY_UMENG_APPKEY = "UMENG_APPKEY";
     private static final String KEY_UMENG_MESSAGE_SECRET = "UMENG_MESSAGE_SECRET";
 
@@ -111,7 +109,10 @@ public class UMengPushClient implements IPushClient {
         } else {
             mApplication = (Application) context.getApplicationContext();
         }
-        UMConfigure.init(context, getStringValueInMetaData(context, KEY_UMENG_APPKEY), "umeng", UMConfigure.DEVICE_TYPE_PHONE, getStringValueInMetaData(context, KEY_UMENG_MESSAGE_SECRET));
+        UMConfigure.init(context,
+                PushUtils.getStringValueInMetaData(context, KEY_UMENG_APPKEY),
+                "umeng", UMConfigure.DEVICE_TYPE_PHONE,
+                PushUtils.getStringValueInMetaData(context, KEY_UMENG_MESSAGE_SECRET));
         mPushAgent = PushAgent.getInstance(context);
         mPushAgent.setNotificationClickHandler(new XPushUmengNotificationClickHandler());
         mPushAgent.setMessageHandler(new XPushUmengMessageHandler());
@@ -154,6 +155,7 @@ public class UMengPushClient implements IPushClient {
                 XPush.transmitCommandResult(mApplication, TYPE_UNREGISTER, RESULT_OK, null, null, null);
                 XPushManager.get().notifyConnectStatusChanged(DISCONNECT);
             }
+
             @Override
             public void onFailure(String s, String s1) {
                 XPush.transmitCommandResult(mApplication, TYPE_UNREGISTER, RESULT_ERROR, null, s, s1);
@@ -263,33 +265,5 @@ public class UMengPushClient implements IPushClient {
         return UMENG_PUSH_PLATFORM_NAME;
     }
 
-
-    /**
-     * 获取manifest里注册的meta-data值集合
-     *
-     * @return meta-data值集合
-     */
-    @Nullable
-    public static Bundle getMetaDatas(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            return pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA).metaData;
-        } catch (PackageManager.NameNotFoundException e) {
-            PushLog.e(e);
-        }
-        return null;
-    }
-
-    /**
-     * 获取meta-data中的String类型的值
-     *
-     * @param key
-     * @return String类型的值
-     */
-    @Nullable
-    public static String getStringValueInMetaData(Context context, String key) {
-        Bundle metaData = getMetaDatas(context);
-        return metaData != null ? metaData.getString(key) : null;
-    }
 
 }

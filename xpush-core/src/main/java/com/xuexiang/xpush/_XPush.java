@@ -196,6 +196,7 @@ public final class _XPush implements IPushClient{
      */
     private void transmit(Context context, @PushAction String action, @NonNull Parcelable data) {
         if (mIPushDispatcher != null) {
+            PushLog.d("[PushDispatcher] action:" + action + ", data:" + data);
             mIPushDispatcher.transmit(context, action, data);
         }
     }

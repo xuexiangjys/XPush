@@ -20,6 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
- # XPush的混淆
--keep class * extends com.xuexiang.xpush.core.IPushClient{*;}
--keep class * extends com.xuexiang.xpush.core.receiver.IPushReceiver{*;}
+-dontwarn com.xiaomi.**
+-keep class * extends com.xiaomi.mipush.sdk.PushMessageReceiver{*;}

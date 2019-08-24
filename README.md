@@ -5,7 +5,7 @@
 [![I](https://img.shields.io/github/issues/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush/issues)
 [![Star](https://img.shields.io/github/stars/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush)
 
-一键集成推送（极光推送、友盟推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
+一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
 
 ## 关于我
 
@@ -62,6 +62,8 @@ dependencies {
   //选择你想要集成的推送库
   implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
 }
 ```
 
@@ -119,6 +121,16 @@ dependencies {
 <meta-data
     android:name="XPush_UMengPush_1001"
     android:value="com.xuexiang.xpush.umeng.UMengPushClient" />
+    
+<!--如果引入了xpush-huawei库-->
+<meta-data
+    android:name="XPush_HuaweiPush_1002"
+    android:value="com.xuexiang.xpush.huawei.HuaweiPushClient" />
+
+<!--如果引入了xpush-xiaomi库-->
+<meta-data
+    android:name="XPush_MIPush_1003"
+    android:value="com.xuexiang.xpush.xiaomi.XiaoMiPushClient" />
 
 ```
 
@@ -142,6 +154,19 @@ dependencies {
 <meta-data
     android:name="UMENG_MESSAGE_SECRET"
     android:value="4783a04255ed93ff675aca69312546f4" />
+    
+<!--华为HMS推送静态注册-->
+<meta-data
+    android:name="com.huawei.hms.client.appid"
+    android:value="101049475"/>
+
+<!--小米推送静态注册-->
+<meta-data
+    android:name="MIPUSH_APPID"
+    android:value="\ 2882303761518134164"/>
+<meta-data
+    android:name="MIPUSH_APPKEY"
+    android:value="\ 5371813415164"/>
 ```
 
 4.在Application中初始化XPush
@@ -174,11 +199,12 @@ private void initPush() {
     XPush.init(this, new IPushInitCallback() {
         @Override
         public boolean onInitPush(int platformCode, String platformName) {
-            if (RomUtils.getRom().getRomName().equals(SYS_EMUI)) {
-                //华为手机使用华为推送
+            String romName = RomUtils.getRom().getRomName();
+            if (romName.equals(SYS_EMUI)) {
                 return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE && platformName.equals(HuaweiPushClient.HUAWEI_PUSH_PLATFORM_NAME);
+            } else if (romName.equals(SYS_MIUI)) {
+                return platformCode == XiaoMiPushClient.MIPUSH_PLATFORM_CODE && platformName.equals(XiaoMiPushClient.MIPUSH_PLATFORM_NAME);
             } else {
-                //未识别到特殊的rom，默认使用极光推送
                 return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
             }
         }

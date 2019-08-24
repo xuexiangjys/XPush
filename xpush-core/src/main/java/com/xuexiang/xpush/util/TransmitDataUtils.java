@@ -17,9 +17,11 @@
 
 package com.xuexiang.xpush.util;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.annotation.PushAction;
 
@@ -47,6 +49,22 @@ public final class TransmitDataUtils {
     public static void sendPushData(Context context, @PushAction String action, Parcelable data) {
         Intent intent = new Intent(action);
         intent.putExtra(INTENT_DATA_PUSH, data);
+        intent.addCategory(context.getPackageName());
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * 发送数据【解决8.0之后静态广播注册失效的问题】
+     *
+     * @param context
+     * @param action    动作
+     * @param component 广播接收器的组件
+     * @param data      数据
+     */
+    public static void sendPushData(Context context, @PushAction String action, @NonNull ComponentName component, Parcelable data) {
+        Intent intent = new Intent(action);
+        intent.putExtra(INTENT_DATA_PUSH, data);
+        intent.setComponent(component);
         intent.addCategory(context.getPackageName());
         context.sendBroadcast(intent);
     }

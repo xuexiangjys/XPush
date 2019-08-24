@@ -37,6 +37,8 @@ import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
 /**
  * 华为推送客户端
+ * 1.tag和alias都不支持
+ * 2.通知到达事件不支持
  *
  * @author xuexiang
  * @since 2019-08-23 14:29
@@ -70,6 +72,7 @@ public class HuaweiPushClient implements IPushClient {
         HMSAgent.connect(new ConnectHandler() {
             @Override
             public void onConnect(int rst) {
+                PushLog.d("huawei-push connect onConnect=" + rst);
                 if (rst == HMSAgent.AgentResultCode.HMSAGENT_SUCCESS) {
                     HMSAgent.Push.getToken(new GetTokenHandler() {
                         @Override
@@ -94,6 +97,7 @@ public class HuaweiPushClient implements IPushClient {
             HMSAgent.Push.deleteToken(token, new DeleteTokenHandler() {
                 @Override
                 public void onResult(int rst) {
+                    PushLog.d("huawei-push deleteToken onResult=" + rst);
                     if (rst == HMSAgent.AgentResultCode.HMSAGENT_SUCCESS) {
                         XPush.transmitCommandResult(mApplication, TYPE_UNREGISTER, RESULT_OK, null, null, null);
                     } else {

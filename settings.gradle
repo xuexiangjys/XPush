@@ -1,1 +1,1 @@
-include ':app', ':keeplive', ':xpush-core', ':xpush-jpush', ':xpush-umeng', ':xpush-huawei'
+include ':app', ':keeplive', ':xpush-core', ':xpush-jpush', ':xpush-umeng', ':xpush-huawei', ':xpush-xiaomi'

@@ -15,33 +15,26 @@
  *
  */
 
-package com.xuexiang.xpush.huawei;
+package com.xuexiang.xpush.core;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.xuexiang.xpush.XPush;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.xuexiang.xpush.util.PushUtils;
 
 /**
- * 华为推送点击处理
- *
+ * XPush默认提供的通知推送打开指定页面的点击处理[透明activity]，使用deeplink技术
+ * <p>
  * 格式如下：
- *
+ * <p>
  * xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是通知的内容
  *
  * @author xuexiang
  * @since 2019-08-23 17:59
  */
-public class HuaweiNotificationClickActivity extends Activity {
+public class XPushNotificationClickActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,36 +45,9 @@ public class HuaweiNotificationClickActivity extends Activity {
             String content = uri.getQueryParameter("content");
             String extraMsg = uri.getQueryParameter("extraMsg");
             String keyValue = uri.getQueryParameter("keyValue");
-            XPush.transmitNotificationClick(this, -1, title, content, extraMsg, json2Map(keyValue));
+            XPush.transmitNotificationClick(this, -1, title, content, extraMsg, PushUtils.json2Map(keyValue));
         }
         finish();
     }
 
-    /**
-     * json转换map
-     *
-     * @param json
-     * @return
-     */
-    private Map<String, String> json2Map(String json) {
-        if (TextUtils.isEmpty(json)) {
-            return null;
-        }
-
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            Map<String, String> map = new HashMap<>();
-            Iterator<String> iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                String key = iterator.next();
-                String value = jsonObject.getString(key);
-                map.put(key, value);
-            }
-            return map;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 }

@@ -23,21 +23,27 @@ import android.content.Context;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.entity.UMessage;
 import com.xuexiang.xpush.XPush;
+import com.xuexiang.xpush.logs.PushLog;
 
 /**
+ * 友盟推送消息处理
  *
  * @author xuexiang
  * @since 2019-08-20 9:10
  */
 public class XPushUmengMessageHandler extends UmengMessageHandler {
 
+    private static final String TAG = "UmengPush-";
+
     @Override
     public void dealWithCustomMessage(Context context, UMessage uMessage) {
+        PushLog.d(TAG + "[dealWithCustomMessage]:" + uMessage);
         XPush.transmitMessage(context, uMessage.custom, null, uMessage.extra);
     }
 
     @Override
     public Notification getNotification(Context context, UMessage uMessage) {
+        PushLog.d(TAG + "[getNotification]:" + uMessage);
         XPush.transmitNotification(context, 0, uMessage.title, uMessage.text, uMessage.custom, uMessage.extra);
         return null;
     }

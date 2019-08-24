@@ -18,7 +18,9 @@
 package com.xuexiang.xpush;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 
 import com.xuexiang.xpush.core.IPushClient;
@@ -26,8 +28,10 @@ import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.annotation.CommandType;
 import com.xuexiang.xpush.core.annotation.ConnectStatus;
+import com.xuexiang.xpush.core.annotation.PushAction;
 import com.xuexiang.xpush.core.annotation.ResultCode;
 import com.xuexiang.xpush.core.dispatcher.IPushDispatcher;
+import com.xuexiang.xpush.core.receiver.impl.AbstractPushReceiver;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xpush.logs.ILogger;
 import com.xuexiang.xpush.logs.PushLog;
@@ -297,6 +301,23 @@ public final class XPush {
      */
     public static void transmitMessage(Context context, XPushMsg pushMsg) {
         _XPush.get().transmitMessage(context, pushMsg);
+    }
+
+    /**
+     * 动态注册消息推送的接收广播【解决Android 8.0（26)之后静态广播注册失效的问题方案一，不推荐使用】
+     *
+     * @param pushReceiver
+     */
+    public static void registerPushReceiver(AbstractPushReceiver pushReceiver) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PushAction.RECEIVE_CONNECT_STATUS_CHANGED);
+        filter.addAction(PushAction.RECEIVE_NOTIFICATION);
+        filter.addAction(PushAction.RECEIVE_NOTIFICATION_CLICK);
+        filter.addAction(PushAction.RECEIVE_MESSAGE);
+        filter.addAction(PushAction.RECEIVE_COMMAND_RESULT);
+        filter.addCategory(XPush.getContext().getPackageName());
+
+        XPush.getContext().registerReceiver(pushReceiver, filter);
     }
 
 

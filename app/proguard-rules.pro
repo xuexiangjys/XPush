@@ -227,6 +227,7 @@
 
  # XPush的混淆
 -keep class * extends com.xuexiang.xpush.core.IPushClient{*;}
+-keep class * extends com.xuexiang.xpush.core.receiver.IPushReceiver{*;}
 
 # 极光推送混淆
 -dontwarn cn.jpush.**
@@ -259,3 +260,6 @@
 # 华为推送
 -keep class com.huawei.hms.**{*;}
 -keep class com.huawei.android.hms.agent.**{*;}
+
+# 小米推送
+-keep class * extends com.xiaomi.mipush.sdk.PushMessageReceiver{*;}

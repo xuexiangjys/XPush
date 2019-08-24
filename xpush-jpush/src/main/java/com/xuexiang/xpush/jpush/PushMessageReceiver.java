@@ -28,9 +28,6 @@ import com.xuexiang.xpush.util.PushUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import cn.jpush.android.api.CmdMessage;
 import cn.jpush.android.api.CustomMessage;
 import cn.jpush.android.api.JPushInterface;
@@ -52,15 +49,17 @@ import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
  */
 public class PushMessageReceiver extends JPushMessageReceiver {
 
+    private static final String TAG = "JPush-";
+
     @Override
     public void onMessage(Context context, CustomMessage message) {
-        PushLog.d("[onMessage]:" + message);
+        PushLog.d(TAG + "[onMessage]:" + message);
         XPush.transmitMessage(context, message.message, message.extra, null);
     }
 
     @Override
     public void onNotifyMessageOpened(Context context, NotificationMessage message) {
-        PushLog.d("[onNotifyMessageOpened]:" + message);
+        PushLog.d(TAG + "[onNotifyMessageOpened]:" + message);
         try {
             XPush.transmitNotificationClick(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
                     PushUtils.toMap(new JSONObject(message.notificationExtras)));
@@ -76,12 +75,12 @@ public class PushMessageReceiver extends JPushMessageReceiver {
             return;
         }
 
-        PushLog.d("[onMultiActionClicked] 用户点击了通知栏按钮:" + intent.getExtras().getString(JPushInterface.EXTRA_NOTIFICATION_ACTION_EXTRA));
+        PushLog.d(TAG + "[onMultiActionClicked] 用户点击了通知栏按钮:" + intent.getExtras().getString(JPushInterface.EXTRA_NOTIFICATION_ACTION_EXTRA));
     }
 
     @Override
     public void onNotifyMessageArrived(Context context, NotificationMessage message) {
-        PushLog.d("[onNotifyMessageArrived]:" + message);
+        PushLog.d(TAG + "[onNotifyMessageArrived]:" + message);
         try {
             XPush.transmitNotification(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
                     PushUtils.toMap(new JSONObject(message.notificationExtras)));
@@ -93,12 +92,12 @@ public class PushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onNotifyMessageDismiss(Context context, NotificationMessage message) {
-        PushLog.d("[onNotifyMessageDismiss]:" + message);
+        PushLog.d(TAG + "[onNotifyMessageDismiss]:" + message);
     }
 
     @Override
     public void onRegister(Context context, String registrationId) {
-        PushLog.d("[onRegister]:" + registrationId);
+        PushLog.d(TAG + "[onRegister]:" + registrationId);
         XPush.transmitCommandResult(context, TYPE_REGISTER,
                 TextUtils.isEmpty(registrationId) ? RESULT_ERROR : RESULT_OK,
                 registrationId, null, null);
@@ -106,20 +105,20 @@ public class PushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onConnected(Context context, boolean isConnected) {
-        PushLog.d("[onConnected] " + isConnected);
+        PushLog.d(TAG + "[onConnected] " + isConnected);
         XPush.transmitConnectStatusChanged(context, isConnected ? CONNECTED : DISCONNECT);
     }
 
     @Override
     public void onCommandResult(Context context, CmdMessage cmdMessage) {
-        PushLog.d("[onCommandResult] " + cmdMessage);
+        PushLog.d(TAG + "[onCommandResult] " + cmdMessage);
     }
 
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         XPush.transmitCommandResult(context, jPushMessage.getSequence(),
                 jPushMessage.getErrorCode() == 0 ? RESULT_OK : jPushMessage.getErrorCode(),
-                PushUtils.set2String(jPushMessage.getTags()), null, null);
+                PushUtils.collection2String(jPushMessage.getTags()), null, null);
         super.onTagOperatorResult(context, jPushMessage);
     }
 

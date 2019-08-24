@@ -21,7 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.xuexiang.pushdemo.activity.TestActivity;
-import com.xuexiang.xpush.core.receiver.impl.AbstractPushReceiver;
+import com.xuexiang.xpush.core.receiver.impl.XPushReceiver;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.entity.XPushMsg;
 import com.xuexiang.xutil.app.ActivityUtils;
@@ -35,10 +35,11 @@ import static com.xuexiang.pushdemo.activity.TestActivity.KEY_PARAM_STRING;
  * @author xuexiang
  * @since 2019-08-16 17:50
  */
-public class CustomPushReceiver extends AbstractPushReceiver {
+public class CustomPushReceiver extends XPushReceiver {
 
     @Override
     public void onNotificationClick(Context context, XPushMsg msg) {
+        super.onNotificationClick(context, msg);
         //打开自定义的Activity
         Intent intent = IntentUtils.getIntent(context, TestActivity.class, null, true);
         intent.putExtra(KEY_PARAM_STRING, msg.getContent());
@@ -48,12 +49,8 @@ public class CustomPushReceiver extends AbstractPushReceiver {
     }
 
     @Override
-    public void onMessageReceived(Context context, XPushMsg msg) {
-
-    }
-
-    @Override
     public void onCommandResult(Context context, XPushCommand command) {
+        super.onCommandResult(context, command);
         ToastUtils.toast(command.getDescription());
     }
 

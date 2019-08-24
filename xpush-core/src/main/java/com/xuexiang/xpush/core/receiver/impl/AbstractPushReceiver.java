@@ -46,7 +46,9 @@ public abstract class AbstractPushReceiver extends BroadcastReceiver implements 
 
     @Override
     public final void onReceive(Context context, Intent intent) {
-        if (intent == null) return;
+        if (intent == null) {
+            return;
+        }
 
         String action = intent.getAction();
         Parcelable parcelable = parsePushData(intent);
