@@ -28,19 +28,19 @@ import android.content.Context;
 public interface IPushClient {
 
     /**
-     * 初始化
+     * 初始化【必须】
      *
      * @param context
      */
     void init(Context context);
 
     /**
-     * 注册推送
+     * 注册推送【必须】
      */
     void register();
 
     /**
-     * 注销推送
+     * 注销推送【必须】
      */
     void unRegister();
 
@@ -88,11 +88,13 @@ public interface IPushClient {
     String getPushToken();
 
     /**
+     * 注意千万不要重复【必须】
      * @return 获取平台码
      */
     int getPlatformCode();
 
     /**
+     * 注意千万不要重复【必须】
      * @return 获取平台名
      */
     String getPlatformName();
