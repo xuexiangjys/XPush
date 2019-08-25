@@ -20,7 +20,7 @@ package com.xuexiang.xpush.entity;
 import java.util.Map;
 
 /**
- * 自定义消息
+ * 自定义（透传）消息
  *
  * @author xuexiang
  * @since 2019-08-17 14:38

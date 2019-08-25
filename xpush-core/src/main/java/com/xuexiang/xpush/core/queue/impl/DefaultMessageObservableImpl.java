@@ -169,7 +169,6 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
      */
     @Override
     public boolean unregister(IMessageObserver observer) {
-        boolean result = false;
         if (observer != null) {
             Iterator<WeakReference<IMessageObserver>> it = mObservers.iterator();
             synchronized (mLock) {
@@ -177,13 +176,12 @@ public class DefaultMessageObservableImpl implements IMessageObservable {
                     IMessageObserver sb = it.next().get();
                     if (sb == observer) {
                         it.remove();
-                        result = true;
-                        break;
+                        return true;
                     }
                 }
             }
         }
-        return result;
+        return false;
     }
 
     /**

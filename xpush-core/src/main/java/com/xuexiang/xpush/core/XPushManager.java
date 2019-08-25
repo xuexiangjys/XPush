@@ -19,18 +19,16 @@ package com.xuexiang.xpush.core;
 
 import android.support.annotation.NonNull;
 
+import com.xuexiang.xpush.core.queue.IMessageFilter;
+import com.xuexiang.xpush.core.queue.IMessageFilterStrategy;
 import com.xuexiang.xpush.core.queue.IMessageObservable;
 import com.xuexiang.xpush.core.queue.IMessageObserver;
+import com.xuexiang.xpush.core.queue.impl.DefaultMessageFilterStrategyImpl;
 import com.xuexiang.xpush.core.queue.impl.DefaultMessageObservableImpl;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.util.PushUtils;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * 推送核心管理类
@@ -47,9 +45,9 @@ public class XPushManager implements IMessageObservable {
      */
     private IMessageObservable mObservable;
     /**
-     * 消息过滤器
+     * 消息过滤策略
      */
-    private List<WeakReference<IMessageFilter>> mFilters;
+    private IMessageFilterStrategy mMessageFilterStrategy;
 
     /**
      * 推送连接状态
@@ -59,7 +57,7 @@ public class XPushManager implements IMessageObservable {
 
     private XPushManager() {
         mObservable = new DefaultMessageObservableImpl();
-        mFilters = new ArrayList<>();
+        mMessageFilterStrategy = new DefaultMessageFilterStrategyImpl();
         mConnectStatus = PushUtils.getConnectStatus();
     }
 
@@ -207,57 +205,16 @@ public class XPushManager implements IMessageObservable {
         }
     }
 
-    //=======================消息过滤器==============================//
+    //=======================消息过滤策略==============================//
 
     /**
-     * 增加消息过滤器
+     * 设置消息过滤策略
      *
-     * @param filter 消息过滤器
+     * @param messageFilterStrategy
      * @return
      */
-    public XPushManager addFilter(@NonNull IMessageFilter filter) {
-        WeakReference<IMessageFilter> reference = new WeakReference<>(filter);
-        mFilters.add(reference);
-        return this;
-    }
-
-    /**
-     * 增加消息过滤器
-     *
-     * @param index  索引
-     * @param filter 消息过滤器
-     * @return
-     */
-    public XPushManager addFilter(int index, @NonNull IMessageFilter filter) {
-        WeakReference<IMessageFilter> reference = new WeakReference<>(filter);
-        mFilters.add(index, reference);
-        return this;
-    }
-
-    /**
-     * 增加消息过滤器
-     *
-     * @param filters 消息过滤器
-     * @return
-     */
-    public XPushManager addFilters(@NonNull IMessageFilter... filters) {
-        List<WeakReference<IMessageFilter>> list = new ArrayList<>();
-        for (IMessageFilter filter : filters) {
-            list.add(new WeakReference<>(filter));
-        }
-        mFilters.addAll(list);
-        return this;
-    }
-
-    /**
-     * 设置消息过滤器
-     *
-     * @param filters 消息过滤器
-     * @return
-     */
-    public XPushManager setFilters(@NonNull IMessageFilter... filters) {
-        mFilters.clear();
-        addFilters(filters);
+    public XPushManager setIMessageFilterStrategy(@NonNull IMessageFilterStrategy messageFilterStrategy) {
+        mMessageFilterStrategy = messageFilterStrategy;
         return this;
     }
 
@@ -268,47 +225,96 @@ public class XPushManager implements IMessageObservable {
      * @return {@code true}：过滤通知 <br> {@code false}：不过滤通知
      */
     private boolean filterNotification(Notification notification) {
-        if (mFilters.size() == 0) {
-            return false;
-        }
-
-        Iterator<WeakReference<IMessageFilter>> it = mFilters.iterator();
-        while (it.hasNext()) {
-            IMessageFilter filter = it.next().get();
-            if (filter != null) {
-                if (filter.filter(notification)) {
-                    return true;
-                }
-            } else {
-                it.remove();
-            }
-        }
-        return false;
+        return mMessageFilterStrategy != null && mMessageFilterStrategy.filterNotification(notification);
     }
 
     /**
-     * 过滤自定义消息
+     * 过滤自定义(透传)消息
      *
      * @param message 自定义消息
      * @return {@code true}：过滤自定义消息 <br> {@code false}：不过滤自定义消息
      */
     private boolean filterCustomMessage(CustomMessage message) {
-        if (mFilters.size() == 0) {
-            return false;
-        }
+        return mMessageFilterStrategy != null && mMessageFilterStrategy.filterCustomMessage(message);
+    }
 
-        Iterator<WeakReference<IMessageFilter>> it = mFilters.iterator();
-        while (it.hasNext()) {
-            IMessageFilter filter = it.next().get();
-            if (filter != null) {
-                if (filter.filter(message)) {
-                    return true;
-                }
-            } else {
-                it.remove();
-            }
+    /**
+     * 增加消息过滤器
+     *
+     * @param filter 消息过滤器
+     */
+    public XPushManager addFilter(@NonNull IMessageFilter filter) {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.addFilter(filter);
         }
-        return false;
+        return this;
+    }
+
+    /**
+     * 增加消息过滤器
+     *
+     * @param index  索引
+     * @param filter 消息过滤器
+     */
+    public XPushManager addFilter(int index, @NonNull IMessageFilter filter) {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.addFilter(index, filter);
+        }
+        return this;
+    }
+
+    /**
+     * 增加消息过滤器
+     *
+     * @param filters 消息过滤器
+     */
+    public XPushManager addFilters(@NonNull IMessageFilter... filters) {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.addFilters(filters);
+        }
+        return this;
+    }
+
+    /**
+     * 设置消息过滤器
+     *
+     * @param filters 消息过滤器
+     */
+    public XPushManager setFilters(@NonNull IMessageFilter... filters) {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.setFilters(filters);
+        }
+        return this;
+    }
+
+    /**
+     * 清除消息过滤器
+     *
+     * @param filter 消息过滤器
+     * @return 是否清除成功
+     */
+    public boolean removeFilter(@NonNull IMessageFilter filter) {
+        return mMessageFilterStrategy != null && mMessageFilterStrategy.removeFilter(filter);
+    }
+
+    /**
+     * 清除消息过滤器
+     *
+     * @param filters 消息过滤器
+     */
+    public void removeFilters(@NonNull IMessageFilter... filters) {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.removeFilters(filters);
+        }
+    }
+
+    /**
+     * 清除所有的消息过滤器
+     */
+    public void removeAll() {
+        if (mMessageFilterStrategy != null) {
+            mMessageFilterStrategy.removeAll();
+        }
     }
 
 }

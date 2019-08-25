@@ -15,7 +15,7 @@
  *
  */
 
-package com.xuexiang.xpush.core;
+package com.xuexiang.xpush.core.queue;
 
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;

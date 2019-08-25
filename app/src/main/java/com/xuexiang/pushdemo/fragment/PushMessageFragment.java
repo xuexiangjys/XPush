@@ -17,25 +17,19 @@
 
 package com.xuexiang.pushdemo.fragment;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xuexiang.pushdemo.R;
 import com.xuexiang.xaop.annotation.MainThread;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageFragment;
-import com.xuexiang.xpush.core.IMessageFilter;
+import com.xuexiang.xpush.core.queue.IMessageFilter;
 import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * @author xuexiang
@@ -70,28 +64,29 @@ public class PushMessageFragment extends XPageFragment {
     @Override
     protected void initListeners() {
         XPushManager.get()
-                .addFilter(new IMessageFilter() {
-                    @Override
-                    public boolean filter(Notification notification) {
-                        if (notification.getContent().contains("XPush")) {
-                            showMessage("通知被拦截");
-                            return true;
-                        }
-                        return false;
-                    }
-
-                    @Override
-                    public boolean filter(CustomMessage message) {
-                        if (message.getMsg().contains("XPush")) {
-                            showMessage("自定义消息被拦截");
-                            return true;
-                        }
-                        return false;
-                    }
-                })
+                .addFilter(mMessageFilter)
                 .register(mMessageSubscriber);
-
     }
+
+    private IMessageFilter mMessageFilter = new IMessageFilter() {
+        @Override
+        public boolean filter(Notification notification) {
+            if (notification.getContent().contains("XPush")) {
+                showMessage("通知被拦截");
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean filter(CustomMessage message) {
+            if (message.getMsg().contains("XPush")) {
+                showMessage("自定义消息被拦截");
+                return true;
+            }
+            return false;
+        }
+    };
 
     private MessageSubscriber mMessageSubscriber = new MessageSubscriber() {
         @Override
@@ -114,6 +109,7 @@ public class PushMessageFragment extends XPageFragment {
     @Override
     public void onDestroyView() {
         XPushManager.get().unregister(mMessageSubscriber);
+        XPushManager.get().removeFilter(mMessageFilter);
         super.onDestroyView();
     }
 }
