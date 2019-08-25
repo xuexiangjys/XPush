@@ -5,7 +5,7 @@
 [![I](https://img.shields.io/github/issues/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush/issues)
 [![Star](https://img.shields.io/github/stars/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush)
 
-一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
+一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
 
 ## 关于我
 
@@ -30,7 +30,7 @@
 
 ----
 
-## 如何使用
+## 如何引用
 
 ### 添加Gradle依赖
 
@@ -230,6 +230,162 @@ private void initPush() {
     XPush.register();
 }
 ```
+
+---
+
+## 如何使用XPush
+
+### 1、推送的注册和注销
+
+* 通过调用`XPush.register()`，即可完成推送的注册。
+
+* 通过调用`XPush.unRegister()`，即可完成推送的注销。
+
+* 通过调用`XPush.getPushToken()`，即可获取消息推送的Token(令牌)。
+
+* 通过调用`XPush.getPlatformCode()`，即可获取当前使用推送平台的码。
+
+### 2、推送的标签（tag）处理
+
+* 通过调用`XPush.addTags()`，即可添加标签（支持传入多个）。
+
+* 通过调用`XPush.deleteTags()`，即可删除标签（支持传入多个）。
+
+* 通过调用`XPush.getTags()`，即可获取当前设备所有的标签。
+
+需要注意的是，友盟推送目前暂不支持标签的获取，华为推送不支持标签的所有操作，小米推送每次只支持一个标签的操作。
+
+### 3、推送的别名（alias）处理
+
+* 通过调用`XPush.bindAlias()`，即可绑定别名。
+
+* 通过调用`XPush.unBindAlias()`，即可解绑别名。
+
+* 通过调用`XPush.getAlias()`，即可获取当前设备所绑定的别名。
+
+需要注意的是，友盟推送目前暂不支持别名的获取，华为推送不支持别名的所有操作。
+
+### 4、推送消息的接收
+
+* 通过调用`XPushManager.get().register()`方法，注册消息订阅`MessageSubscriber`，即可在任意地方接收到推送的消息。
+
+* 通过调用`XPushManager.get().unregister()`方法，即可取消消息的订阅。
+
+这里需要注意的是，消息订阅的回调并不一定是在主线程，因此在回调中如果进行了UI的操作，一定要确保切换至主线程。下面演示代码中使用了我的另一个开源库[XAOP](https://github.com/xuexiangjys/XAOP),只通过`@MainThread`注解就能自动切换至主线程,可供参考。
+
+```
+/**
+ * 初始化监听
+ */
+@Override
+protected void initListeners() {
+    XPushManager.get().register(mMessageSubscriber);
+}
+
+private MessageSubscriber mMessageSubscriber = new MessageSubscriber() {
+    @Override
+    public void onMessageReceived(CustomMessage message) {
+        showMessage(String.format("收到自定义消息:%s", message));
+    }
+
+    @Override
+    public void onNotification(Notification notification) {
+        showMessage(String.format("收到通知:%s", notification));
+    }
+};
+
+@MainThread
+private void showMessage(String msg) {
+    tvContent.setText(msg);
+}
+
+
+@Override
+public void onDestroyView() {
+    XPushManager.get().unregister(mMessageSubscriber);
+    super.onDestroyView();
+}
+```
+
+### 5、推送消息的过滤处理
+
+* 通过调用`XPushManager.get().addFilter()`方法，可增加对订阅推送消息的过滤处理。对于一些我们不想处理的消息，可以通过消息过滤器将它们筛选出来。
+
+* 通过调用`XPushManager.get().removeFilter()`方法，即可去除消息过滤器。
+
+```
+/**
+ * 初始化监听
+ */
+@Override
+protected void initListeners() {
+    XPushManager.get().addFilter(mMessageFilter);
+}
+
+private IMessageFilter mMessageFilter = new IMessageFilter() {
+    @Override
+    public boolean filter(Notification notification) {
+        if (notification.getContent().contains("XPush")) {
+            showMessage("通知被拦截");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean filter(CustomMessage message) {
+        if (message.getMsg().contains("XPush")) {
+            showMessage("自定义消息被拦截");
+            return true;
+        }
+        return false;
+    }
+};
+
+@Override
+public void onDestroyView() {
+    XPushManager.get().removeFilter(mMessageFilter);
+    super.onDestroyView();
+}
+```
+
+### 6、推送通知的点击处理
+
+> 对于通知的点击事件，我们可以处理得更优雅，自定义其点击后的动作，打开我们想让用户看到的页面。
+
+我们可以在全局消息推送的接收器`IPushReceiver`中的`onNotificationClick`回调中，增加打开指定页面的操作。
+
+```
+@Override
+public void onNotificationClick(Context context, XPushMsg msg) {
+    super.onNotificationClick(context, msg);
+    //打开自定义的Activity
+    Intent intent = IntentUtils.getIntent(context, TestActivity.class, null, true);
+    intent.putExtra(KEY_PARAM_STRING, msg.getContent());
+    intent.putExtra(KEY_PARAM_INT, msg.getId());
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    ActivityUtils.startActivity(intent);
+}
+```
+
+需要注意的是，这需要你在消息推送平台推送的通知使用的是`自定义动作`或者`打开指定页面`类型，并且传入的Intent uri 内容满足如下格式:
+
+* title：通知的标题
+
+* content：通知的内容
+
+* extraMsg：通知附带的拓展字段，可存放json或其他内容
+
+* keyValue：通知附带的键值对
+
+```
+xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是通知的内容&extraMsg=xxxxxxxxx&keyValue={"param1": "1111", "param2": "2222"}
+```
+
+当然你也可以自定义传入的Intent uri 格式，具体可参考项目中的[XPushNotificationClickActivity](https://github.com/xuexiangjys/XPush/blob/master/xpush-core/src/main/java/com/xuexiang/xpush/core/XPushNotificationClickActivity.java)和[AndroidManifest.xml](https://github.com/xuexiangjys/XPush/blob/master/xpush-core/src/main/AndroidManifest.xml)
+
+
+---
 
 ## 如何拓展第三方推送
 
