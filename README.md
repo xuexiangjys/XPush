@@ -548,9 +548,113 @@ public interface IPushClient {
 
 * 3.创建和重写三方消息推送的消息接收器（一般是重写Receiver）。重写三方推送的的接收透传消息和通知的方法，调用`XPush`的transmitXXX方法，将通知、透传消息、通知点击事件、以及其他事件，转发到XPush。
 
+主要调用以下五个方法：
+
+(1)XPush.transmitMessage(): 转发自定义(透传)消息.
+
+(2)XPush.transmitNotification(): 转发通知到达消息.
+
+(3)XPush.transmitNotificationClick(): 转发通知点击事件.
+
+(4)XPush.transmitCommandResult(): 转发IPushClient命令执行结果.
+
+(5)XPush.transmitConnectStatusChanged(): 转发推送连接状态发生改变的事件.
+
 * 4.增加该推送平台对应的代码混淆配置信息。
 
 以上即完成了推送平台的集成。剩下的就是在初始化XPush的时候对推送平台进行选择了.如果你看完了还是不会的话，你可以参考项目中的[xpush-xiaomi](https://github.com/xuexiangjys/XPush/tree/master/xpush-xiaomi)和[xpush-huawei](https://github.com/xuexiangjys/XPush/tree/master/xpush-huawei).
+
+---
+
+## 实体介绍
+
+### XPushMsg
+
+> 推送消息转译实体，携带消息的原始数据
+
+字段名 | 类型 | 备注
+:-|:-:|:-
+mId | int | 消息ID / 状态
+mTitle | String | 通知标题
+mContent | String | 通知内容
+mMsg | String | 自定义（透传）消息
+mExtraMsg | String | 消息拓展字段
+mKeyValue | String | 消息键值对
+
+
+### Notification
+
+> 推送通知，由XPushMsg转化而来
+
+字段名 | 类型 | 备注
+:-|:-:|:-
+mId | int | 消息ID / 状态
+mTitle | String | 通知标题
+mContent | String | 通知内容
+mExtraMsg | String | 消息拓展字段
+mKeyValue | String | 消息键值对
+
+
+### CustomMessage
+
+> 自定义（透传）消息，由XPushMsg转化而来
+
+字段名 | 类型 | 备注
+:-|:-:|:-
+mMsg | String | 自定义（透传）消息
+mExtraMsg | String | 消息拓展字段
+mKeyValue | String | 消息键值对
+
+
+### XPushCommand
+
+> IPushClient执行相关命令的结果信息实体
+
+字段名 | 类型 | 备注
+:-|:-:|:-
+mType | int | 命令类型
+mResultCode | int | 结果码
+mContent | String | 命令内容
+mExtraMsg | String | 拓展字段
+mError | String | 错误信息
+
+
+## 常量介绍
+
+### CommandType
+
+> 命令的类型
+
+命令名 | 命令码 | 备注
+:-|:-:|:-
+TYPE_REGISTER | 2000 | 注册推送
+TYPE_UNREGISTER | 2001 | 注销推送
+TYPE_ADD_TAG | 2002 | 添加标签
+TYPE_DEL_TAG | 2003 | 删除标签
+TYPE_GET_TAG | 2004 | 获取标签
+TYPE_BIND_ALIAS | 2005 | 绑定别名
+TYPE_UNBIND_ALIAS | 2006 | 解绑别名
+TYPE_GET_ALIAS | 2007 | 获取别名
+TYPE_AND_OR_DEL_TAG | 2008 | 添加或删除标签
+
+### ResultCode
+
+> 命令的结果码
+
+结果名 | 结果码 | 备注
+:-|:-:|:-
+RESULT_OK | 0 | 成功
+RESULT_ERROR | 1 | 失败
+
+### ConnectStatus
+
+> 推送连接状态
+
+状态名 | 状态码 | 备注
+:-|:-:|:-
+DISCONNECT | 10 | 已断开
+CONNECTING | 11 | 连接中
+CONNECTED | 12 | 已连接
 
 ---
 
