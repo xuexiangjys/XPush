@@ -9,7 +9,7 @@ assignees: xuexiangjys
 
 **提Bug前需要做的事情**
 
-1.如果是集成问题的话，请保证仔细按照[如何引用](https://github.com/xuexiangjys/XPush/wiki/%E5%A6%82%E4%BD%95%E5%BC%95%E7%94%A8)的步骤，一步一步来，不要跳步骤！
+1.如果是集成问题的话，请保证仔细按照[快速集成指南](https://github.com/xuexiangjys/XPush/wiki/%E5%BF%AB%E9%80%9F%E9%9B%86%E6%88%90%E6%8C%87%E5%8D%97)的步骤，一步一步来，不要跳步骤！
 2.详细阅读过[使用手册](https://github.com/xuexiangjys/XPush/wiki)，并且确保是框架的问题。
 3.参考[常见问题](https://github.com/xuexiangjys/XPush/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98),可以解决你出现的绝大多数问题!
 
