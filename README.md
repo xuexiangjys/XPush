@@ -7,6 +7,14 @@
 
 一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
 
+在提issue前，请先阅读[【提问的智慧】](https://xuexiangjys.blog.csdn.net/article/details/83344235)，并严格按照[issue模板](https://github.com/xuexiangjys/XPush/issues/new/choose)进行填写，节约大家的时间。
+
+在使用前，请一定要仔细阅读[使用说明文档](https://github.com/xuexiangjys/XPush/wiki),重要的事情说三遍！！！
+
+在使用前，请一定要仔细阅读[使用说明文档](https://github.com/xuexiangjys/XPush/wiki),重要的事情说三遍！！！
+
+在使用前，请一定要仔细阅读[使用说明文档](https://github.com/xuexiangjys/XPush/wiki),重要的事情说三遍！！！
+
 ## 关于我
 
 [![github](https://img.shields.io/badge/GitHub-xuexiangjys-blue.svg)](https://github.com/xuexiangjys)   [![csdn](https://img.shields.io/badge/CSDN-xuexiangjys-green.svg)](http://blog.csdn.net/xuexiangjys)   [![简书](https://img.shields.io/badge/简书-xuexiangjys-red.svg)](https://www.jianshu.com/u/6bf605575337)   [![掘金](https://img.shields.io/badge/掘金-xuexiangjys-brightgreen.svg)](https://juejin.im/user/598feef55188257d592e56ed)   [![知乎](https://img.shields.io/badge/知乎-xuexiangjys-violet.svg)](https://www.zhihu.com/people/xuexiangjys) 
@@ -27,10 +35,45 @@
 
 * 提供有效的保活机制。保证接入XPush的应用消息推送的到达率和稳定性，这也是很多推送框架所做不到的。
 
+## 组成结构
+
+> 本框架借鉴了[OnePush（目前已不维护了）](https://github.com/pengyuantao/OnePush)中的部分思想，加之我3年消息推送的经验，形成了如下几个部分：
+
+* 消息推送客户端`IPushClient`：主要提供消息推送平台的主要API。
+
+* 消息推送事件转发器`IPushDispatcher`：主要用于将第三方的消息推送事件转发为XPush可识别的事件。
+
+* 消息推送接收器`IPushReceiver`：统一接收IPushDispatcher转发过来的事件，是事件的接收中心。
+
+* 推送消息的被观察者`IMessageObservable`：主要负责管理推送消息的订阅和转发。
+
+* 推送消息的过滤策略`IMessageFilterStrategy`：主要负责推送消息的过滤处理和管理。
+
+以上5个组成部分可以根据你自身的业务需求进行自定义。
+
+## 消息推送流程
+
+在后台发出一则推送消息后：
+
+```
+第三方推送平台 --- (消息) ---> 第三方推送平台内部的接收消息的Receiver --->（重写其接收的方法）---> IPushDispatcher ---> (转发消息内容为XPushMsg/XPushCommand）---> IPushReceiver ---> (如不使用XPushManager提供的消息管理，这里直接结束）
+
+    【使用XPushManager提供的消息管理】：---IPushReceiver---> XPushManager -----> IMessageFilterStrategy --->（对消息进行过滤处理）---> IMessageObservable ---> （消息转发到具体订阅的地方）
+
+```
+
+## 为什么要做这个项目
+
+做过Android消息推送的人都知道，Android不仅设备碎片化严重，推送平台也是五花八门的。早在2017年工信部就号召所有的厂商来制定统一的Android消息推送平台，可到现在也没有下文（究其原因还是这其中的利益太大了，谁也不想妥协）。
+
+可是我们也不能将希望全都寄托在这个完全没有定数的事件上，代码终归要写，功能终归要上，与其受制于人，不如自己革命，搞一个自己能控制的消息推送全平台解决方案来得靠谱。
+
+之前在QQ交流群里一直有人希望我开源一个消息推送框架，其实我在上一家公司的时候就写了一个推送框架，只不过捆绑业务太深，加之避开泄密之嫌，也就没有开源的必要。此次的推送框架完全是重新写了一个，加之全新的设计，会使框架更加通用，灵活。
+
 
 ----
 
-## 如何引用
+## 快速集成指南
 
 ### 添加Gradle依赖
 
