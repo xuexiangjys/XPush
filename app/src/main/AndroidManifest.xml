@@ -95,22 +95,22 @@
         <!--如果引入了xpush-jpush库-->
         <meta-data
             android:name="XPush_JPush_1000"
-            android:value="com.xuexiang.xpush.jpush.JPushClient" />
+            android:value="@string/xpush_jpush_client_name" />
 
         <!--如果引入了xpush-umeng库-->
         <meta-data
             android:name="XPush_UMengPush_1001"
-            android:value="com.xuexiang.xpush.umeng.UMengPushClient" />
+            android:value="@string/xpush_umeng_client_name" />
 
         <!--如果引入了xpush-huawei库-->
         <meta-data
             android:name="XPush_HuaweiPush_1002"
-            android:value="com.xuexiang.xpush.huawei.HuaweiPushClient" />
+            android:value="@string/xpush_huawei_client_name" />
 
         <!--如果引入了xpush-xiaomi库-->
         <meta-data
             android:name="XPush_MIPush_1003"
-            android:value="com.xuexiang.xpush.xiaomi.XiaoMiPushClient" />
+            android:value="@string/xpush_xiaomi_client_name" />
 
     </application>
 

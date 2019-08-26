@@ -91,62 +91,62 @@ public class XiaoMiPushReceiver extends PushMessageReceiver {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
                 //保存push token
                 PushUtils.savePushToken(MIPUSH_PLATFORM_NAME, cmdArg1);
-                log = context.getString(R.string.register_success);
+                log = context.getString(R.string.xiaomi_register_success);
             } else {
-                log = context.getString(R.string.register_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_register_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_UNREGISTER.equals(command)) {
             commandType = TYPE_UNREGISTER;
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.unregister_success);
+                log = context.getString(R.string.xiaomi_unregister_success);
             } else {
-                log = context.getString(R.string.unregister_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_unregister_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_SET_ALIAS.equals(command)) {
             commandType = TYPE_BIND_ALIAS;
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.set_alias_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_set_alias_success, cmdArg1);
             } else {
-                log = context.getString(R.string.set_alias_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_set_alias_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_UNSET_ALIAS.equals(command)) {
             commandType = TYPE_UNBIND_ALIAS;
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.unset_alias_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_unset_alias_success, cmdArg1);
             } else {
-                log = context.getString(R.string.unset_alias_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_unset_alias_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_SET_ACCOUNT.equals(command)) {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.set_account_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_set_account_success, cmdArg1);
             } else {
-                log = context.getString(R.string.set_account_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_set_account_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_UNSET_ACCOUNT.equals(command)) {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.unset_account_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_unset_account_success, cmdArg1);
             } else {
-                log = context.getString(R.string.unset_account_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_unset_account_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_SUBSCRIBE_TOPIC.equals(command)) {
             commandType = TYPE_ADD_TAG;
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.subscribe_topic_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_subscribe_topic_success, cmdArg1);
             } else {
-                log = context.getString(R.string.subscribe_topic_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_subscribe_topic_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_UNSUBSCRIBE_TOPIC.equals(command)) {
             commandType = TYPE_DEL_TAG;
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.unsubscribe_topic_success, cmdArg1);
+                log = context.getString(R.string.xiaomi_unsubscribe_topic_success, cmdArg1);
             } else {
-                log = context.getString(R.string.unsubscribe_topic_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_unsubscribe_topic_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_SET_ACCEPT_TIME.equals(command)) {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.set_accept_time_success, cmdArg1, cmdArg2);
+                log = context.getString(R.string.xiaomi_set_accept_time_success, cmdArg1, cmdArg2);
             } else {
-                log = context.getString(R.string.set_accept_time_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_set_accept_time_fail, commandMessage.getReason());
             }
         } else {
             log = commandMessage.getReason();
@@ -166,15 +166,15 @@ public class XiaoMiPushReceiver extends PushMessageReceiver {
         String log;
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.register_success);
+                log = context.getString(R.string.xiaomi_register_success);
             } else {
-                log = context.getString(R.string.register_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_register_fail, commandMessage.getReason());
             }
         } else if (MiPushClient.COMMAND_UNREGISTER.equals(command)) {
             if (commandMessage.getResultCode() == ErrorCode.SUCCESS) {
-                log = context.getString(R.string.unregister_success);
+                log = context.getString(R.string.xiaomi_unregister_success);
             } else {
-                log = context.getString(R.string.unregister_fail, commandMessage.getReason());
+                log = context.getString(R.string.xiaomi_unregister_fail, commandMessage.getReason());
             }
         } else {
             log = commandMessage.getReason();

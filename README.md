@@ -189,7 +189,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 4.在Application中初始化XPush
 
-初始化XPush的方式有两种：
+初始化XPush的方式有两种，根据业务需要选择一直方式就行了：
 
 * 静态注册
 
@@ -384,10 +384,48 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 
 当然你也可以自定义传入的Intent uri 格式，具体可参考项目中的[XPushNotificationClickActivity](https://github.com/xuexiangjys/XPush/blob/master/xpush-core/src/main/java/com/xuexiang/xpush/core/XPushNotificationClickActivity.java)和[AndroidManifest.xml](https://github.com/xuexiangjys/XPush/blob/master/xpush-core/src/main/AndroidManifest.xml)
 
-
 ---
 
-## 如何拓展第三方推送
+## 推送平台说明
+
+### 目前已支持的推送平台
+
+推送平台 | 平台名 | 平台码 | 模块名 | 客户端类
+:-|:-:|:-:|:-:|:-
+极光推送 | JPush | 1000 | xpush-jpush | com.xuexiang.xpush.jpush.JPushClient
+友盟推送 | UMengPush | 1001 | xpush-umeng | com.xuexiang.xpush.umeng.UMengPushClient
+华为推送 | HuaweiPush | 1002 | xpush-huawei | com.xuexiang.xpush.huawei.HuaweiPushClient
+小米推送 | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
+
+### 推送平台的注意事项
+
+> 极光推送平台所有特性都支持。
+
+#### 友盟推送
+
+* 友盟推送在进行XPush初始化的时候，除了在主进程中注册，还需要在channel中注册。
+
+* 友盟推送不支持Tag和alias的获取
+
+* 友盟推送不支持监听推送的连接状态。
+
+#### 华为推送
+
+* 华为推送在注册之前需要安装最新的推送服务，否则将无法注册成功（库会自动弹出升级或者安装提示）
+
+* 华为推送不支持所有Tag和alias的操作。
+
+* 华为推送不支持接收通知到达事件。
+
+#### 小米推送
+
+* 小米推送一次只能操作一个Tag。
+
+* 小米推送注销无结果反馈。
+
+* 小米推送不支持监听推送的连接状态。
+
+### 如何拓展第三方推送
 
 > 由于Android推送平台的众多，目前本项目不可能也没必要提供所有推送平台的集成库。如果你想使用的推送平台在我这没有找到对应的集成库的话，那么就需要你自己写一个了。
 
@@ -471,6 +509,51 @@ public interface IPushClient {
 
 以上即完成了推送平台的集成。剩下的就是在初始化XPush的时候对推送平台进行选择了.如果你看完了还是不会的话，你可以参考项目中的[xpush-xiaomi](https://github.com/xuexiangjys/XPush/tree/master/xpush-xiaomi)和[xpush-huawei](https://github.com/xuexiangjys/XPush/tree/master/xpush-huawei).
 
+---
+
+## 混淆配置
+
+```
+# XPush的混淆
+-keep class * extends com.xuexiang.xpush.core.IPushClient{*;}
+-keep class * extends com.xuexiang.xpush.core.receiver.IPushReceiver{*;}
+
+# 极光推送混淆
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+-keep class * extends cn.jpush.android.service.JPushMessageReceiver{*;}
+
+# umeng推送
+-dontwarn com.umeng.**
+-dontwarn com.taobao.**
+-dontwarn anet.channel.**
+-dontwarn anetwork.channel.**
+-dontwarn org.android.**
+-dontwarn org.apache.thrift.**
+-dontwarn com.xiaomi.**
+-dontwarn com.huawei.**
+-dontwarn com.meizu.**
+-keep class com.taobao.** {*;}
+-keep class org.android.** {*;}
+-keep class anet.channel.** {*;}
+-keep class com.xiaomi.** {*;}
+-keep class com.huawei.** {*;}
+-keep class com.meizu.** {*;}
+-keep class org.apache.thrift.** {*;}
+-keep class com.alibaba.sdk.android.**{*;}
+-keep class com.ut.**{*;}
+-keep class com.ta.**{*;}
+
+# 华为推送
+-keep class com.huawei.hms.**{*;}
+-keep class com.huawei.android.hms.agent.**{*;}
+
+# 小米推送
+-keep class * extends com.xiaomi.mipush.sdk.PushMessageReceiver{*;}
+
+```
 
 ## 特别感谢
 

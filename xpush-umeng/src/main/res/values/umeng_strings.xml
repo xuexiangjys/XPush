@@ -17,5 +17,6 @@
 
 <resources>
 
+    <string name="xpush_umeng_client_name">com.xuexiang.xpush.umeng.UMengPushClient</string>
 
 </resources>

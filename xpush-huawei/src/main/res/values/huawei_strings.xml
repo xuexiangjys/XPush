@@ -17,5 +17,6 @@
 
 <resources>
 
+    <string name="xpush_huawei_client_name">com.xuexiang.xpush.huawei.HuaweiPushClient</string>
 
 </resources>

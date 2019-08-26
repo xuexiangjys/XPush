@@ -17,4 +17,6 @@
 
 <resources>
 
+    <string name="xpush_jpush_client_name">com.xuexiang.xpush.jpush.JPushClient</string>
+
 </resources>

@@ -1,0 +1,41 @@
+<!--
+  ~ Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<resources>
+
+    <string name="xpush_xiaomi_client_name">com.xuexiang.xpush.xiaomi.XiaoMiPushClient</string>
+
+    <string name="xiaomi_register_success">Register push success.</string>
+    <string name="xiaomi_register_fail">Register push fail for %1$s.</string>
+    <string name="xiaomi_unregister_success">unRegister push success.</string>
+    <string name="xiaomi_unregister_fail">unRegister push fail for %1$s.</string>
+    <string name="xiaomi_set_alias_success"> Set alias \"%1$s\" success.</string>
+    <string name="xiaomi_set_alias_fail"> Set alias fail for %1$s.</string>
+    <string name="xiaomi_unset_alias_success"> Unset alias \"%1$s\" success.</string>
+    <string name="xiaomi_unset_alias_fail"> Unset alias fail for %1$s.</string>
+    <string name="xiaomi_set_account_success"> Set account \"%1$s\" success.</string>
+    <string name="xiaomi_set_account_fail"> Set account fail for %1$s.</string>
+    <string name="xiaomi_unset_account_success"> Unset account \"%1$s\" success.</string>
+    <string name="xiaomi_unset_account_fail"> Unset account fail for %1$s.</string>
+    <string name="xiaomi_subscribe_topic_success"> Subscribe topic \"%1$s\" success.</string>
+    <string name="xiaomi_subscribe_topic_fail"> Subscribe topic fail for %1$s.</string>
+    <string name="xiaomi_unsubscribe_topic_success"> Unsubscribe topic \"%1$s\" success.</string>
+    <string name="xiaomi_unsubscribe_topic_fail"> Unsubscribe topic fail for %1$s.</string>
+    <string name="xiaomi_set_accept_time_success"> Set accept time %1$s - %2$s success.</string>
+    <string name="xiaomi_set_accept_time_fail"> Set accept time fail for %1$s.</string>
+
+</resources>
