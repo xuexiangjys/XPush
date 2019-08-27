@@ -20,7 +20,7 @@ import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.service.LocalService.KEY_LOCAL_SERVICE_NAME;
 
 /**
- * 定时器
+ * 定时器保活
  * 安卓5.0及以上
  */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -35,15 +35,19 @@ public final class JobHandlerService extends JobService {
             mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
             JobInfo.Builder builder = new JobInfo.Builder(startId++, new ComponentName(getPackageName(), JobHandlerService.class.getName()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS); //执行的最小延迟时间
-                builder.setOverrideDeadline(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);  //执行的最长延时时间
+                //执行的最小延迟时间
                 builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
-                builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);//线性重试方案
+                //执行的最长延时时间
+                builder.setOverrideDeadline(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
+                builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
+                //线性重试方案
+                builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);
             } else {
                 builder.setPeriodic(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
             }
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
-            builder.setRequiresCharging(true); // 当插入充电器，执行该任务
+            // 当插入充电器，执行该任务
+            builder.setRequiresCharging(true);
             mJobScheduler.schedule(builder.build());
         }
         return START_STICKY;

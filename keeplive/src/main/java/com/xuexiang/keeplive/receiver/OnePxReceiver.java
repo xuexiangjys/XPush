@@ -9,9 +9,15 @@ import android.os.Looper;
 
 import com.xuexiang.keeplive.activity.OnePixelActivity;
 
+/**
+ * 一像素保活方案
+ *
+ * @author xuexiang
+ * @since 2019-08-27 9:32
+ */
 public final class OnePxReceiver extends BroadcastReceiver {
-    public static final String KEEP_ACTION_SCREEN_OFF = "com.xuexiang.keeplive.receiver._ACTION_SCREEN_OFF";
-    public static final String KEEP_ACTION_SCREEN_ON = "com.xuexiang.keeplive.receiver._ACTION_SCREEN_ON";
+    public static final String KEEP_ACTION_SCREEN_OFF = "com.xuexiang.keeplive.receiver.KEEP_ACTION_SCREEN_OFF";
+    public static final String KEEP_ACTION_SCREEN_ON = "com.xuexiang.keeplive.receiver.KEEP_ACTION_SCREEN_ON";
 
     private Handler mHandler;
     private boolean mScreenOn = true;

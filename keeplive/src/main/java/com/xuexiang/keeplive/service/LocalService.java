@@ -17,17 +17,17 @@ import android.os.RemoteException;
 
 import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.keeplive.R;
-import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import com.xuexiang.keeplive.receiver.OnePxReceiver;
+import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OFF;
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
- * 本地服务
+ * 本地服务（双进程守护之本地进程)
  *
  * @author xuexiang
  * @since 2019-08-18 23:23
@@ -41,6 +41,9 @@ public final class LocalService extends Service {
      * 控制暂停
      */
     private boolean mIsPause = true;
+    /**
+     * 无声音乐保活
+     */
     private MediaPlayer mMediaPlayer;
     private GuardBinder mBinder;
     private Handler mHandler;
@@ -127,9 +130,7 @@ public final class LocalService extends Service {
         //隐藏服务通知
         try {
             if (KeepLive.foregroundNotification == null || !KeepLive.foregroundNotification.isShow()) {
-                if (Build.VERSION.SDK_INT < 25) {
-                    startService(new Intent(this, HideForegroundService.class));
-                }
+                startService(new Intent(this, HideForegroundService.class));
             }
         } catch (Exception e) {
         }

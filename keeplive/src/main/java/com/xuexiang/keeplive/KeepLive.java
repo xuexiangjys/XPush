@@ -17,6 +17,9 @@ import java.util.List;
 
 /**
  * 保活工具
+ *
+ * @author xuexiang
+ * @since 2019-08-27 10:01
  */
 public final class KeepLive {
     /**

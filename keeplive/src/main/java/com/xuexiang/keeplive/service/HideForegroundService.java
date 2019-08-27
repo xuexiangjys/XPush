@@ -13,10 +13,15 @@ import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
- * 隐藏前台服务通知
+ * 通过相同的notification_id来隐藏前台服务通知
+ *
+ * @author xuexiang
+ * @since 2019-08-27 9:33
  */
 public class HideForegroundService extends Service {
+
     private Handler mHandler;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startForeground();

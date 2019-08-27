@@ -20,7 +20,7 @@ import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OF
 import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
 
 /**
- * 守护进程服务
+ * 守护进程服务（双进程守护之守护进程)
  *
  * @author xuexiang
  * @since 2019-08-14 16:09
@@ -69,12 +69,10 @@ public final class RemoteService extends Service {
 
         @Override
         public void wakeUp(String title, String description, int iconRes) throws RemoteException {
-            if (Build.VERSION.SDK_INT < 25) {
-                Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-                intent2.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-                Notification notification = NotificationUtils.createNotification(RemoteService.this, title, description, iconRes, intent2);
-                RemoteService.this.startForeground(KEY_NOTIFICATION_ID, notification);
-            }
+            Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+            intent.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
+            Notification notification = NotificationUtils.createNotification(RemoteService.this, title, description, iconRes, intent);
+            RemoteService.this.startForeground(KEY_NOTIFICATION_ID, notification);
         }
 
     }
@@ -83,11 +81,9 @@ public final class RemoteService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             if (ServiceUtils.isRunningTaskExist(getApplicationContext(), getPackageName() + ":remote")) {
-                Intent localService = new Intent(RemoteService.this,
-                        LocalService.class);
+                Intent localService = new Intent(RemoteService.this, LocalService.class);
                 RemoteService.this.startService(localService);
-                mIsBoundLocalService = RemoteService.this.bindService(new Intent(RemoteService.this,
-                        LocalService.class), mConnection, Context.BIND_ABOVE_CLIENT);
+                mIsBoundLocalService = RemoteService.this.bindService(new Intent(RemoteService.this, LocalService.class), mConnection, Context.BIND_ABOVE_CLIENT);
             }
             PowerManager pm = (PowerManager) RemoteService.this.getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = pm != null && pm.isScreenOn();
