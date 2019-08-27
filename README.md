@@ -232,7 +232,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 4.在Application中初始化XPush
 
-初始化XPush的方式有两种，根据业务需要选择一直方式就行了：
+初始化XPush的方式有两种，根据业务需要选择一种方式就行了：
 
 * 静态注册
 
