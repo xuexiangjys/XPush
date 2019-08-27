@@ -98,4 +98,11 @@ dependencies {
     implementation project(path: ':xpush-huawei')
     implementation project(path: ':xpush-xiaomi')
 
+//    implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:0.0.1'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-jpush:0.0.1'
+//    implementation 'com.github.xuexiangjys.XPush:keeplive:0.0.1'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-core:0.0.1'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-umeng:0.0.1'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-huawei:0.0.1'
+
 }
