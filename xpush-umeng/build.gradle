@@ -43,3 +43,5 @@ dependencies {
     //PushSDK
     implementation 'com.umeng.umsdk:push:6.0.1'
 }
+
+apply from: "../JitPackUpload.gradle"

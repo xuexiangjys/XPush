@@ -36,5 +36,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly deps.support.app_compat
     compileOnly project(path: ':xpush-core')
-
 }
+
+apply from: "../JitPackUpload.gradle"

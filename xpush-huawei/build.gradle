@@ -38,5 +38,7 @@ dependencies {
 
     implementation 'com.huawei.android.hms:push:2.6.3.306'
     implementation 'com.huawei.android.hms:base:2.6.3.306'
-
 }
+
+apply from: "../JitPackUpload.gradle"
+

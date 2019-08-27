@@ -18,3 +18,5 @@ dependencies {
     compileOnly deps.support.app_compat
 }
 
+apply from: "../JitPackUpload.gradle"
+
