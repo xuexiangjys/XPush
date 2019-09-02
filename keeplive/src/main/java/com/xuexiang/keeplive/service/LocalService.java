@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -69,7 +68,7 @@ public final class LocalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             //播放无声音乐
             if (mMediaPlayer == null) {
                 mMediaPlayer = MediaPlayer.create(this, R.raw.novioce);
@@ -79,7 +78,7 @@ public final class LocalService extends Service {
                         @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
                             if (!mIsPause) {
-                                if (KeepLive.runMode == KeepLive.RunMode.ROGUE) {
+                                if (KeepLive.sRunMode == KeepLive.RunMode.ROGUE) {
                                     play();
                                 } else {
                                     if (mHandler != null) {
@@ -115,10 +114,10 @@ public final class LocalService extends Service {
         intentFilter2.addAction(KEEP_ACTION_SCREEN_ON);
         registerReceiver(mScreenStateReceiver, intentFilter2);
         //启用前台服务，提升优先级
-        if (KeepLive.foregroundNotification != null) {
+        if (KeepLive.sForegroundNotification != null) {
             Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
             intent2.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-            Notification notification = NotificationUtils.createNotification(this, KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes(), intent2);
+            Notification notification = NotificationUtils.createNotification(this, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent2);
             startForeground(KEY_NOTIFICATION_ID, notification);
         }
         //绑定守护进程
@@ -129,19 +128,19 @@ public final class LocalService extends Service {
         }
         //隐藏服务通知
         try {
-            if (KeepLive.foregroundNotification == null || !KeepLive.foregroundNotification.isShow()) {
+            if (KeepLive.sForegroundNotification == null || !KeepLive.sForegroundNotification.isShow()) {
                 startService(new Intent(this, HideForegroundService.class));
             }
         } catch (Exception e) {
         }
-        if (KeepLive.keepLiveService != null) {
-            KeepLive.keepLiveService.onWorking();
+        if (KeepLive.sKeepLiveService != null) {
+            KeepLive.sKeepLiveService.onWorking();
         }
         return START_STICKY;
     }
 
     private void play() {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
                 mMediaPlayer.start();
             }
@@ -149,7 +148,7 @@ public final class LocalService extends Service {
     }
 
     private void pause() {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
             }
@@ -202,9 +201,9 @@ public final class LocalService extends Service {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
-                if (mBinder != null && KeepLive.foregroundNotification != null) {
+                if (mBinder != null && KeepLive.sForegroundNotification != null) {
                     GuardAidl guardAidl = GuardAidl.Stub.asInterface(service);
-                    guardAidl.wakeUp(KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes());
+                    guardAidl.wakeUp(KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -228,8 +227,8 @@ public final class LocalService extends Service {
             unregisterReceiver(mScreenStateReceiver);
         } catch (Exception e) {
         }
-        if (KeepLive.keepLiveService != null) {
-            KeepLive.keepLiveService.onStop();
+        if (KeepLive.sKeepLiveService != null) {
+            KeepLive.sKeepLiveService.onStop();
         }
     }
 }

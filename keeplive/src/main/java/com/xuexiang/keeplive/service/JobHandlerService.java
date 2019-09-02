@@ -55,10 +55,10 @@ public final class JobHandlerService extends JobService {
 
     private void startService(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (KeepLive.foregroundNotification != null) {
+            if (KeepLive.sForegroundNotification != null) {
                 Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
                 intent2.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-                Notification notification = NotificationUtils.createNotification(this, KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes(), intent2);
+                Notification notification = NotificationUtils.createNotification(this, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent2);
                 startForeground(KEY_NOTIFICATION_ID, notification);
             }
         }

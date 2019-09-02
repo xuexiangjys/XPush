@@ -39,7 +39,8 @@ public class MainFragment extends XPageContainerListFragment {
                 //此处填写fragment
                 OperationFragment.class,
                 PushMessageFragment.class,
-                NotifyFragment.class
+                NotifyFragment.class,
+                KeepLiveFragment.class
         };
     }
 

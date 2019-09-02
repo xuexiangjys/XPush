@@ -37,11 +37,11 @@ public final class KeepLive {
          */
         ROGUE
     }
-
-    public static ForegroundNotification foregroundNotification = null;
-    public static KeepLiveService keepLiveService = null;
-    public static RunMode runMode = null;
-    public static boolean useSilenceMusic = true;
+    public static Application sApplication;
+    public static ForegroundNotification sForegroundNotification = null;
+    public static KeepLiveService sKeepLiveService = null;
+    public static RunMode sRunMode = null;
+    public static boolean sUseSilenceMusic = true;
 
     /**
      * 启动保活
@@ -52,9 +52,10 @@ public final class KeepLive {
      */
     public static void startWork(@NonNull Application application, @NonNull RunMode runMode, @NonNull ForegroundNotification foregroundNotification, @NonNull KeepLiveService keepLiveService) {
         if (isMainProcess(application)) {
-            KeepLive.foregroundNotification = foregroundNotification;
-            KeepLive.keepLiveService = keepLiveService;
-            KeepLive.runMode = runMode;
+            KeepLive.sApplication = application;
+            KeepLive.sForegroundNotification = foregroundNotification;
+            KeepLive.sKeepLiveService = keepLiveService;
+            KeepLive.sRunMode = runMode;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //启动定时器，在定时器中启动本地服务和守护进程
                 Intent intent = new Intent(application, JobHandlerService.class);
@@ -74,6 +75,13 @@ public final class KeepLive {
         }
     }
 
+    public static Application getApplication() {
+        if (sApplication == null) {
+            throw new ExceptionInInitializerError("请先在全局Application中调用 KeepLive.startWork() 进行初始化！");
+        }
+        return sApplication;
+    }
+
     /**
      * 是否启用无声音乐
      * 如不设置，则默认启用
@@ -81,7 +89,7 @@ public final class KeepLive {
      * @param enable
      */
     public static void useSilenceMusice(boolean enable) {
-        KeepLive.useSilenceMusic = enable;
+        KeepLive.sUseSilenceMusic = enable;
     }
 
     private static boolean isMainProcess(@NonNull Application application) {

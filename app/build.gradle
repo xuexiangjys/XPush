@@ -91,21 +91,21 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
-//    implementation project(path: ':keeplive')
-//    implementation project(path: ':xpush-core')
-//    implementation project(path: ':xpush-jpush')
-//    implementation project(path: ':xpush-umeng')
-//    implementation project(path: ':xpush-huawei')
-//    implementation project(path: ':xpush-xiaomi')
+    implementation project(path: ':keeplive')
+    implementation project(path: ':xpush-core')
+    implementation project(path: ':xpush-jpush')
+    implementation project(path: ':xpush-umeng')
+    implementation project(path: ':xpush-huawei')
+    implementation project(path: ':xpush-xiaomi')
 
-    //XPush核心库（必须添加）
-    implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'
-    //XPush保活库（可选）
-    implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.0'
-    //XPush三方推送集成库（选择性添加）
-    implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
-    implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
-    implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
-    implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
+//    //XPush核心库（必须添加）
+//    implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'
+//    //XPush保活库（可选）
+//    implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.0'
+//    //XPush三方推送集成库（选择性添加）
+//    implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
+//    implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
 
 }

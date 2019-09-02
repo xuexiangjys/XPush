@@ -19,9 +19,9 @@ public final class NotificationClickReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (ACTION_CLICK_NOTIFICATION.equals(intent.getAction())) {
-            if (KeepLive.foregroundNotification != null) {
-                if (KeepLive.foregroundNotification.getNotificationClickListener() != null) {
-                    KeepLive.foregroundNotification.getNotificationClickListener().onNotificationClick(context, intent);
+            if (KeepLive.sForegroundNotification != null) {
+                if (KeepLive.sForegroundNotification.getNotificationClickListener() != null) {
+                    KeepLive.sForegroundNotification.getNotificationClickListener().onNotificationClick(context, intent);
                 }
             }
         }
