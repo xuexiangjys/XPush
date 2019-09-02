@@ -1,17 +1,21 @@
 package com.xuexiang.keeplive;
 
-import android.app.ActivityManager;
+import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
 import com.xuexiang.keeplive.config.ForegroundNotification;
 import com.xuexiang.keeplive.config.KeepLiveService;
 import com.xuexiang.keeplive.service.JobHandlerService;
 import com.xuexiang.keeplive.service.LocalService;
 import com.xuexiang.keeplive.service.RemoteService;
+import com.xuexiang.keeplive.utils.ServiceUtils;
+import com.xuexiang.keeplive.whitelist.IWhiteListCallback;
+import com.xuexiang.keeplive.whitelist.WhiteList;
+import com.xuexiang.keeplive.whitelist.WhiteListIntentWrapper;
 
 import java.util.List;
 
@@ -37,6 +41,7 @@ public final class KeepLive {
          */
         ROGUE
     }
+
     public static Application sApplication;
     public static ForegroundNotification sForegroundNotification = null;
     public static KeepLiveService sKeepLiveService = null;
@@ -51,7 +56,7 @@ public final class KeepLive {
      * @param keepLiveService        保活业务
      */
     public static void startWork(@NonNull Application application, @NonNull RunMode runMode, @NonNull ForegroundNotification foregroundNotification, @NonNull KeepLiveService keepLiveService) {
-        if (isMainProcess(application)) {
+        if (ServiceUtils.isMainProcess(application)) {
             KeepLive.sApplication = application;
             KeepLive.sForegroundNotification = foregroundNotification;
             KeepLive.sKeepLiveService = keepLiveService;
@@ -92,20 +97,23 @@ public final class KeepLive {
         KeepLive.sUseSilenceMusic = enable;
     }
 
-    private static boolean isMainProcess(@NonNull Application application) {
-        int pid = android.os.Process.myPid();
-        String processName = "";
-        ActivityManager mActivityManager = (ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = mActivityManager.getRunningAppProcesses();
-        if (runningAppProcessInfos != null) {
-            for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
-                if (appProcess.pid == pid) {
-                    processName = appProcess.processName;
-                    break;
-                }
-            }
-            return processName.equals(application.getPackageName());
-        }
-        return false;
+    //======================================白名单=============================================//
+
+    public static List<WhiteListIntentWrapper> gotoWhiteListActivity(final Fragment fragment, String target) {
+        return WhiteList.gotoWhiteListActivity(fragment, target);
     }
+
+    public static List<WhiteListIntentWrapper> gotoWhiteListActivity(final Activity activity, String target) {
+        return WhiteList.gotoWhiteListActivity(activity, target);
+    }
+
+    /**
+     * 设置白名单意图跳转回调
+     *
+     * @param sIWhiteListCallback
+     */
+    public static void setIWhiteListCallback(IWhiteListCallback sIWhiteListCallback) {
+        WhiteList.setIWhiteListCallback(sIWhiteListCallback);
+    }
+
 }

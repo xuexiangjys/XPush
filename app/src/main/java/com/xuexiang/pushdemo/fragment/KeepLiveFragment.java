@@ -17,7 +17,7 @@
 
 package com.xuexiang.pushdemo.fragment;
 
-import com.xuexiang.keeplive.utils.IntentWrapper;
+import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
 
@@ -51,7 +51,7 @@ public class KeepLiveFragment extends XPageSimpleListFragment {
     protected void onItemClick(int position) {
         switch (position) {
             case 0:
-                IntentWrapper.whiteListMatters(getActivity(), "推送服务");
+                KeepLive.gotoWhiteListActivity(this, "推送服务");
                 break;
             case 1:
 

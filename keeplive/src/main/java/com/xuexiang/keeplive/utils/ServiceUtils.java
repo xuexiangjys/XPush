@@ -1,7 +1,9 @@
 package com.xuexiang.keeplive.utils;
 
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +39,23 @@ public final class ServiceUtils {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    public static boolean isMainProcess(@NonNull Application application) {
+        int pid = android.os.Process.myPid();
+        String processName = "";
+        ActivityManager mActivityManager = (ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = mActivityManager.getRunningAppProcesses();
+        if (runningAppProcessInfos != null) {
+            for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
+                if (appProcess.pid == pid) {
+                    processName = appProcess.processName;
+                    break;
+                }
+            }
+            return processName.equals(application.getPackageName());
         }
         return false;
     }
