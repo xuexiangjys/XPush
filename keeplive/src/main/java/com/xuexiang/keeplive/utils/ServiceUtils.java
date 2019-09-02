@@ -46,10 +46,10 @@ public final class ServiceUtils {
     public static boolean isMainProcess(@NonNull Application application) {
         int pid = android.os.Process.myPid();
         String processName = "";
-        ActivityManager mActivityManager = (ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = mActivityManager.getRunningAppProcesses();
+        ActivityManager manager = (ActivityManager) application.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfos = manager.getRunningAppProcesses();
         if (runningAppProcessInfos != null) {
-            for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
+            for (ActivityManager.RunningAppProcessInfo appProcess : manager.getRunningAppProcesses()) {
                 if (appProcess.pid == pid) {
                     processName = appProcess.processName;
                     break;

@@ -80,15 +80,19 @@ public class MyApp extends Application {
         XUtil.init(this);
         XUtil.debug(BuildConfig.DEBUG);
 
-        PageConfig.getInstance().setPageConfiguration(new PageConfiguration() { //页面注册
+        //页面注册
+        PageConfig.getInstance().setPageConfiguration(new PageConfiguration() {
             @Override
             public List<PageInfo> registerPages(Context context) {
-                return AppPageConfig.getInstance().getPages(); //自动注册页面
+                //自动注册页面
+                return AppPageConfig.getInstance().getPages();
             }
         }).debug("PageLog").enableWatcher(true).init(this);
 
-        XAOP.init(this); //初始化插件
-        XAOP.debug(BuildConfig.DEBUG); //日志打印切片开启
+        //初始化插件
+        XAOP.init(this);
+        //日志打印切片开启
+        XAOP.debug(BuildConfig.DEBUG);
         //设置动态申请权限切片 申请权限被拒绝的事件响应监听
         XAOP.setOnPermissionDeniedListener(new PermissionUtils.OnPermissionDeniedListener() {
             @Override

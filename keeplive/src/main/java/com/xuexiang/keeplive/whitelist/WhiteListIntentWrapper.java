@@ -44,8 +44,7 @@ public final class WhiteListIntentWrapper {
      */
     private int mType;
 
-
-    protected WhiteListIntentWrapper(Intent intent, int type) {
+    public WhiteListIntentWrapper(Intent intent, int type) {
         mIntent = intent;
         mType = type;
     }

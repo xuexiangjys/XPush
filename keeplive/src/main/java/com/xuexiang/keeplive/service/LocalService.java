@@ -68,6 +68,10 @@ public final class LocalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!KeepLive.isKeepLive(this)) {
+            return super.onStartCommand(intent, flags, startId);
+        }
+
         if (KeepLive.sUseSilenceMusic) {
             //播放无声音乐
             if (mMediaPlayer == null) {
@@ -158,6 +162,10 @@ public final class LocalService extends Service {
     private class ScreenStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, Intent intent) {
+            if (!KeepLive.isKeepLive(LocalService.this)) {
+                return;
+            }
+
             String action = intent.getAction();
             if (KEEP_ACTION_SCREEN_OFF.equals(action)) {
                 mIsPause = false;
@@ -181,13 +189,16 @@ public final class LocalService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            if (!KeepLive.isKeepLive(LocalService.this)) {
+                return;
+            }
+
             if (ServiceUtils.isServiceRunning(getApplicationContext(), KEY_LOCAL_SERVICE_NAME)) {
                 Intent remoteService = new Intent(LocalService.this,
                         RemoteService.class);
                 LocalService.this.startService(remoteService);
                 Intent intent = new Intent(LocalService.this, RemoteService.class);
-                mIsBoundRemoteService = LocalService.this.bindService(intent, mConnection,
-                        Context.BIND_ABOVE_CLIENT);
+                mIsBoundRemoteService = LocalService.this.bindService(intent, mConnection, Context.BIND_ABOVE_CLIENT);
             }
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = pm != null && pm.isScreenOn();
@@ -200,6 +211,10 @@ public final class LocalService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            if (!KeepLive.isKeepLive(LocalService.this)) {
+                return;
+            }
+
             try {
                 if (mBinder != null && KeepLive.sForegroundNotification != null) {
                     GuardAidl guardAidl = GuardAidl.Stub.asInterface(service);

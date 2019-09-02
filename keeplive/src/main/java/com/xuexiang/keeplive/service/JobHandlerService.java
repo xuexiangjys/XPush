@@ -12,12 +12,12 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.xuexiang.keeplive.KeepLive;
-import com.xuexiang.keeplive.utils.ServiceUtils;
-import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
+import com.xuexiang.keeplive.utils.NotificationUtils;
+import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 import static com.xuexiang.keeplive.service.LocalService.KEY_LOCAL_SERVICE_NAME;
+import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
  * 定时器保活
@@ -54,6 +54,10 @@ public final class JobHandlerService extends JobService {
     }
 
     private void startService(Context context) {
+        if (!KeepLive.isKeepLive(this)) {
+            return;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (KeepLive.sForegroundNotification != null) {
                 Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
@@ -62,12 +66,8 @@ public final class JobHandlerService extends JobService {
                 startForeground(KEY_NOTIFICATION_ID, notification);
             }
         }
-        //启动本地服务
-        Intent localIntent = new Intent(context, LocalService.class);
-        //启动守护进程
-        Intent guardIntent = new Intent(context, RemoteService.class);
-        startService(localIntent);
-        startService(guardIntent);
+
+        KeepLive.startDoubleProcessService(this);
     }
 
     @Override
@@ -84,5 +84,11 @@ public final class JobHandlerService extends JobService {
             startService(this);
         }
         return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        KeepLive.stopDoubleProcessService(this);
     }
 }

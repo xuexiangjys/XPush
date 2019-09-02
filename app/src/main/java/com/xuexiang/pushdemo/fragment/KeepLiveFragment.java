@@ -17,7 +17,15 @@
 
 package com.xuexiang.pushdemo.fragment;
 
+import android.app.Activity;
+import android.app.Application;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+
 import com.xuexiang.keeplive.KeepLive;
+import com.xuexiang.keeplive.whitelist.IWhiteListCallback;
+import com.xuexiang.keeplive.whitelist.IWhiteListProvider;
+import com.xuexiang.keeplive.whitelist.WhiteListIntentWrapper;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
 
@@ -37,7 +45,7 @@ public class KeepLiveFragment extends XPageSimpleListFragment {
      */
     @Override
     protected List<String> initSimpleData(List<String> lists) {
-        lists.add("添加白名单");
+        lists.add("添加到白名单");
         lists.add("停止保活");
         return lists;
     }
@@ -51,10 +59,34 @@ public class KeepLiveFragment extends XPageSimpleListFragment {
     protected void onItemClick(int position) {
         switch (position) {
             case 0:
+//                //自定义设置白名单跳转意图的数据提供
+//                KeepLive.setIWhiteListProvider(new IWhiteListProvider() {
+//                    @Override
+//                    public List<WhiteListIntentWrapper> getWhiteList(Application application) {
+//                        return null;
+//                    }
+//                });
+//                //自定义设置白名单的显示处理
+//                KeepLive.setIWhiteListCallback(new IWhiteListCallback() {
+//                    @Override
+//                    public void init(@NonNull String target, @NonNull String appName) {
+//
+//                    }
+//
+//                    @Override
+//                    public void showWhiteList(@NonNull Activity activity, @NonNull WhiteListIntentWrapper intentWrapper) {
+//
+//                    }
+//
+//                    @Override
+//                    public void showWhiteList(@NonNull Fragment fragment, @NonNull WhiteListIntentWrapper intentWrapper) {
+//
+//                    }
+//                });
                 KeepLive.gotoWhiteListActivity(this, "推送服务");
                 break;
             case 1:
-
+                KeepLive.stopWork();
                 break;
             default:
                 break;

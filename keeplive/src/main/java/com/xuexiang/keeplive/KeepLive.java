@@ -2,18 +2,22 @@ package com.xuexiang.keeplive;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.xuexiang.keeplive.config.ForegroundNotification;
 import com.xuexiang.keeplive.config.KeepLiveService;
+import com.xuexiang.keeplive.service.HideForegroundService;
 import com.xuexiang.keeplive.service.JobHandlerService;
 import com.xuexiang.keeplive.service.LocalService;
 import com.xuexiang.keeplive.service.RemoteService;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 import com.xuexiang.keeplive.whitelist.IWhiteListCallback;
+import com.xuexiang.keeplive.whitelist.IWhiteListProvider;
 import com.xuexiang.keeplive.whitelist.WhiteList;
 import com.xuexiang.keeplive.whitelist.WhiteListIntentWrapper;
 
@@ -42,7 +46,7 @@ public final class KeepLive {
         ROGUE
     }
 
-    public static Application sApplication;
+    private static Application sApplication;
     public static ForegroundNotification sForegroundNotification = null;
     public static KeepLiveService sKeepLiveService = null;
     public static RunMode sRunMode = null;
@@ -56,6 +60,8 @@ public final class KeepLive {
      * @param keepLiveService        保活业务
      */
     public static void startWork(@NonNull Application application, @NonNull RunMode runMode, @NonNull ForegroundNotification foregroundNotification, @NonNull KeepLiveService keepLiveService) {
+        setIsKeepLive(application, true);
+
         if (ServiceUtils.isMainProcess(application)) {
             KeepLive.sApplication = application;
             KeepLive.sForegroundNotification = foregroundNotification;
@@ -70,14 +76,55 @@ public final class KeepLive {
                     application.startService(intent);
                 }
             } else {
-                //启动本地服务
-                Intent localIntent = new Intent(application, LocalService.class);
-                //启动守护进程
-                Intent guardIntent = new Intent(application, RemoteService.class);
-                application.startService(localIntent);
-                application.startService(guardIntent);
+                startDoubleProcessService(application);
             }
         }
+    }
+
+    /**
+     * 停止保活
+     */
+    public static void stopWork() {
+        stopWork(getApplication());
+    }
+
+    /**
+     * 停止保活
+     *
+     * @param context
+     */
+    public static void stopWork(@NonNull Context context) {
+        setIsKeepLive(context, false);
+
+        if (KeepLive.sForegroundNotification != null && KeepLive.sForegroundNotification.isShow()) {
+            context.startService(new Intent(context, HideForegroundService.class));
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //停止定时器，在定时器中启动本地服务和守护进程
+            context.stopService(new Intent(context, JobHandlerService.class));
+        } else {
+            stopDoubleProcessService(context);
+        }
+    }
+
+
+    public static void startDoubleProcessService(@NonNull Context context) {
+        //启动本地服务
+        Intent localIntent = new Intent(context, LocalService.class);
+        //启动守护进程
+        Intent guardIntent = new Intent(context, RemoteService.class);
+        context.startService(localIntent);
+        context.startService(guardIntent);
+    }
+
+    public static void stopDoubleProcessService(@NonNull Context context) {
+        //停止本地服务
+        Intent localIntent = new Intent(context, LocalService.class);
+        //停止守护进程
+        Intent guardIntent = new Intent(context, RemoteService.class);
+        context.stopService(localIntent);
+        context.stopService(guardIntent);
     }
 
     public static Application getApplication() {
@@ -85,6 +132,18 @@ public final class KeepLive {
             throw new ExceptionInInitializerError("请先在全局Application中调用 KeepLive.startWork() 进行初始化！");
         }
         return sApplication;
+    }
+
+    public static boolean isKeepLive(Context context) {
+        return getKeepLiveSP(context).getBoolean("key_is_KeepLive", false);
+    }
+
+    public static SharedPreferences getKeepLiveSP(Context context) {
+        return context.getSharedPreferences("KeepLive", Context.MODE_MULTI_PROCESS | Context.MODE_PRIVATE);
+    }
+
+    public static void setIsKeepLive(Context context, boolean isKeepLive) {
+        getKeepLiveSP(context).edit().putBoolean("key_is_KeepLive", isKeepLive).apply();
     }
 
     /**
@@ -99,10 +158,24 @@ public final class KeepLive {
 
     //======================================白名单=============================================//
 
+    /**
+     * 跳转到设置白名单的页面
+     *
+     * @param fragment
+     * @param target
+     * @return
+     */
     public static List<WhiteListIntentWrapper> gotoWhiteListActivity(final Fragment fragment, String target) {
         return WhiteList.gotoWhiteListActivity(fragment, target);
     }
 
+    /**
+     * 跳转到设置白名单的页面
+     *
+     * @param activity
+     * @param target
+     * @return
+     */
     public static List<WhiteListIntentWrapper> gotoWhiteListActivity(final Activity activity, String target) {
         return WhiteList.gotoWhiteListActivity(activity, target);
     }
@@ -114,6 +187,15 @@ public final class KeepLive {
      */
     public static void setIWhiteListCallback(IWhiteListCallback sIWhiteListCallback) {
         WhiteList.setIWhiteListCallback(sIWhiteListCallback);
+    }
+
+    /**
+     * 设置白名单跳转意图数据提供者
+     *
+     * @param sIWhiteListProvider
+     */
+    public static void setIWhiteListProvider(IWhiteListProvider sIWhiteListProvider) {
+        WhiteList.setIWhiteListProvider(sIWhiteListProvider);
     }
 
 }
