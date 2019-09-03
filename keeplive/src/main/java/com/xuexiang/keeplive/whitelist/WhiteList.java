@@ -42,7 +42,13 @@ import java.util.List;
  */
 public final class WhiteList {
 
+    /**
+     * 所有白名单跳转意图
+     */
     private static List<WhiteListIntentWrapper> sAllWhiteListIntent;
+    /**
+     * 已匹配合适的白名单跳转意图
+     */
     private static List<WhiteListIntentWrapper> sMatchedWhiteListIntent;
 
     private static IWhiteListProvider sIWhiteListProvider = new DefaultWhiteListProvider();
@@ -69,6 +75,11 @@ public final class WhiteList {
         return sAllWhiteListIntent;
     }
 
+    /**
+     * 获取已匹配合适的白名单跳转意图
+     *
+     * @return 已匹配合适的白名单跳转意图
+     */
     public static List<WhiteListIntentWrapper> getMatchedWhiteListIntent() {
         if (sMatchedWhiteListIntent == null) {
             sMatchedWhiteListIntent = new ArrayList<>();

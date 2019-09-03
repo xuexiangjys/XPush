@@ -159,6 +159,15 @@ public final class KeepLive {
     //======================================白名单=============================================//
 
     /**
+     * 获取已匹配合适的白名单跳转意图
+     *
+     * @return 已匹配合适的白名单跳转意图
+     */
+    public static List<WhiteListIntentWrapper> getMatchedWhiteListIntent() {
+        return WhiteList.getMatchedWhiteListIntent();
+    }
+
+    /**
      * 跳转到设置白名单的页面
      *
      * @param fragment
