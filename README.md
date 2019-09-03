@@ -564,6 +564,13 @@ public interface IPushClient {
 
 以上即完成了推送平台的集成。剩下的就是在初始化XPush的时候对推送平台进行选择了.如果你看完了还是不会的话，你可以参考项目中的[xpush-xiaomi](https://github.com/xuexiangjys/XPush/tree/master/xpush-xiaomi)和[xpush-huawei](https://github.com/xuexiangjys/XPush/tree/master/xpush-huawei).
 
+
+## 保活机制说明
+
+> 这里提供的应用保活机制也是借鉴了前人终结出来的各种方案的混合处理。目前在9.0及以下版本都能有很好的保活效果（只要你不主动杀死程序），如果你的应用希望能够一直在后台运行（比如推送服务）而不被系统自动杀死的话，可以尝试一下。需要注意的是，程序保活并不代表能做到程序杀不死，除非你把你的应用做成系统应用或者加入到系统的白名单内，否则也只是提高了程序的优先级权重，减少程序被系统回收杀死的概率而已。
+
+关于保活机制的使用可以参考[保活机制使用](https://github.com/xuexiangjys/XPush/wiki/%E4%BF%9D%E6%B4%BB%E6%9C%BA%E5%88%B6%E4%BD%BF%E7%94%A8)
+
 ---
 
 ## 实体介绍
@@ -706,6 +713,7 @@ CONNECTED | 12 | 已连接
 
 * [OnePush](https://github.com/pengyuantao/OnePush)
 * [keeplive](https://github.com/fanqieVip/keeplive)
+* [HelloDaemon](https://github.com/xingda920813/HelloDaemon)
 
 ## 如果觉得项目还不错，可以考虑打赏一波
 

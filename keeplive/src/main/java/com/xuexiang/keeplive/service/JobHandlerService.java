@@ -54,7 +54,7 @@ public final class JobHandlerService extends JobService {
     }
 
     private void startService(Context context) {
-        if (!KeepLive.isKeepLive(this)) {
+        if (!KeepLive.isKeepLive(context)) {
             return;
         }
 
@@ -62,12 +62,12 @@ public final class JobHandlerService extends JobService {
             if (KeepLive.sForegroundNotification != null) {
                 Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
                 intent2.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-                Notification notification = NotificationUtils.createNotification(this, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent2);
+                Notification notification = NotificationUtils.createNotification(context, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent2);
                 startForeground(KEY_NOTIFICATION_ID, notification);
             }
         }
 
-        KeepLive.startDoubleProcessService(this);
+        KeepLive.startDoubleProcessService(context);
     }
 
     @Override
@@ -89,6 +89,8 @@ public final class JobHandlerService extends JobService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        KeepLive.stopDoubleProcessService(this);
+        if (!KeepLive.isKeepLive(this)) {
+            KeepLive.stopDoubleProcessService(this);
+        }
     }
 }
