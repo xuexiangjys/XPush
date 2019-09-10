@@ -26,29 +26,30 @@ import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public final class JobHandlerService extends JobService {
 
-    private JobScheduler mJobScheduler;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startService(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mJobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            JobInfo.Builder builder = new JobInfo.Builder(startId++, new ComponentName(getPackageName(), JobHandlerService.class.getName()));
+            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            JobInfo.Builder builder = new JobInfo.Builder(++startId, new ComponentName(getPackageName(), JobHandlerService.class.getName())).setPersisted(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 //执行的最小延迟时间
                 builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
                 //执行的最长延时时间
                 builder.setOverrideDeadline(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
-                builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
                 //线性重试方案
                 builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);
             } else {
                 builder.setPeriodic(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
             }
-            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
-            // 当插入充电器，执行该任务
-            builder.setRequiresCharging(true);
-            mJobScheduler.schedule(builder.build());
+            //省电模式下
+            if (KeepLive.sRunMode == KeepLive.RunMode.ENERGY) {
+                //需要网络
+                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+                // 当插入充电器，执行该任务
+                builder.setRequiresCharging(true);
+            }
+            jobScheduler.schedule(builder.build());
         }
         return START_STICKY;
     }
