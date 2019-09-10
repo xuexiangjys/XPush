@@ -29,9 +29,9 @@ import com.xuexiang.xutil.tip.ToastUtils;
  */
 public class NotifyBroadCastReceiver extends BroadcastReceiver {
 
-    public final static String ACTION_SUBMIT = "com.xuexiang.pushdemo.receiver.action_submit";
-    public final static String ACTION_CANCEL = "com.xuexiang.pushdemo.receiver.action_cancel";
-    public final static String ACTION_REPLY = "com.xuexiang.pushdemo.receiver.action_reply";
+    public final static String ACTION_SUBMIT = "com.xuexiang.pushdemo.receiver.ACTION_SUBMIT";
+    public final static String ACTION_CANCEL = "com.xuexiang.pushdemo.receiver.ACTION_CANCEL";
+    public final static String ACTION_REPLY = "com.xuexiang.pushdemo.receiver.ACTION_REPLY";
 
     @Override
     public void onReceive(Context context, Intent intent) {

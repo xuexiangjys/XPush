@@ -42,7 +42,8 @@ public class MainFragment extends XPageContainerListFragment implements ClickUti
                 OperationFragment.class,
                 PushMessageFragment.class,
                 NotifyFragment.class,
-                KeepLiveFragment.class
+                KeepLiveFragment.class,
+                PollingFragment.class
         };
     }
 
