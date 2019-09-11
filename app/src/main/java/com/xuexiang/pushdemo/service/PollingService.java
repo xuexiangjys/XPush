@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.xuexiang.xutil.net.JsonUtil;
+
 /**
  * 轮询处理事件的服务
  *
@@ -47,7 +49,8 @@ public class PollingService extends IntentService {
      */
     public static void start(Context context, PollingTask task) {
         Intent intent = new Intent(context, PollingService.class);
-        intent.putExtra(KEY_POLLING_TASK, task);
+        //不可以使用Parcelable、Serializable，因为AlarmManager在发PendingIntent可能会丢失数据
+        intent.putExtra(KEY_POLLING_TASK, task.toJson());
         context.startService(intent);
     }
 
@@ -60,7 +63,6 @@ public class PollingService extends IntentService {
         super(SERVICE_NAME);
     }
 
-
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         //在子线程中
@@ -68,7 +70,7 @@ public class PollingService extends IntentService {
             return;
         }
         mCount++;
-        PollingTask pollingTask = (PollingTask) intent.getSerializableExtra(KEY_POLLING_TASK);
+        PollingTask pollingTask = JsonUtil.fromJson(intent.getStringExtra(KEY_POLLING_TASK), PollingTask.class);
         Log.e("xuexiang", "第" + mCount + "次定时处理事务:" + pollingTask);
     }
 }
