@@ -41,7 +41,6 @@ import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.core.dispatcher.impl.Android26PushDispatcherImpl;
 import com.xuexiang.xpush.huawei.HuaweiPushClient;
 import com.xuexiang.xpush.jpush.JPushClient;
-import com.xuexiang.xpush.umeng.UMengPushClient;
 import com.xuexiang.xpush.xiaomi.XiaoMiPushClient;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.AppUtils;

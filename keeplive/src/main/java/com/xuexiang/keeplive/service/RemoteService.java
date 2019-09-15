@@ -10,7 +10,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
-import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.utils.ServiceUtils;
@@ -44,10 +43,6 @@ public final class RemoteService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!KeepLive.isKeepLive(this)) {
-            return super.onStartCommand(intent, flags, startId);
-        }
-
         try {
             mIsBoundLocalService = this.bindService(new Intent(RemoteService.this, LocalService.class), mConnection, Context.BIND_ABOVE_CLIENT);
         } catch (Exception e) {
@@ -72,10 +67,6 @@ public final class RemoteService extends Service {
 
         @Override
         public void wakeUp(String title, String description, int iconRes) throws RemoteException {
-            if (!KeepLive.isKeepLive(RemoteService.this)) {
-                return;
-            }
-
             Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
             intent.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
             Notification notification = NotificationUtils.createNotification(RemoteService.this, title, description, iconRes, intent);
@@ -87,10 +78,6 @@ public final class RemoteService extends Service {
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            if (!KeepLive.isKeepLive(RemoteService.this)) {
-                return;
-            }
-
             if (ServiceUtils.isRunningTaskExist(getApplicationContext(), getPackageName() + ":remote")) {
                 Intent localService = new Intent(RemoteService.this, LocalService.class);
                 RemoteService.this.startService(localService);

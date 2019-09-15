@@ -16,7 +16,6 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:theme="@style/OnePixelActivity" />
-
         <service android:name=".service.LocalService" />
         <service android:name=".service.HideForegroundService" />
         <service

@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
 import com.xuexiang.keeplive.KeepLive;
@@ -26,12 +27,28 @@ import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public final class JobHandlerService extends JobService {
 
+    private static final int JOB_SERVICE_ID = 11000;
+
+    /**
+     * 停止保活服务
+     *
+     * @param context
+     */
+    public static void stop(@NonNull Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.cancel(JOB_SERVICE_ID);
+        }
+        context.stopService(new Intent(context, JobHandlerService.class));
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startService(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            JobInfo.Builder builder = new JobInfo.Builder(++startId, new ComponentName(getPackageName(), JobHandlerService.class.getName())).setPersisted(true);
+            JobInfo.Builder builder = new JobInfo.Builder(JOB_SERVICE_ID, new ComponentName(getPackageName(), JobHandlerService.class.getName()))
+                        .setPersisted(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 //执行的最小延迟时间
                 builder.setMinimumLatency(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
@@ -42,23 +59,16 @@ public final class JobHandlerService extends JobService {
             } else {
                 builder.setPeriodic(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
             }
-            //省电模式下
-            if (KeepLive.sRunMode == KeepLive.RunMode.ENERGY) {
-                //需要网络
-                builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
-                // 当插入充电器，执行该任务
-                builder.setRequiresCharging(true);
-            }
+            //需要网络
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+            // 当插入充电器，执行该任务
+            builder.setRequiresCharging(true);
             jobScheduler.schedule(builder.build());
         }
         return START_STICKY;
     }
 
     private void startService(Context context) {
-        if (!KeepLive.isKeepLive(context)) {
-            return;
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (KeepLive.sForegroundNotification != null) {
                 Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
@@ -90,8 +100,6 @@ public final class JobHandlerService extends JobService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (!KeepLive.isKeepLive(this)) {
-            KeepLive.stopDoubleProcessService(this);
-        }
+        KeepLive.stopDoubleProcessService(this);
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -60,8 +59,6 @@ public final class KeepLive {
      * @param keepLiveService        保活业务
      */
     public static void startWork(@NonNull Application application, @NonNull RunMode runMode, @NonNull ForegroundNotification foregroundNotification, @NonNull KeepLiveService keepLiveService) {
-        setIsKeepLive(application, true);
-
         if (ServiceUtils.isMainProcess(application)) {
             KeepLive.sApplication = application;
             KeepLive.sForegroundNotification = foregroundNotification;
@@ -94,20 +91,17 @@ public final class KeepLive {
      * @param context
      */
     public static void stopWork(@NonNull Context context) {
-        setIsKeepLive(context, false);
-
         if (KeepLive.sForegroundNotification != null && KeepLive.sForegroundNotification.isShow()) {
             context.startService(new Intent(context, HideForegroundService.class));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //停止定时器，在定时器中启动本地服务和守护进程
-            context.stopService(new Intent(context, JobHandlerService.class));
+            JobHandlerService.stop(context);
         } else {
             stopDoubleProcessService(context);
         }
     }
-
 
     public static void startDoubleProcessService(@NonNull Context context) {
         //启动本地服务
@@ -132,18 +126,6 @@ public final class KeepLive {
             throw new ExceptionInInitializerError("请先在全局Application中调用 KeepLive.startWork() 进行初始化！");
         }
         return sApplication;
-    }
-
-    public static boolean isKeepLive(Context context) {
-        return getKeepLiveSP(context).getBoolean("key_is_KeepLive", false);
-    }
-
-    public static SharedPreferences getKeepLiveSP(Context context) {
-        return context.getSharedPreferences("KeepLive", Context.MODE_MULTI_PROCESS | Context.MODE_PRIVATE);
-    }
-
-    public static void setIsKeepLive(Context context, boolean isKeepLive) {
-        getKeepLiveSP(context).edit().putBoolean("key_is_KeepLive", isKeepLive).apply();
     }
 
     /**
