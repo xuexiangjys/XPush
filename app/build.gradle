@@ -90,6 +90,10 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    //RxJava
+    implementation deps.rxjava2
+    implementation deps.rx_android
+    implementation 'com.github.xuexiangjys:RxUtil2:1.1.5'
 
     implementation project(path: ':keeplive')
     implementation project(path: ':xpush-core')

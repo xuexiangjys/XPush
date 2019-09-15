@@ -19,9 +19,6 @@ package com.xuexiang.pushdemo.fragment;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -30,13 +27,18 @@ import android.util.Log;
 import com.xuexiang.pushdemo.service.JobSchedulerService;
 import com.xuexiang.pushdemo.service.PollingService;
 import com.xuexiang.pushdemo.service.PollingTask;
+import com.xuexiang.rxutil2.rxjava.DisposablePool;
+import com.xuexiang.rxutil2.rxjava.RxJavaUtils;
+import com.xuexiang.rxutil2.subsciber.SimpleThrowableAction;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageSimpleListFragment;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 import static android.content.Context.ALARM_SERVICE;
-import static android.content.Context.JOB_SCHEDULER_SERVICE;
 import static com.xuexiang.pushdemo.service.PollingService.KEY_POLLING_TASK;
 
 /**
@@ -45,6 +47,8 @@ import static com.xuexiang.pushdemo.service.PollingService.KEY_POLLING_TASK;
  */
 @Page(name = "定时任务")
 public class PollingFragment extends XPageSimpleListFragment {
+
+    private final static String TAG = "PollingTask";
 
     private static boolean sIsPollingStart;
 
@@ -78,24 +82,15 @@ public class PollingFragment extends XPageSimpleListFragment {
      * @param context
      * @param intervalMillis 间隔（毫秒）
      */
-    private void startPollingTask(Context context, long intervalMillis) {
+    private void startPollingTask(final Context context, long intervalMillis) {
         if (sIsPollingStart) {
             return;
         }
 
         Log.e("xuexiang", "开始执行定时任务");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobInfo.Builder builder = new JobInfo.Builder(POLLING_TASK_ID, new ComponentName(context, JobSchedulerService.class));
-            builder.setPeriodic(intervalMillis);
-            //Android 7.0+ 增加了一项针对 JobScheduler 的新限制，最小间隔只能是下面设定的数字
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setPeriodic(JobInfo.getMinPeriodMillis(), JobInfo.getMinFlexMillis());
-            }
-            builder.setPersisted(true);
-            JobScheduler scheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
-            if (scheduler != null) {
-                scheduler.schedule(builder.build());
-            }
+            JobSchedulerService.start(context, POLLING_TASK_ID, intervalMillis);
         } else {
             //Android 4.4- 使用 AlarmManager
             AlarmManager manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
@@ -106,8 +101,18 @@ public class PollingFragment extends XPageSimpleListFragment {
             }
         }
 
+        //总体来讲还是RxJava比较精准
+        DisposablePool.get().add(RxJavaUtils.polling(intervalMillis, intervalMillis, TimeUnit.MILLISECONDS, new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                PollingService.start(context, new PollingTask(PollingTask.TYPE_RXJAVA, "这是RxJava定时执行的事务"));
+            }
+        }, new SimpleThrowableAction(TAG)), TAG);
+
         sIsPollingStart = true;
     }
+
+
 
     /**
      * 获取轮询意图
@@ -116,7 +121,7 @@ public class PollingFragment extends XPageSimpleListFragment {
      */
     private PendingIntent getPendingIntent(Context context) {
         Intent intent = new Intent(context, PollingService.class);
-        intent.putExtra(KEY_POLLING_TASK, new PollingTask(PollingTask.TYPE_ALARM_MANAGER, "这是AlarmManager定时执行的事务"));
+        intent.putExtra(KEY_POLLING_TASK, new PollingTask(PollingTask.TYPE_ALARM_MANAGER, "这是AlarmManager定时执行的事务").toJson());
         return PendingIntent.getService(context, POLLING_TASK_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -130,11 +135,9 @@ public class PollingFragment extends XPageSimpleListFragment {
         }
 
         Log.e("xuexiang", "停止执行定时任务");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobScheduler scheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
-            if (scheduler != null) {
-                scheduler.cancel(POLLING_TASK_ID);
-            }
+            JobSchedulerService.stop(context, POLLING_TASK_ID);
         } else {
             AlarmManager manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             PendingIntent pendingIntent = getPendingIntent(context);
@@ -142,6 +145,8 @@ public class PollingFragment extends XPageSimpleListFragment {
                 manager.cancel(pendingIntent);
             }
         }
+
+        DisposablePool.get().remove(TAG);
 
         sIsPollingStart = false;
     }

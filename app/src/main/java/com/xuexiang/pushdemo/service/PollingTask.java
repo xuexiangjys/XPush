@@ -17,7 +17,7 @@
 
 package com.xuexiang.pushdemo.service;
 
-import java.io.Serializable;
+import com.xuexiang.xutil.net.JsonUtil;
 
 /**
  * 轮询任务【例子】
@@ -25,9 +25,10 @@ import java.io.Serializable;
  * @author xuexiang
  * @since 2019-09-10 23:41
  */
-public class PollingTask implements Serializable {
+public class PollingTask {
     public static final int TYPE_ALARM_MANAGER = 1;
     public static final int TYPE_JOB_SCHEDULER = 2;
+    public static final int TYPE_RXJAVA = 3;
 
     /**
      * 任务类型
@@ -42,7 +43,6 @@ public class PollingTask implements Serializable {
         mType = type;
         mParam = param;
     }
-
 
     public int getType() {
         return mType;
@@ -60,6 +60,10 @@ public class PollingTask implements Serializable {
     public PollingTask setParam(String param) {
         mParam = param;
         return this;
+    }
+
+    public String toJson() {
+        return JsonUtil.toJson(this);
     }
 
     @Override
