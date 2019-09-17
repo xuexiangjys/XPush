@@ -9,13 +9,14 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
 import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OFF;
-import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
+import static com.xuexiang.keeplive.receiver.DeviceStatusReceiver.KEEP_ACTION_OPEN_MUSIC;
+import static com.xuexiang.keeplive.receiver.DeviceStatusReceiver.KEEP_ACTION_CLOSE_MUSIC;
 import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
@@ -86,9 +87,9 @@ public final class RemoteService extends Service {
             PowerManager pm = (PowerManager) RemoteService.this.getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = pm != null && pm.isScreenOn();
             if (isScreenOn) {
-                sendBroadcast(new Intent(KEEP_ACTION_SCREEN_ON));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(KEEP_ACTION_CLOSE_MUSIC));
             } else {
-                sendBroadcast(new Intent(KEEP_ACTION_SCREEN_OFF));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(KEEP_ACTION_OPEN_MUSIC));
             }
         }
 
