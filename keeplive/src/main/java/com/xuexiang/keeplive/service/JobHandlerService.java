@@ -58,6 +58,7 @@ public final class JobHandlerService extends JobService {
                 builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR);
             } else {
                 builder.setPeriodic(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS);
+                builder.setRequiresDeviceIdle(true);
             }
             //需要网络
             builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);

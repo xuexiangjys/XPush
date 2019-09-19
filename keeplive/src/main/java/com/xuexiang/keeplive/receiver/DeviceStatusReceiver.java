@@ -40,6 +40,7 @@ public final class DeviceStatusReceiver extends BroadcastReceiver {
                     if (!mScreenOn) {
                         Intent intent2 = new Intent(context, OnePixelActivity.class);
                         intent2.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
                         try {
                             pendingIntent.send();
