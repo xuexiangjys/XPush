@@ -17,6 +17,7 @@
 
 package com.xuexiang.pushdemo.fragment;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ import com.xuexiang.xaop.annotation.MainThread;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageFragment;
+import com.xuexiang.xpage.utils.TitleBar;
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
@@ -37,6 +39,7 @@ import com.xuexiang.xpush.entity.XPushCommand;
 import com.xuexiang.xpush.huawei.HuaweiPushClient;
 import com.xuexiang.xpush.umeng.UMengPushClient;
 import com.xuexiang.xpush.util.PushUtils;
+import com.xuexiang.xpush.xg.XGPushClient;
 import com.xuexiang.xutil.common.StringUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 
@@ -59,9 +62,11 @@ public class OperationFragment extends XPageFragment {
     TextView tvPushPlatform;
     @BindView(R.id.tv_token)
     TextView tvToken;
+
+    @BindView(R.id.ll_status)
+    LinearLayout llStatus;
     @BindView(R.id.tv_status)
     TextView tvStatus;
-
 
     @BindView(R.id.ll_tag)
     LinearLayout llTag;
@@ -91,16 +96,49 @@ public class OperationFragment extends XPageFragment {
     }
 
     @Override
+    protected TitleBar initTitleBar() {
+        TitleBar titleBar = super.initTitleBar();
+        titleBar.addAction(new TitleBar.TextAction("分享") {
+            @Override
+            public void performAction(View view) {
+                String token = XPush.getPushToken();
+                if (!StringUtils.isEmpty(token)) {
+                    shareText(token);
+                } else {
+                    ToastUtils.toast("推送未连接！");
+                }
+            }
+        });
+        return titleBar;
+    }
+
+    /**
+     * 分享文字
+     *
+     * @param content 文字
+     */
+    private void shareText(String content) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
+        shareIntent.setType("text/plain");
+        //设置分享列表的标题，并且每次都显示分享列表
+        startActivity(Intent.createChooser(shareIntent, "分享到"));
+    }
+
+    @Override
     protected void initViews() {
         tvPushPlatform.setText(String.format("%s(%d)", XPush.getPlatformName(), XPush.getPlatformCode()));
         tvToken.setText(XPush.getPushToken());
         tvStatus.setText(PushUtils.formatConnectStatus(XPush.getConnectStatus()));
 
         //极光推送都支持
-        if (XPush.getPlatformCode() == UMengPushClient.UMENG_PUSH_PLATFORM_CODE) {
-            //友盟推送不支持获取tag和alias
+        if (XPush.getPlatformCode() == UMengPushClient.UMENG_PUSH_PLATFORM_CODE || XPush.getPlatformCode() == XGPushClient.XGPUSH_PLATFORM_CODE) {
+            //友盟/信鸽推送不支持获取tag和alias
             btnGetTag.setVisibility(View.GONE);
             btnGetAlias.setVisibility(View.GONE);
+
+            llStatus.setVisibility(View.GONE);
         } else if (XPush.getPlatformCode() == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE) {
             //华为推送不支持tag和alias操作
             llTag.setVisibility(View.GONE);

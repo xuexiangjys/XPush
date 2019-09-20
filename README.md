@@ -5,7 +5,7 @@
 [![I](https://img.shields.io/github/issues/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush/issues)
 [![Star](https://img.shields.io/github/stars/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush)
 
-一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
+一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、信鸽推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
 
 在提issue前，请先阅读[【提问的智慧】](https://xuexiangjys.blog.csdn.net/article/details/83344235)，并严格按照[issue模板](https://github.com/xuexiangjys/XPush/issues/new/choose)进行填写，节约大家的时间。
 
@@ -108,6 +108,7 @@ dependencies {
   //选择你想要集成的推送库
   implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
 }
@@ -192,7 +193,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 <meta-data
     android:name="XPush_MIPush_1003"
     android:value="com.xuexiang.xpush.xiaomi.XiaoMiPushClient" />
-
+    
+<!--如果引入了xpush-xg库-->
+<meta-data
+    android:name="XPush_XGPush_1004"
+    android:value="@string/xpush_xg_client_name" />
 ```
 
 3.添加第三方AppKey和AppSecret.
@@ -229,6 +234,14 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 <meta-data
     android:name="MIPUSH_APPKEY"
     android:value="\ 5371813415164"/>
+    
+<!--信鸽推送静态注册-->
+<meta-data
+    android:name="XGPUSH_ACCESS_ID"
+    android:value="2100343759" />
+<meta-data
+    android:name="XGPUSH_ACCESS_KEY"
+    android:value="A7Q26I8SH7LV" />
 ```
 
 4.在Application中初始化XPush
@@ -297,7 +310,7 @@ private void initPush() {
 
 * 通过调用`XPush.getTags()`，即可获取当前设备所有的标签。
 
-需要注意的是，友盟推送目前暂不支持标签的获取，华为推送不支持标签的所有操作，小米推送每次只支持一个标签的操作。
+需要注意的是，友盟推送和信鸽推送目前暂不支持标签的获取，华为推送不支持标签的所有操作，小米推送每次只支持一个标签的操作。
 
 ### 3、推送的别名（alias）处理
 
@@ -307,7 +320,7 @@ private void initPush() {
 
 * 通过调用`XPush.getAlias()`，即可获取当前设备所绑定的别名。
 
-需要注意的是，友盟推送目前暂不支持别名的获取，华为推送不支持别名的所有操作。
+需要注意的是，友盟推送和信鸽推送目前暂不支持别名的获取，华为推送不支持别名的所有操作。
 
 ### 4、推送消息的接收
 

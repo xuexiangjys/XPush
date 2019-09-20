@@ -263,3 +263,9 @@
 
 # 小米推送
 -keep class * extends com.xiaomi.mipush.sdk.PushMessageReceiver{*;}
+
+# 信鸽推送
+-keep class com.tencent.android.tpush.** {*;}
+-keep class com.tencent.mid.** {*;}
+-keep class com.qq.taf.jce.** {*;}
+-keep class com.tencent.bigdata.** {*;}

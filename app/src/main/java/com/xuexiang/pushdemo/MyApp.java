@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Process;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.xuexiang.keeplive.KeepLive;
@@ -30,6 +31,7 @@ import com.xuexiang.keeplive.config.ForegroundNotification;
 import com.xuexiang.keeplive.config.ForegroundNotificationClickListener;
 import com.xuexiang.keeplive.config.KeepLiveService;
 import com.xuexiang.pushdemo.push.CustomPushReceiver;
+import com.xuexiang.pushdemo.util.PushPlatformUtils;
 import com.xuexiang.xaop.XAOP;
 import com.xuexiang.xaop.util.PermissionUtils;
 import com.xuexiang.xpage.AppPageConfig;
@@ -37,27 +39,26 @@ import com.xuexiang.xpage.PageConfig;
 import com.xuexiang.xpage.PageConfiguration;
 import com.xuexiang.xpage.model.PageInfo;
 import com.xuexiang.xpush.XPush;
-import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.core.dispatcher.impl.Android26PushDispatcherImpl;
-import com.xuexiang.xpush.huawei.HuaweiPushClient;
-import com.xuexiang.xpush.jpush.JPushClient;
-import com.xuexiang.xpush.xiaomi.XiaoMiPushClient;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.AppUtils;
 import com.xuexiang.xutil.common.StringUtils;
-import com.xuexiang.xutil.system.RomUtils;
 import com.xuexiang.xutil.tip.ToastUtils;
 
 import java.util.List;
-
-import static com.xuexiang.xutil.system.RomUtils.SYS_EMUI;
-import static com.xuexiang.xutil.system.RomUtils.SYS_MIUI;
 
 /**
  * @author xuexiang
  * @since 2018/11/7 下午1:12
  */
 public class MyApp extends Application {
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //解决4.x运行崩溃的问题
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
@@ -130,7 +131,6 @@ public class MyApp extends Application {
                     public void onWorking() {
                         Log.e("xuexiang", "onWorking");
                     }
-
                     /**
                      * 服务终止
                      * 由于服务可能会被多次终止，该方法可能重复调用，需同onWorking配套使用，如注册和注销broadcast
@@ -148,22 +148,8 @@ public class MyApp extends Application {
      */
     private void initPush() {
         XPush.debug(BuildConfig.DEBUG);
-        //手动注册
-//        XPush.init(this, new UMengPushClient());
-        //自动注册
-        XPush.init(this, new IPushInitCallback() {
-            @Override
-            public boolean onInitPush(int platformCode, String platformName) {
-                String romName = RomUtils.getRom().getRomName();
-                if (romName.equals(SYS_EMUI)) {
-                    return platformCode == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE && platformName.equals(HuaweiPushClient.HUAWEI_PUSH_PLATFORM_NAME);
-                } else if (romName.equals(SYS_MIUI)) {
-                    return platformCode == XiaoMiPushClient.MIPUSH_PLATFORM_CODE && platformName.equals(XiaoMiPushClient.MIPUSH_PLATFORM_NAME);
-                } else {
-                    return platformCode == JPushClient.JPUSH_PLATFORM_CODE && platformName.equals(JPushClient.JPUSH_PLATFORM_NAME);
-                }
-            }
-        });
+
+        PushPlatformUtils.initPushClient(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android8.0静态广播注册失败解决方案一：动态注册

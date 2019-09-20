@@ -96,6 +96,14 @@
             android:name="MIPUSH_APPKEY"
             android:value="\ 5371813415164" />
 
+        <!--信鸽推送静态注册-->
+        <meta-data
+            android:name="XGPUSH_ACCESS_ID"
+            android:value="2100343759" />
+        <meta-data
+            android:name="XGPUSH_ACCESS_KEY"
+            android:value="A7Q26I8SH7LV" />
+
         <!--********************************XPush各家推送的SDK注册地方**************************************-->
         <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
         <!--value格式：对应客户端实体类的全类名路径-->
@@ -119,6 +127,11 @@
         <meta-data
             android:name="XPush_MIPush_1003"
             android:value="@string/xpush_xiaomi_client_name" />
+
+        <!--如果引入了xpush-xg库-->
+        <meta-data
+            android:name="XPush_XGPush_1004"
+            android:value="@string/xpush_xg_client_name" />
 
     </application>
 

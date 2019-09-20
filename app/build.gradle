@@ -13,9 +13,16 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        multiDexEnabled true
+
         ndk {
             // 设置支持的SO库
             abiFilters 'armeabi', 'x86'  //,'armeabi-v7a', 'x86', 'x86_64', 'arm64-v8a','mips','mips64'
+
+            manifestPlaceholders = [
+                    XG_ACCESS_ID:"2100343759",
+                    XG_ACCESS_KEY:"A7Q26I8SH7LV",
+            ]
         }
     }
 
@@ -74,11 +81,13 @@ dependencies {
     androidTestImplementation deps.runner
     androidTestImplementation deps.espresso.core
 
+    implementation 'com.android.support:multidex:1.0.3'
+
     //工具类
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:1.1.6'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:1.1.6'
     //切片
-    implementation 'com.github.xuexiangjys.XAOP:xaop-runtime:1.0.4'  //添加依赖
+    implementation 'com.github.xuexiangjys.XAOP:xaop-runtime:1.0.5'  //添加依赖
 
     //XPage
     implementation 'com.github.xuexiangjys.XPage:xpage-lib:2.2.6'
@@ -101,6 +110,7 @@ dependencies {
     implementation project(path: ':xpush-umeng')
     implementation project(path: ':xpush-huawei')
     implementation project(path: ':xpush-xiaomi')
+    implementation project(path: ':xpush-xg')
 
 //    //XPush核心库（必须添加）
 //    implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'

@@ -39,6 +39,7 @@ public class MainFragment extends XPageContainerListFragment implements ClickUti
     protected Class[] getPagesClasses() {
         return new Class[]{
                 //此处填写fragment
+                PushPlatformSelectFragment.class,
                 OperationFragment.class,
                 PushMessageFragment.class,
                 NotifyFragment.class,
