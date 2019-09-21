@@ -72,6 +72,23 @@
 
 之前在QQ交流群里一直有人希望我开源一个消息推送框架，其实我在上一家公司的时候就写了一个推送框架，只不过捆绑业务太深，加之避开泄密之嫌，也就没有开源的必要。此次的推送框架完全是重新写了一个，加之全新的设计，会使框架更加通用，灵活。
 
+## 演示（请star支持）
+
+### Demo下载
+
+#### XPush全平台集成Demo
+
+[![XPushDemo](https://img.shields.io/badge/downloads-4.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xpushdemo.apk?raw=true)
+
+![](./art/download_xpush.png)
+
+#### 信鸽厂商集成Demo
+
+[![信鸽demo](https://img.shields.io/badge/downloads-2.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xgdemo.apk?raw=true)
+
+![](./art/download_xgdemo.png)
+
+
 ----
 
 ## 快速集成指南

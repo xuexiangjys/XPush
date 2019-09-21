@@ -118,8 +118,12 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
 
-    implementation project(path: ':xpush-core')
-    implementation project(path: ':xpush-xg')
+//    implementation project(path: ':xpush-core')
+//    implementation project(path: ':xpush-xg')
+
+    //XPush核心库（必须添加）
+    implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.1'
+    implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.1'
 
     //信鸽华为推送
     implementation 'com.tencent.xinge:xghw:4.3.2-huawei-release'
