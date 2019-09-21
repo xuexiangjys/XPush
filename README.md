@@ -5,7 +5,7 @@
 [![I](https://img.shields.io/github/issues/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush/issues)
 [![Star](https://img.shields.io/github/stars/xuexiangjys/XPush.svg)](https://github.com/xuexiangjys/XPush)
 
-一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
+一个轻量级、可插拔的Android消息推送框架。一键集成推送（极光推送、友盟推送、信鸽推送、华为、小米推送等），提供有效的保活机制，支持推送的拓展，充分解耦推送和业务逻辑，解放你的双手！
 
 在提issue前，请先阅读[【提问的智慧】](https://xuexiangjys.blog.csdn.net/article/details/83344235)，并严格按照[issue模板](https://github.com/xuexiangjys/XPush/issues/new/choose)进行填写，节约大家的时间。
 
@@ -68,8 +68,9 @@
 
 可是我们也不能将希望全都寄托在这个完全没有定数的事件上，代码终归要写，功能终归要上，与其受制于人，不如自己革命，搞一个自己能控制的消息推送全平台解决方案来得靠谱。
 
-之前在QQ交流群里一直有人希望我开源一个消息推送框架，其实我在上一家公司的时候就写了一个推送框架，只不过捆绑业务太深，加之避开泄密之嫌，也就没有开源的必要。此次的推送框架完全是重新写了一个，加之全新的设计，会使框架更加通用，灵活。
+可能有人又会说，现在友盟和信鸽都支持厂商推送的集成，为何你自己还要搞一套呢？如果你对推送的及时性和到达率都没什么要求的话，其实也是无所谓的（实践证明，友盟并不好用，信鸽还可以）。在这里我需要说明的是，你不可能把自己的命运交到别人的手里，推送有别于其他的业务，相对来说比较复杂，需要处理大批量的事件消息，对服务器的要求比较大，你愿意把你的推送消息交给第三方推送平台去处理？再说了，你能强制你们后台接入指定第三方的推送平台？如果都不能，与其受制于人，何不把这些命运把握在自己的手上，那么写出来的功能自己心安啊。
 
+之前在QQ交流群里一直有人希望我开源一个消息推送框架，其实我在上一家公司的时候就写了一个推送框架，只不过捆绑业务太深，加之避开泄密之嫌，也就没有开源的必要。此次的推送框架完全是重新写了一个，加之全新的设计，会使框架更加通用，灵活。
 
 ----
 
@@ -93,9 +94,9 @@ allprojects {
 dependencies {
   ...
   //推送核心库
-  implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.1'
   //推送保活库
-  implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.1'
 }
 ```
 
@@ -105,10 +106,11 @@ dependencies {
 dependencies {
   ...
   //选择你想要集成的推送库
-  implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.1'
 }
 ```
 
@@ -191,7 +193,11 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 <meta-data
     android:name="XPush_MIPush_1003"
     android:value="com.xuexiang.xpush.xiaomi.XiaoMiPushClient" />
-
+    
+<!--如果引入了xpush-xg库-->
+<meta-data
+    android:name="XPush_XGPush_1004"
+    android:value="@string/xpush_xg_client_name" />
 ```
 
 3.添加第三方AppKey和AppSecret.
@@ -228,6 +234,14 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 <meta-data
     android:name="MIPUSH_APPKEY"
     android:value="\ 5371813415164"/>
+    
+<!--信鸽推送静态注册-->
+<meta-data
+    android:name="XGPUSH_ACCESS_ID"
+    android:value="2100343759" />
+<meta-data
+    android:name="XGPUSH_ACCESS_KEY"
+    android:value="A7Q26I8SH7LV" />
 ```
 
 4.在Application中初始化XPush
@@ -296,7 +310,7 @@ private void initPush() {
 
 * 通过调用`XPush.getTags()`，即可获取当前设备所有的标签。
 
-需要注意的是，友盟推送目前暂不支持标签的获取，华为推送不支持标签的所有操作，小米推送每次只支持一个标签的操作。
+需要注意的是，友盟推送和信鸽推送目前暂不支持标签的获取，华为推送不支持标签的所有操作，小米推送每次只支持一个标签的操作。
 
 ### 3、推送的别名（alias）处理
 
@@ -306,7 +320,7 @@ private void initPush() {
 
 * 通过调用`XPush.getAlias()`，即可获取当前设备所绑定的别名。
 
-需要注意的是，友盟推送目前暂不支持别名的获取，华为推送不支持别名的所有操作。
+需要注意的是，友盟推送和信鸽推送目前暂不支持别名的获取，华为推送不支持别名的所有操作。
 
 ### 4、推送消息的接收
 
@@ -435,10 +449,11 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 
 推送平台 | 平台名 | 平台码 | 模块名 | 客户端类
 :-|:-:|:-:|:-:|:-
-极光推送 | JPush | 1000 | xpush-jpush | com.xuexiang.xpush.jpush.JPushClient
-友盟推送 | UMengPush | 1001 | xpush-umeng | com.xuexiang.xpush.umeng.UMengPushClient
-华为推送 | HuaweiPush | 1002 | xpush-huawei | com.xuexiang.xpush.huawei.HuaweiPushClient
-小米推送 | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
+[极光推送](https://www.jiguang.cn/) | JPush | 1000 | xpush-jpush | com.xuexiang.xpush.jpush.JPushClient
+[友盟推送](https://www.umeng.com/push) | UMengPush | 1001 | xpush-umeng | com.xuexiang.xpush.umeng.UMengPushClient
+[华为推送](https://developer.huawei.com/consumer/cn/service/hms/pushservice.html) | HuaweiPush | 1002 | xpush-huawei | com.xuexiang.xpush.huawei.HuaweiPushClient
+[小米推送](https://dev.mi.com/console/appservice/push.html) | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
+[信鸽推送](https://xg.qq.com/) | XGPush | 1004 | xpush-xg | com.xuexiang.xpush.xg.XGPushClient
 
 ### 推送平台的注意事项
 
@@ -451,6 +466,12 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 * 友盟推送不支持Tag和alias的获取
 
 * 友盟推送不支持监听推送的连接状态。
+
+#### 信鸽推送
+
+* 信鸽推送不支持Tag和alias的获取
+
+* 信鸽推送不支持监听推送的连接状态。
 
 #### 华为推送
 
@@ -563,6 +584,13 @@ public interface IPushClient {
 * 4.增加该推送平台对应的代码混淆配置信息。
 
 以上即完成了推送平台的集成。剩下的就是在初始化XPush的时候对推送平台进行选择了.如果你看完了还是不会的话，你可以参考项目中的[xpush-xiaomi](https://github.com/xuexiangjys/XPush/tree/master/xpush-xiaomi)和[xpush-huawei](https://github.com/xuexiangjys/XPush/tree/master/xpush-huawei).
+
+
+## 保活机制说明
+
+> 这里提供的应用保活机制也是借鉴了前人终结出来的各种方案的混合处理。目前在9.0及以下版本都能有很好的保活效果（只要你不主动杀死程序），如果你的应用希望能够一直在后台运行（比如推送服务）而不被系统自动杀死的话，可以尝试一下。需要注意的是，程序保活并不代表能做到程序杀不死，除非你把你的应用做成系统应用或者加入到系统的白名单内，否则也只是提高了程序的优先级权重，减少程序被系统回收杀死的概率而已。
+
+关于保活机制的使用可以参考[保活机制使用](https://github.com/xuexiangjys/XPush/wiki/%E4%BF%9D%E6%B4%BB%E6%9C%BA%E5%88%B6%E4%BD%BF%E7%94%A8)
 
 ---
 
@@ -693,6 +721,12 @@ CONNECTED | 12 | 已连接
 -keep class com.ut.**{*;}
 -keep class com.ta.**{*;}
 
+# 信鸽推送
+-keep class com.tencent.android.tpush.** {*;}
+-keep class com.tencent.mid.** {*;}
+-keep class com.qq.taf.jce.** {*;}
+-keep class com.tencent.bigdata.** {*;}
+
 # 华为推送
 -keep class com.huawei.hms.**{*;}
 -keep class com.huawei.android.hms.agent.**{*;}
@@ -706,8 +740,11 @@ CONNECTED | 12 | 已连接
 
 * [OnePush](https://github.com/pengyuantao/OnePush)
 * [keeplive](https://github.com/fanqieVip/keeplive)
+* [HelloDaemon](https://github.com/xingda920813/HelloDaemon)
 
 ## 如果觉得项目还不错，可以考虑打赏一波
+
+> 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
 
 ![](https://github.com/xuexiangjys/Resource/blob/master/img/pay/alipay.jpeg) &emsp; ![](https://github.com/xuexiangjys/Resource/blob/master/img/pay/weixinpay.jpeg)
 

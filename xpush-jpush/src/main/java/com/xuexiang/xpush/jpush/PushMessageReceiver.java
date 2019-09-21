@@ -63,8 +63,8 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         try {
             XPush.transmitNotificationClick(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
                     PushUtils.toMap(new JSONObject(message.notificationExtras)));
-        } catch (JSONException localJSONException1) {
-            localJSONException1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             XPush.transmitNotificationClick(context, message.notificationId, message.notificationTitle, message.notificationContent, message.notificationExtras, null);
         }
     }
@@ -84,8 +84,8 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         try {
             XPush.transmitNotification(context, message.notificationId, message.notificationTitle, message.notificationContent, null,
                     PushUtils.toMap(new JSONObject(message.notificationExtras)));
-        } catch (JSONException localJSONException1) {
-            localJSONException1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             XPush.transmitNotification(context, message.notificationId, message.notificationTitle, message.notificationContent, message.notificationExtras, null);
         }
     }

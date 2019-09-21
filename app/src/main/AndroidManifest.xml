@@ -25,11 +25,19 @@
 
         <receiver android:name=".receiver.NotifyBroadCastReceiver">
             <intent-filter>
-                <action android:name="com.xuexiang.pushdemo.receiver.action_submit" />
-                <action android:name="com.xuexiang.pushdemo.receiver.action_cancel" />
-                <action android:name="com.xuexiang.pushdemo.receiver.action_reply" />
+                <action android:name="com.xuexiang.pushdemo.receiver.ACTION_SUBMIT" />
+                <action android:name="com.xuexiang.pushdemo.receiver.ACTION_CANCEL" />
+                <action android:name="com.xuexiang.pushdemo.receiver.ACTION_REPLY" />
             </intent-filter>
         </receiver>
+
+        <!--定时服务-->
+        <service
+            android:name=".service.JobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!--轮询处理服务-->
+        <service android:name=".service.PollingService" />
+
 
         <!--********************************XPush消息推送接收器************************************-->
         <!--自定义消息推送接收器-->
@@ -47,15 +55,15 @@
 
         <!--&lt;!&ndash;默认的消息推送接收器&ndash;&gt;-->
         <!--<receiver android:name="com.xuexiang.xpush.core.receiver.impl.XPushReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />-->
-                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />-->
-                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />-->
-                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />-->
-                <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />-->
+        <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />-->
+        <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />-->
+        <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />-->
+        <!--<action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />-->
 
-                <!--<category android:name="${applicationId}" />-->
-            <!--</intent-filter>-->
+        <!--<category android:name="${applicationId}" />-->
+        <!--</intent-filter>-->
         <!--</receiver>-->
 
         <!--********************************XPush各家推送的AppId注册地方************************************-->
@@ -78,15 +86,23 @@
         <!--华为HMS推送静态注册-->
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="101049475"/>
+            android:value="101049475" />
 
         <!--小米推送静态注册-->
         <meta-data
             android:name="MIPUSH_APPID"
-            android:value="\ 2882303761518134164"/>
+            android:value="\ 2882303761518134164" />
         <meta-data
             android:name="MIPUSH_APPKEY"
-            android:value="\ 5371813415164"/>
+            android:value="\ 5371813415164" />
+
+        <!--信鸽推送静态注册-->
+        <meta-data
+            android:name="XGPUSH_ACCESS_ID"
+            android:value="2100343759" />
+        <meta-data
+            android:name="XGPUSH_ACCESS_KEY"
+            android:value="A7Q26I8SH7LV" />
 
         <!--********************************XPush各家推送的SDK注册地方**************************************-->
         <!--name格式：XPush_[PlatformName]_[PlatformCode]-->
@@ -111,6 +127,11 @@
         <meta-data
             android:name="XPush_MIPush_1003"
             android:value="@string/xpush_xiaomi_client_name" />
+
+        <!--如果引入了xpush-xg库-->
+        <meta-data
+            android:name="XPush_XGPush_1004"
+            android:value="@string/xpush_xg_client_name" />
 
     </application>
 

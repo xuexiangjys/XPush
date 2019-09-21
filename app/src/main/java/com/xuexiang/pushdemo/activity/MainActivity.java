@@ -17,10 +17,13 @@
 
 package com.xuexiang.pushdemo.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.xuexiang.pushdemo.fragment.MainFragment;
 import com.xuexiang.xpage.base.XPageActivity;
+import com.xuexiang.xpush.notify.NotificationUtils;
 
 public class MainActivity extends XPageActivity {
 
@@ -28,5 +31,18 @@ public class MainActivity extends XPageActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         openPage(MainFragment.class);
+
+        if (!NotificationUtils.isNotifyPermissionOpen(this)) {
+            new AlertDialog.Builder(this)
+                    .setCancelable(false)
+                    .setMessage("通知权限未打开，是否前去打开？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface d, int w) {
+                            NotificationUtils.openNotifyPermissionSetting(MainActivity.this);
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .show();
+        }
     }
 }

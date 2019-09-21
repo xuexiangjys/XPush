@@ -9,21 +9,22 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.xuexiang.keeplive.KeepLive;
 import com.xuexiang.keeplive.R;
+import com.xuexiang.keeplive.receiver.DeviceStatusReceiver;
 import com.xuexiang.keeplive.receiver.NotificationClickReceiver;
-import com.xuexiang.keeplive.receiver.OnePxReceiver;
 import com.xuexiang.keeplive.utils.NotificationUtils;
 import com.xuexiang.keeplive.utils.ServiceUtils;
 
-import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_OFF;
-import static com.xuexiang.keeplive.receiver.OnePxReceiver.KEEP_ACTION_SCREEN_ON;
+import static com.xuexiang.keeplive.receiver.DeviceStatusReceiver.KEEP_ACTION_CLOSE_MUSIC;
+import static com.xuexiang.keeplive.receiver.DeviceStatusReceiver.KEEP_ACTION_OPEN_MUSIC;
+import static com.xuexiang.keeplive.receiver.DeviceStatusReceiver.KEEP_ACTION_OPEN_MUSIC_ONCE;
 import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 
 /**
@@ -35,8 +36,8 @@ import static com.xuexiang.keeplive.utils.NotificationUtils.KEY_NOTIFICATION_ID;
 public final class LocalService extends Service {
     public static final String KEY_LOCAL_SERVICE_NAME = "com.xuexiang.keeplive.service.LocalService";
 
-    private OnePxReceiver mOnePxReceiver;
-    private ScreenStateReceiver mScreenStateReceiver;
+    private DeviceStatusReceiver mDeviceStatusReceiver;
+    private MusicControlReceiver mMusicControlReceiver;
     /**
      * 控制暂停
      */
@@ -69,7 +70,7 @@ public final class LocalService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             //播放无声音乐
             if (mMediaPlayer == null) {
                 mMediaPlayer = MediaPlayer.create(this, R.raw.novioce);
@@ -79,7 +80,7 @@ public final class LocalService extends Service {
                         @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
                             if (!mIsPause) {
-                                if (KeepLive.runMode == KeepLive.RunMode.ROGUE) {
+                                if (KeepLive.sRunMode == KeepLive.RunMode.ROGUE) {
                                     play();
                                 } else {
                                     if (mHandler != null) {
@@ -99,26 +100,28 @@ public final class LocalService extends Service {
             }
         }
         //像素保活
-        if (mOnePxReceiver == null) {
-            mOnePxReceiver = new OnePxReceiver();
+        if (mDeviceStatusReceiver == null) {
+            mDeviceStatusReceiver = new DeviceStatusReceiver();
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        registerReceiver(mOnePxReceiver, intentFilter);
+        intentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        registerReceiver(mDeviceStatusReceiver, intentFilter);
         //屏幕点亮状态监听，用于单独控制音乐播放
-        if (mScreenStateReceiver == null) {
-            mScreenStateReceiver = new ScreenStateReceiver();
+        if (mMusicControlReceiver == null) {
+            mMusicControlReceiver = new MusicControlReceiver();
         }
         IntentFilter intentFilter2 = new IntentFilter();
-        intentFilter2.addAction(KEEP_ACTION_SCREEN_OFF);
-        intentFilter2.addAction(KEEP_ACTION_SCREEN_ON);
-        registerReceiver(mScreenStateReceiver, intentFilter2);
+        intentFilter2.addAction(KEEP_ACTION_OPEN_MUSIC);
+        intentFilter2.addAction(KEEP_ACTION_CLOSE_MUSIC);
+        intentFilter2.addAction(KEEP_ACTION_OPEN_MUSIC_ONCE);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mMusicControlReceiver, intentFilter2);
         //启用前台服务，提升优先级
-        if (KeepLive.foregroundNotification != null) {
+        if (KeepLive.sForegroundNotification != null) {
             Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
             intent2.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-            Notification notification = NotificationUtils.createNotification(this, KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes(), intent2);
+            Notification notification = NotificationUtils.createNotification(this, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent2);
             startForeground(KEY_NOTIFICATION_ID, notification);
         }
         //绑定守护进程
@@ -129,43 +132,56 @@ public final class LocalService extends Service {
         }
         //隐藏服务通知
         try {
-            if (KeepLive.foregroundNotification == null || !KeepLive.foregroundNotification.isShow()) {
+            if (KeepLive.sForegroundNotification == null || !KeepLive.sForegroundNotification.isShow()) {
                 startService(new Intent(this, HideForegroundService.class));
             }
         } catch (Exception e) {
         }
-        if (KeepLive.keepLiveService != null) {
-            KeepLive.keepLiveService.onWorking();
+        if (KeepLive.sKeepLiveService != null) {
+            KeepLive.sKeepLiveService.onWorking();
         }
         return START_STICKY;
     }
 
     private void play() {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
                 mMediaPlayer.start();
             }
         }
     }
 
+    private void playOnce() {
+        if (KeepLive.sUseSilenceMusic) {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.start();
+            }
+        }
+    }
+
     private void pause() {
-        if (KeepLive.useSilenceMusic) {
+        if (KeepLive.sUseSilenceMusic) {
             if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
             }
         }
     }
 
-    private class ScreenStateReceiver extends BroadcastReceiver {
+    /**
+     * 音乐播放控制广播
+     */
+    public class MusicControlReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(final Context context, Intent intent) {
             String action = intent.getAction();
-            if (KEEP_ACTION_SCREEN_OFF.equals(action)) {
+            if (KEEP_ACTION_OPEN_MUSIC.equals(action)) {
                 mIsPause = false;
                 play();
-            } else if (KEEP_ACTION_SCREEN_ON.equals(action)) {
+            } else if (KEEP_ACTION_CLOSE_MUSIC.equals(action)) {
                 mIsPause = true;
                 pause();
+            } else if (KEEP_ACTION_OPEN_MUSIC_ONCE.equals(action)) {
+                playOnce();
             }
         }
     }
@@ -187,24 +203,23 @@ public final class LocalService extends Service {
                         RemoteService.class);
                 LocalService.this.startService(remoteService);
                 Intent intent = new Intent(LocalService.this, RemoteService.class);
-                mIsBoundRemoteService = LocalService.this.bindService(intent, mConnection,
-                        Context.BIND_ABOVE_CLIENT);
+                mIsBoundRemoteService = LocalService.this.bindService(intent, mConnection, Context.BIND_ABOVE_CLIENT);
             }
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = pm != null && pm.isScreenOn();
             if (isScreenOn) {
-                sendBroadcast(new Intent(KEEP_ACTION_SCREEN_ON));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(KEEP_ACTION_CLOSE_MUSIC));
             } else {
-                sendBroadcast(new Intent(KEEP_ACTION_SCREEN_OFF));
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent(KEEP_ACTION_OPEN_MUSIC));
             }
         }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
-                if (mBinder != null && KeepLive.foregroundNotification != null) {
+                if (mBinder != null && KeepLive.sForegroundNotification != null) {
                     GuardAidl guardAidl = GuardAidl.Stub.asInterface(service);
-                    guardAidl.wakeUp(KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes());
+                    guardAidl.wakeUp(KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes());
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -223,13 +238,19 @@ public final class LocalService extends Service {
             } catch (Exception e) {
             }
         }
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
         try {
-            unregisterReceiver(mOnePxReceiver);
-            unregisterReceiver(mScreenStateReceiver);
+            unregisterReceiver(mDeviceStatusReceiver);
+            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mMusicControlReceiver);
         } catch (Exception e) {
         }
-        if (KeepLive.keepLiveService != null) {
-            KeepLive.keepLiveService.onStop();
+        if (KeepLive.sKeepLiveService != null) {
+            KeepLive.sKeepLiveService.onStop();
         }
     }
 }

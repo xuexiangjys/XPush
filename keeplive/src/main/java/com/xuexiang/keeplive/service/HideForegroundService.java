@@ -40,10 +40,10 @@ public class HideForegroundService extends Service {
 
 
     private void startForeground() {
-        if (KeepLive.foregroundNotification != null) {
+        if (KeepLive.sForegroundNotification != null) {
             Intent intent = new Intent(getApplicationContext(), NotificationClickReceiver.class);
             intent.setAction(NotificationClickReceiver.ACTION_CLICK_NOTIFICATION);
-            Notification notification = NotificationUtils.createNotification(this, KeepLive.foregroundNotification.getTitle(), KeepLive.foregroundNotification.getDescription(), KeepLive.foregroundNotification.getIconRes(), intent);
+            Notification notification = NotificationUtils.createNotification(this, KeepLive.sForegroundNotification.getTitle(), KeepLive.sForegroundNotification.getDescription(), KeepLive.sForegroundNotification.getIconRes(), intent);
             startForeground(KEY_NOTIFICATION_ID, notification);
         }
     }

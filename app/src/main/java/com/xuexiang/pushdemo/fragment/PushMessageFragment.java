@@ -28,6 +28,7 @@ import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
+import com.xuexiang.xutil.common.StringUtils;
 
 import butterknife.BindView;
 
@@ -71,7 +72,7 @@ public class PushMessageFragment extends XPageFragment {
     private IMessageFilter mMessageFilter = new IMessageFilter() {
         @Override
         public boolean filter(Notification notification) {
-            if (notification.getContent().contains("XPush")) {
+            if (StringUtils.isEmpty(notification.getContent()) || notification.getContent().contains("XPush")) {
                 showMessage("通知被拦截");
                 return true;
             }
@@ -80,7 +81,7 @@ public class PushMessageFragment extends XPageFragment {
 
         @Override
         public boolean filter(CustomMessage message) {
-            if (message.getMsg().contains("XPush")) {
+            if (StringUtils.isEmpty(message.getMsg()) || message.getMsg().contains("XPush")) {
                 showMessage("自定义消息被拦截");
                 return true;
             }
