@@ -108,9 +108,9 @@ dependencies {
   //选择你想要集成的推送库
   implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
   implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.0'
 }
 ```
 
@@ -449,10 +449,11 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 
 推送平台 | 平台名 | 平台码 | 模块名 | 客户端类
 :-|:-:|:-:|:-:|:-
-极光推送 | JPush | 1000 | xpush-jpush | com.xuexiang.xpush.jpush.JPushClient
-友盟推送 | UMengPush | 1001 | xpush-umeng | com.xuexiang.xpush.umeng.UMengPushClient
-华为推送 | HuaweiPush | 1002 | xpush-huawei | com.xuexiang.xpush.huawei.HuaweiPushClient
-小米推送 | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
+[极光推送](https://www.jiguang.cn/) | JPush | 1000 | xpush-jpush | com.xuexiang.xpush.jpush.JPushClient
+[友盟推送](https://www.umeng.com/push) | UMengPush | 1001 | xpush-umeng | com.xuexiang.xpush.umeng.UMengPushClient
+[华为推送](https://developer.huawei.com/consumer/cn/service/hms/pushservice.html) | HuaweiPush | 1002 | xpush-huawei | com.xuexiang.xpush.huawei.HuaweiPushClient
+[小米推送](https://dev.mi.com/console/appservice/push.html) | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
+[信鸽推送](https://xg.qq.com/) | XGPush | 1004 | xpush-xg | com.xuexiang.xpush.xg.XGPushClient
 
 ### 推送平台的注意事项
 
@@ -465,6 +466,12 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 * 友盟推送不支持Tag和alias的获取
 
 * 友盟推送不支持监听推送的连接状态。
+
+### 信鸽推送
+
+* 信鸽推送不支持Tag和alias的获取
+
+* 信鸽推送不支持监听推送的连接状态。
 
 #### 华为推送
 
@@ -713,6 +720,12 @@ CONNECTED | 12 | 已连接
 -keep class com.alibaba.sdk.android.**{*;}
 -keep class com.ut.**{*;}
 -keep class com.ta.**{*;}
+
+# 信鸽推送
+-keep class com.tencent.android.tpush.** {*;}
+-keep class com.tencent.mid.** {*;}
+-keep class com.qq.taf.jce.** {*;}
+-keep class com.tencent.bigdata.** {*;}
 
 # 华为推送
 -keep class com.huawei.hms.**{*;}

@@ -26,13 +26,13 @@
         <item>信鸽推送(XGPush)</item>
     </string-array>
 
-    <string-array name="push_platform_code_entry">
+    <integer-array name="push_platform_code_entry">
         <item>1000</item>
         <item>1001</item>
         <item>1002</item>
         <item>1003</item>
         <item>1004</item>
-    </string-array>
+    </integer-array>
 
 
 

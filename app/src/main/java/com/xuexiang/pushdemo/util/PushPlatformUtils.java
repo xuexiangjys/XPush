@@ -20,6 +20,7 @@ package com.xuexiang.pushdemo.util;
 import android.app.Application;
 
 import com.xuexiang.xpush.XPush;
+import com.xuexiang.xpush.core.IPushClient;
 import com.xuexiang.xpush.core.IPushInitCallback;
 import com.xuexiang.xpush.huawei.HuaweiPushClient;
 import com.xuexiang.xpush.jpush.JPushClient;
@@ -89,5 +90,37 @@ public final class PushPlatformUtils {
             }
         }
     }
+
+
+    /**
+     * 切换推送平台
+     *
+     * @param platformCode
+     */
+    public static void switchPushClient(int platformCode) {
+        //先注销当前推送平台
+        XPush.unRegister();
+        //设置新的推送平台
+        XPush.setIPushClient(getPushClientByPlatformCode(platformCode));
+        //注册推送
+        XPush.register();
+        SettingSPUtils.getInstance().setPushPlatformCode(platformCode);
+    }
+
+    public static IPushClient getPushClientByPlatformCode(int platformCode) {
+        switch (platformCode) {
+            case UMengPushClient.UMENG_PUSH_PLATFORM_CODE:
+                return new UMengPushClient();
+            case HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE:
+                return new HuaweiPushClient();
+            case XiaoMiPushClient.MIPUSH_PLATFORM_CODE:
+                return new XiaoMiPushClient();
+            case XGPushClient.XGPUSH_PLATFORM_CODE:
+                return new XGPushClient();
+            default:
+                return new JPushClient();
+        }
+    }
+
 
 }

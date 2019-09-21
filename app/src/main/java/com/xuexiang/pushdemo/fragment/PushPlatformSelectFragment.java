@@ -17,14 +17,20 @@
 
 package com.xuexiang.pushdemo.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
 import com.xuexiang.pushdemo.R;
+import com.xuexiang.pushdemo.util.PushPlatformUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageFragment;
 import com.xuexiang.xpush.XPush;
+import com.xuexiang.xutil.resource.ResUtils;
+import com.xuexiang.xutil.tip.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,6 +44,9 @@ public class PushPlatformSelectFragment extends XPageFragment {
     @BindView(R.id.tv_push_platform)
     TextView tvPushPlatform;
 
+    private String[] mPlatform;
+    private int[] mPlatformCode;
+
     /**
      * 布局的资源id
      *
@@ -48,11 +57,21 @@ public class PushPlatformSelectFragment extends XPageFragment {
         return R.layout.fragment_push_platform_select;
     }
 
+    @Override
+    protected void initArgs() {
+        mPlatform = ResUtils.getStringArray(R.array.push_platform_name_entry);
+        mPlatformCode = ResUtils.getIntArray(R.array.push_platform_code_entry);
+    }
+
     /**
      * 初始化控件
      */
     @Override
     protected void initViews() {
+        updatePushPlatform();
+    }
+
+    private void updatePushPlatform() {
         tvPushPlatform.setText(String.format("%s(%d)", XPush.getPlatformName(), XPush.getPlatformCode()));
     }
 
@@ -78,7 +97,29 @@ public class PushPlatformSelectFragment extends XPageFragment {
     }
 
     private void switchPlatform() {
-
-
+        new AlertDialog.Builder(getContext())
+                .setTitle("选择推送平台")
+                .setSingleChoiceItems(mPlatform, arrayIndexOf(mPlatformCode, XPush.getPlatformCode()), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        ToastUtils.toast("选择了: " + mPlatform[which]);
+                        PushPlatformUtils.switchPushClient(mPlatformCode[which]);
+                        updatePushPlatform();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
+
+    public static int arrayIndexOf(@NonNull final int[] array, final int search) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == search) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
 }
