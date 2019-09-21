@@ -138,7 +138,7 @@ public class OperationFragment extends XPageFragment {
             btnGetTag.setVisibility(View.GONE);
             btnGetAlias.setVisibility(View.GONE);
 
-            llStatus.setVisibility(View.GONE);
+//            llStatus.setVisibility(View.GONE);
         } else if (XPush.getPlatformCode() == HuaweiPushClient.HUAWEI_PUSH_PLATFORM_CODE) {
             //华为推送不支持tag和alias操作
             llTag.setVisibility(View.GONE);

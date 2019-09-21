@@ -97,15 +97,18 @@ public class PushPlatformSelectFragment extends XPageFragment {
     }
 
     private void switchPlatform() {
+        final int index = arrayIndexOf(mPlatformCode, XPush.getPlatformCode());
         new AlertDialog.Builder(getContext())
                 .setTitle("选择推送平台")
-                .setSingleChoiceItems(mPlatform, arrayIndexOf(mPlatformCode, XPush.getPlatformCode()), new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(mPlatform, index, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ToastUtils.toast("选择了: " + mPlatform[which]);
-                        PushPlatformUtils.switchPushClient(mPlatformCode[which]);
-                        updatePushPlatform();
+                        if (index != which) {
+                            ToastUtils.toast("选择了: " + mPlatform[which]);
+                            PushPlatformUtils.switchPushClient(mPlatformCode[which]);
+                            updatePushPlatform();
+                        }
                     }
                 })
                 .setCancelable(false)

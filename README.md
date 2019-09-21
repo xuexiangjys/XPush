@@ -68,7 +68,7 @@
 
 可是我们也不能将希望全都寄托在这个完全没有定数的事件上，代码终归要写，功能终归要上，与其受制于人，不如自己革命，搞一个自己能控制的消息推送全平台解决方案来得靠谱。
 
-可能有人又会说，现在友盟和信鸽都支持厂商推送的集成，为何你自己还要搞一套呢？如果你对推送的及时性和到达率都没什么要求的话，其实也是无所谓的（实践证明，并不好用）。在这里我需要说明的是，你不可能把自己的命运交到别人的手里，推送有别于其他的业务，相对来说比较复杂，需要处理大批量的事件消息，对服务器的要求比较大，你愿意把你的推送消息交给第三方推送平台去处理？再说了，你能强制你们后台接入指定第三方的推送平台？如果都不能，与其受制于人，何不把这些命运把握在自己的手上，那么写出来的功能自己也安心啊。
+可能有人又会说，现在友盟和信鸽都支持厂商推送的集成，为何你自己还要搞一套呢？如果你对推送的及时性和到达率都没什么要求的话，其实也是无所谓的（实践证明，友盟并不好用，信鸽还可以）。在这里我需要说明的是，你不可能把自己的命运交到别人的手里，推送有别于其他的业务，相对来说比较复杂，需要处理大批量的事件消息，对服务器的要求比较大，你愿意把你的推送消息交给第三方推送平台去处理？再说了，你能强制你们后台接入指定第三方的推送平台？如果都不能，与其受制于人，何不把这些命运把握在自己的手上，那么写出来的功能自己心安啊。
 
 之前在QQ交流群里一直有人希望我开源一个消息推送框架，其实我在上一家公司的时候就写了一个推送框架，只不过捆绑业务太深，加之避开泄密之嫌，也就没有开源的必要。此次的推送框架完全是重新写了一个，加之全新的设计，会使框架更加通用，灵活。
 
@@ -94,9 +94,9 @@ allprojects {
 dependencies {
   ...
   //推送核心库
-  implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-core:1.0.1'
   //推送保活库
-  implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:keeplive:1.0.1'
 }
 ```
 
@@ -106,11 +106,11 @@ dependencies {
 dependencies {
   ...
   //选择你想要集成的推送库
-  implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.0'
-  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.0'
+  implementation 'com.github.xuexiangjys.XPush:xpush-jpush:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-umeng:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-huawei:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xiaomi:1.0.1'
+  implementation 'com.github.xuexiangjys.XPush:xpush-xg:1.0.1'
 }
 ```
 
@@ -467,7 +467,7 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 
 * 友盟推送不支持监听推送的连接状态。
 
-### 信鸽推送
+#### 信鸽推送
 
 * 信鸽推送不支持Tag和alias的获取
 

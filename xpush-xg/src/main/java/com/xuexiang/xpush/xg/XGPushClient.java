@@ -27,11 +27,14 @@ import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 import com.xuexiang.xpush.XPush;
 import com.xuexiang.xpush.core.IPushClient;
+import com.xuexiang.xpush.core.XPushManager;
 import com.xuexiang.xpush.logs.PushLog;
 import com.xuexiang.xpush.util.PushUtils;
 
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_BIND_ALIAS;
 import static com.xuexiang.xpush.core.annotation.CommandType.TYPE_UNBIND_ALIAS;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.CONNECTED;
+import static com.xuexiang.xpush.core.annotation.ConnectStatus.DISCONNECT;
 import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_ERROR;
 import static com.xuexiang.xpush.core.annotation.ResultCode.RESULT_OK;
 
@@ -84,7 +87,16 @@ public class XGPushClient implements IPushClient {
      */
     @Override
     public void register() {
-        XGPushManager.registerPush(mContext);
+        XGPushManager.registerPush(mContext, new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object o, int i) {
+                XPushManager.get().notifyConnectStatusChanged(CONNECTED);
+            }
+            @Override
+            public void onFail(Object o, int i, String s) {
+                XPushManager.get().notifyConnectStatusChanged(DISCONNECT);
+            }
+        });
     }
 
     /**
@@ -92,7 +104,16 @@ public class XGPushClient implements IPushClient {
      */
     @Override
     public void unRegister() {
-        XGPushManager.unregisterPush(mContext);
+        XGPushManager.unregisterPush(mContext, new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object o, int i) {
+                XPushManager.get().notifyConnectStatusChanged(DISCONNECT);
+            }
+            @Override
+            public void onFail(Object o, int i, String s) {
+
+            }
+        });
     }
 
     /**
