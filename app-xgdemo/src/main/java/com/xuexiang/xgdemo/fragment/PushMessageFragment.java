@@ -15,16 +15,16 @@
  *
  */
 
-package com.xuexiang.pushdemo.fragment;
+package com.xuexiang.xgdemo.fragment;
 
 import android.widget.TextView;
 
-import com.xuexiang.pushdemo.R;
 import com.xuexiang.xaop.annotation.MainThread;
+import com.xuexiang.xgdemo.R;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.base.XPageFragment;
-import com.xuexiang.xpush.core.queue.IMessageFilter;
 import com.xuexiang.xpush.core.XPushManager;
+import com.xuexiang.xpush.core.queue.IMessageFilter;
 import com.xuexiang.xpush.core.queue.impl.MessageSubscriber;
 import com.xuexiang.xpush.entity.CustomMessage;
 import com.xuexiang.xpush.entity.Notification;
@@ -38,6 +38,8 @@ import butterknife.BindView;
  */
 @Page(name = "推送消息接收")
 public class PushMessageFragment extends XPageFragment {
+
+
     @BindView(R.id.tv_content)
     TextView tvContent;
 
@@ -50,6 +52,7 @@ public class PushMessageFragment extends XPageFragment {
     protected int getLayoutId() {
         return R.layout.fragment_push_message;
     }
+
 
     /**
      * 初始化控件

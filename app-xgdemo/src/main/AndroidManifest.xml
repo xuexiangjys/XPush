@@ -1,0 +1,70 @@
+<!--
+  ~ Copyright (C) 2019 xuexiangjys(xuexiangjys@163.com)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xuexiang.xgdemo">
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="false"
+        android:configChanges="screenSize|keyboardHidden|orientation|keyboard"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation|keyboard"
+            android:windowSoftInputMode="adjustPan|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.TestActivity" />
+
+
+        <!--********************************XPush消息推送接收器************************************-->
+        <!--自定义消息推送接收器-->
+        <receiver android:name=".push.CustomPushReceiver">
+            <intent-filter>
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_CONNECT_STATUS_CHANGED" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_NOTIFICATION_CLICK" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_MESSAGE" />
+                <action android:name="com.xuexiang.xpush.core.action.RECEIVE_COMMAND_RESULT" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+
+        <!--信鸽推送静态注册-->
+        <meta-data
+            android:name="XGPUSH_ACCESS_ID"
+            android:value="2100343749" />
+        <meta-data
+            android:name="XGPUSH_ACCESS_KEY"
+            android:value="AM1AL86JK12B" />
+
+    </application>
+
+
+</manifest>
