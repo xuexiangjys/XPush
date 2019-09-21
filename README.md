@@ -74,6 +74,10 @@
 
 ## 演示（请star支持）
 
+### 程序演示
+
+![](./art/demo.gif)
+
 ### Demo下载
 
 #### XPush全平台集成Demo
