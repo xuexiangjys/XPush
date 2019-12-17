@@ -476,6 +476,8 @@ xpush://com.xuexiang.xpush/notification?title=这是一个通知&content=这是�
 [小米推送](https://dev.mi.com/console/appservice/push.html) | MIPush | 1003 | xpush-xiaomi | com.xuexiang.xpush.xiaomi.XiaoMiPushClient
 [信鸽推送](https://xg.qq.com/) | XGPush | 1004 | xpush-xg | com.xuexiang.xpush.xg.XGPushClient
 
+除此之外，如果你使用MQTT协议来做消息推送的话，我也同样提供了案例给你：[XPush-MQTT](https://github.com/xuexiangjys/XPush-MQTT)
+
 ### 推送平台的注意事项
 
 > 极光推送平台所有特性都支持。

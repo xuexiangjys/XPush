@@ -187,7 +187,7 @@ public class XPushCommand implements Parcelable {
      * @return 获取命令的描述信息
      */
     public String getDescription() {
-        return getTypeName(mType) + (isSuccess() ? "成功：" + mContent : "失败");
+        return getTypeName(mType) + (isSuccess() ? "成功：" + mContent : "失败:" + mError);
     }
 
     protected XPushCommand(Parcel in) {
