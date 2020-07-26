@@ -37,7 +37,7 @@ dependencies {
     compileOnly project(path: ':xpush-core')
 
     //信鸽jar，不包含厂商通道
-    implementation 'com.tencent.xinge:xinge:4.3.5-release'
+    implementation 'com.tencent.xinge:xinge:4.3.7-release'
     //jg包
     implementation 'com.tencent.jg:jg:1.1'
     //wup包

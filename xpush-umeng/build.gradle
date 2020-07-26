@@ -37,11 +37,11 @@ dependencies {
     compileOnly project(path: ':xpush-core')
 
     //PushSDK必须依赖基础组件库，所以需要加入对应依赖
-    implementation 'com.umeng.umsdk:common:2.0.2'
+    implementation 'com.umeng.umsdk:common:9.1.0'
     //PushSDK必须依赖utdid库，所以需要加入对应依赖
-    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
+    implementation 'com.umeng.umsdk:utdid:1.5.2'
     //PushSDK
-    implementation 'com.umeng.umsdk:push:6.0.1'
+    implementation 'com.umeng.umsdk:push:6.1.0'
 }
 
 apply from: "../JitPackUpload.gradle"
