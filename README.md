@@ -76,7 +76,7 @@
 
 ### 程序演示
 
-![](./art/demo.gif)
+![xpush_demo.gif](https://img.rruu.net/image/5f7dc2c7761df)
 
 ### Demo下载
 
@@ -84,14 +84,13 @@
 
 [![XPushDemo](https://img.shields.io/badge/downloads-4.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xpushdemo.apk?raw=true)
 
-![](./art/download_xpush.png)
+![download_xpush.png](https://img.rruu.net/image/5f7dc2c46814b)
 
 #### 信鸽厂商集成Demo
 
 [![信鸽demo](https://img.shields.io/badge/downloads-2.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xgdemo.apk?raw=true)
 
-![](./art/download_xgdemo.png)
-
+![download_xgdemo.png](https://img.rruu.net/image/5f7dc2c46815f)
 
 ----
 
@@ -769,10 +768,10 @@ CONNECTED | 12 | 已连接
 
 > 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
 
-![](https://github.com/xuexiangjys/Resource/blob/master/img/pay/alipay.jpeg) &emsp; ![](https://github.com/xuexiangjys/Resource/blob/master/img/pay/weixinpay.jpeg)
+![alipay.jpeg](https://img.rruu.net/image/5f47eeb8bcdf5) &emsp; ![weixinpay.jpeg](https://img.rruu.net/image/5f47eeb1c8a08)
 
 ## 联系方式
 
 [![](https://img.shields.io/badge/点击一键加入QQ交流群-602082750-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=9922861ef85c19f1575aecea0e8680f60d9386080a97ed310c971ae074998887)
 
-![](https://github.com/xuexiangjys/XPage/blob/master/img/qq_group.jpg)
+![winxin.jpg](https://img.rruu.net/image/5f47ee9f6b02d)
