@@ -76,7 +76,7 @@
 
 ### 程序演示
 
-![xpush_demo.gif](https://img.rruu.net/image/5f7dc2c7761df)
+![xpush_demo.gif](https://ss.im5i.com/2021/06/15/6RZMD.gif)
 
 ### Demo下载
 
@@ -84,13 +84,14 @@
 
 [![XPushDemo](https://img.shields.io/badge/downloads-4.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xpushdemo.apk?raw=true)
 
-![download_xpush.png](https://img.rruu.net/image/5f7dc2c46814b)
+![download_xpush.png](https://ss.im5i.com/2021/06/15/6R3J2.png)
 
 #### 信鸽厂商集成Demo
 
 [![信鸽demo](https://img.shields.io/badge/downloads-2.2M-blue.svg)](https://github.com/xuexiangjys/XPush/blob/master/apk/xgdemo.apk?raw=true)
 
-![download_xgdemo.png](https://img.rruu.net/image/5f7dc2c46815f)
+![download_xgdemo.png](https://ss.im5i.com/2021/06/15/6RIoP.png)
+
 
 ----
 
@@ -768,7 +769,7 @@ CONNECTED | 12 | 已连接
 
 > 你的打赏是我维护的动力，我将会列出所有打赏人员的清单在下方作为凭证，打赏前请留下打赏项目的备注！
 
-![pay.png](https://img.rruu.net/image/5f871d00045da)
+![pay.png](https://ss.im5i.com/2021/06/14/6twG6.png)
 
 ## 联系方式
 
@@ -776,4 +777,4 @@ CONNECTED | 12 | 已连接
 
 > 更多资讯内容，欢迎扫描关注我的个人微信公众号:【我的Android开源之旅】
 
-![gzh_weixin.jpg](https://img.rruu.net/image/5f871cfff3194)
+![gzh_weixin.jpg](https://ss.im5i.com/2021/06/14/65yoL.jpg)
