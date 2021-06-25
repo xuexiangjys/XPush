@@ -35,6 +35,10 @@
 
 * 提供有效的保活机制。保证接入XPush的应用消息推送的到达率和稳定性，这也是很多推送框架所做不到的。
 
+## Star趋势图
+
+[![Stargazers over time](https://starchart.cc/xuexiangjys/XPush.svg)](https://starchart.cc/xuexiangjys/XPush)
+
 ## 组成结构
 
 > 本框架借鉴了[OnePush（目前已不维护了）](https://github.com/pengyuantao/OnePush)中的部分思想，加之我3年消息推送的经验，形成了如下几个部分：
